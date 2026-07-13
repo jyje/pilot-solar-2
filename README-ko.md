@@ -20,7 +20,7 @@ Claude Code 스타일의 에이전트 하네스를 구축하고 구동해보는 
 
 | # | 주제 | 요약 | 상태 |
 | --- | --- | --- | --- |
-| 01 | [Solar Open2 하네스](01-solar-open2-harness/) | Upstage Solar Open2 모델을 백엔드로 하는 Claude Code 하네스(스킬 등) 구성 | 계획중 |
+| 01 | [Solar Open2 하네스](01-solar-open2-harness/) | Upstage Solar Open2 모델을 백엔드로 하는 Claude Code 하네스(스킬 등) 구성 | 검증 완료 |
 | 02 | [Claude Agent SDK, 로컬 구동](02-claude-agent-sdk-local/) | Claude Agent SDK로 로컬 Claude Code 인스턴스를 프로그래밍 방식으로 구동 | 계획중 |
 | 03 | [LangChain Upstage deepagents](03-langchain-upstage-deepagents/) | LangChain Upstage SDK를 이용해 코드 레벨에서 deepagents 초기화 | 계획중 |
 

@@ -20,7 +20,7 @@ without needing the other two.
 
 | # | Topic | Goal | Key tech | Status |
 | --- | --- | --- | --- | --- |
-| 01 | Solar Open2 harness | Stand up a minimal Claude Code harness (custom skills, project config) that routes through Upstage's Solar Open2 model | Solar Open2, Claude Code, `.claude/skills/` | Planned |
+| 01 | Solar Open2 harness | Stand up a minimal Claude Code harness (custom skills, project config) that routes through Upstage's Solar Open2 model | Solar Open2, Claude Code, `.claude/skills/` | Verified |
 | 02 | Claude Agent SDK, local | Drive a local Claude Code instance programmatically via the Claude Agent SDK (no manual CLI interaction) | Claude Agent SDK, Python/TS | Planned |
 | 03 | LangChain Upstage deepagents | Initialize a `deepagents`-based agent at the code level using `langchain-upstage` as the model backend | LangChain, `langchain-upstage`, `deepagents` | Planned |
 
@@ -40,6 +40,14 @@ without needing the other two.
 - **Expected output**: a working `.claude/skills/` setup in
   `01-solar-open2-harness/`, plus a README documenting the setup and a
   short demo transcript/recording.
+- **Result**: done. Verified two ways — the official `claude-upstage`
+  wrapper (piped stdin, since it doesn't forward a `-p`-style flag to
+  `claude`) and the plain `claude` CLI pointed at Upstage's
+  Anthropic-compatible endpoint via `ANTHROPIC_BASE_URL`/`ANTHROPIC_AUTH_TOKEN`.
+  Both confirmed locally and wired into CI
+  (`.github/workflows/verify-solar-open2-harness.yml`). See
+  `01-solar-open2-harness/README.md` for transcripts and the finding about
+  `claude-upstage`'s argument passthrough.
 
 ## Topic 02 — Claude Agent SDK, local
 

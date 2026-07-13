@@ -1,0 +1,36 @@
+name: verify-solar-open2-harness
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "01-solar-open2-harness/**"
+      - ".github/workflows/verify-solar-open2-harness.yml"
+  pull_request:
+    paths:
+      - "01-solar-open2-harness/**"
+      - ".github/workflows/verify-solar-open2-harness.yml"
+  workflow_dispatch: {}
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Install claude-upstage
+        run: curl -fsSL https://console.upstage.ai/claude-upstage.sh | sh -s install
+
+      - name: Run verification
+        env:
+          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          ./01-solar-open2-harness/scripts/verify.sh

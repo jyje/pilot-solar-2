@@ -20,7 +20,7 @@ read, run, and presented independently.
 
 | # | Topic | Summary | Status |
 | --- | --- | --- | --- |
-| 01 | [Solar Open2 harness](01-solar-open2-harness/) | Build a Claude Code harness (skills, etc.) backed by Upstage's Solar Open2 model | Planned |
+| 01 | [Solar Open2 harness](01-solar-open2-harness/) | Build a Claude Code harness (skills, etc.) backed by Upstage's Solar Open2 model | Verified |
 | 02 | [Claude Agent SDK, local](02-claude-agent-sdk-local/) | Drive a local Claude Code instance programmatically with the Claude Agent SDK | Planned |
 | 03 | [LangChain Upstage deepagents](03-langchain-upstage-deepagents/) | Initialize deepagents at the code level using the LangChain Upstage SDK | Planned |
 

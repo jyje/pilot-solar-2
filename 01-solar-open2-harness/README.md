@@ -3,7 +3,9 @@
 [← back to repo overview](../README.md)
 
 **Status:** Verified — Claude Code runs against Upstage's Solar Open2 model
-two different ways, both confirmed working end to end (locally and in CI).
+two different ways, and its custom-skill system works through that
+backend too. All three checks are confirmed working end to end (locally
+and in CI).
 
 ## Goal
 
@@ -11,7 +13,9 @@ Show that a Claude Code harness can run against Upstage's **Solar Open2**
 model instead of Anthropic's own models, and verify it two ways: through
 Upstage's own `claude-upstage` wrapper, and through the **official**
 `claude` CLI configured with plain environment variables — no wrapper,
-no proxy.
+no proxy. Also verify that this repo's custom `.claude/skills/` — the
+"simple skills" part of the original brief — are actually honored when
+Solar Open2 is the backend, not just when Claude models are.
 
 ## How it works
 
@@ -130,11 +134,58 @@ this repo's actual `CLAUDE.md`/state, not a canned reply, confirming Solar
 Open2 answers through the full agentic Claude Code harness (tool access
 included), not just a raw chat completion.
 
+## Skills through Solar Open2
+
+The harness ships three custom skills (`.claude/skills/`, ported from
+`jyje/skills` in an earlier pass). Do they actually get honored when Solar
+Open2 is the model, not just when a Claude model is? Tested with
+`git-commit-helper`, whose output format is strict enough to check
+mechanically: `<gitmoji> <type>(<domain>): <title>`.
+
+**Finding: autonomous skill-selection is unreliable, explicit invocation
+is not.** Asked to just "write the commit message" (no skill named), Solar
+Open2 produced a plausible-looking message that silently dropped the
+required format:
+
+```console
+$ claude -p "Using this repo's git-commit-helper skill conventions, \
+  write the commit message for a new file docs/hello.txt containing a \
+  greeting, added as a brand-new doc. Output only the commit message."
+docs: add hello.txt greeting
+
+Add a new documentation file containing a greeting.
+```
+
+No gitmoji, no `(domain)` — the skill's own required format wasn't
+applied, even though the skill was named in the prompt's wording. Asked
+the same thing but telling the model outright to *use* the skill:
+
+```console
+$ claude -p "Use the git-commit-helper skill. A new file docs/hello.txt \
+  with a greeting was just added to this repo as a new doc. Write the \
+  commit message per that skill's exact format (gitmoji + type(domain): \
+  title). Output only the commit message."
+📄 docs(docs): add hello greeting
+```
+
+Correct on the second attempt — gitmoji, type, and `(domain):` all
+present. The gap between these two prompts is small in wording but large
+in outcome: Solar Open2 can follow a skill's contract precisely once told
+to load it, but doesn't reliably decide *on its own* that a skill applies
+just because its subject matches the skill's `description` trigger
+phrases the way Claude models tend to. **Practical takeaway:** when
+running Claude Code on Solar Open2, name the skill explicitly in prompts
+that need it rather than relying on automatic trigger-phrase matching.
+
 ## Verification
 
-[`scripts/verify.sh`](scripts/verify.sh) runs both methods plus
-`claude-upstage doctor`, and fails loudly if any of them don't produce a
-response. Run it locally with `UPSTAGE_API_KEY` set:
+[`scripts/verify.sh`](scripts/verify.sh) runs three checks —
+`claude-upstage doctor`, Method A, Method B, and the explicit
+`git-commit-helper` skill invocation — and fails loudly if any of them
+don't hold up. The skill check doesn't pin exact wording (the title text
+isn't deterministic); it asserts the two structural things the skill's
+format contract requires: a gitmoji (a non-ASCII byte) and a
+`(domain):` segment. Run it locally with `UPSTAGE_API_KEY` set:
 
 ```bash
 UPSTAGE_API_KEY="..." ./scripts/verify.sh

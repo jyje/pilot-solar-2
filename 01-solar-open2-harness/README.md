@@ -105,47 +105,38 @@ echo "hello" | claude-upstage
 
 ## Verified methods
 
+Every sample below is real output from one CI run of `verify.sh`
+(truncated to <=100 chars, same as the script itself prints) — not
+hand-picked or edited. Click through to read the untruncated response
+yourself:
+
+**Evidence run:** [`verify` job, 2026-07-14](https://github.com/jyje/pilot-solar-2/actions/runs/29304170180/job/86994029784)
+(or browse [every run](https://github.com/jyje/pilot-solar-2/actions/workflows/verify-solar-open2-harness.yml) for the latest)
+
 ### Method A — `claude-upstage`, piped stdin
 
-```console
-$ echo "hello" | claude-upstage
-Verifying API key... ✓ ok
-
-☀ Upstage Solar × Claude Code
-
-  host    https://api.upstage.ai
-  model   solar-open2
-  key     saved in macOS Keychain
-
-Launching claude ...
-
-안녕하세요! 어떤 도움이 필요하신가요? 🚀
-
-현재 pilot-solar-2 저장소에는 세 가지 주제의 실험이 준비되어 있습니다:
-1. Solar Open2 Harness — Claude Code를 Upstage Solar Open2 모델에 적용
-2. Claude Agent SDK Local — 로컬에서 Claude Code 구동
-3. LangChain Upstage DeepAgents — LangChain Upstage SDK 기반 deepagents 초기화
-...
+```bash
+echo "hello" | claude-upstage
 ```
+> Hello! 👋 How can I help you with the `pilot-solar-2` project today? I can assist with the three inde ...(truncated)
+
+[Full output →](https://github.com/jyje/pilot-solar-2/actions/runs/29304170180/job/86994029784)
 
 ### Method B — official `claude` CLI, plain env vars
 
-```console
-$ export ANTHROPIC_BASE_URL="https://api.upstage.ai"
-$ export ANTHROPIC_AUTH_TOKEN="$UPSTAGE_API_KEY"
-$ export ANTHROPIC_MODEL="solar-open2"
-$ claude -p "hello"
-안녕하세요! 👋
-
-pilot-solar-2 저장소에 잘 오셨습니다. Upstage의 Solar Open2 모델을 중심으로
-3개의 독립적인 에이전트 실험을 호스팅하는 포트폴리오 프로젝트입니다.
-...
+```bash
+export ANTHROPIC_BASE_URL="https://api.upstage.ai"
+export ANTHROPIC_AUTH_TOKEN="$UPSTAGE_API_KEY"
+export ANTHROPIC_MODEL="solar-open2"
+claude -p "hello"
 ```
+> Hello! 👋 I'm ready to help you with your `pilot-solar-2` project. This repo contains three agent-har ...(truncated)
 
-Both transcripts are real, captured runs — and both show the model reading
-this repo's actual `CLAUDE.md`/state, not a canned reply, confirming Solar
-Open2 answers through the full agentic Claude Code harness (tool access
-included), not just a raw chat completion.
+[Full output →](https://github.com/jyje/pilot-solar-2/actions/runs/29304170180/job/86994029784)
+
+Both responses read this repo's actual `CLAUDE.md`/state, not a canned
+reply, confirming Solar Open2 answers through the full agentic Claude
+Code harness (tool access included), not just a raw chat completion.
 
 ## Skills through Solar Open2
 
@@ -156,39 +147,42 @@ Open2 is the model, not just when a Claude model is? Tested with
 mechanically: `<gitmoji> <type>(<domain>): <title>`.
 
 **Finding: autonomous skill-selection is unreliable, explicit invocation
-is not.** Asked to just "write the commit message" (no skill named), Solar
-Open2 produced a plausible-looking message that silently dropped the
-required format:
+is not.** Asked to just "write the commit message" (no skill named, a
+one-off manual check, not part of the automated suite), Solar Open2
+produced a plausible-looking message that silently dropped the required
+format:
 
-```console
-$ claude -p "Using this repo's git-commit-helper skill conventions, \
-  write the commit message for a new file docs/hello.txt containing a \
-  greeting, added as a brand-new doc. Output only the commit message."
-docs: add hello.txt greeting
-
-Add a new documentation file containing a greeting.
+```bash
+claude -p "Using this repo's git-commit-helper skill conventions, write \
+  the commit message for a new file docs/hello.txt. Output only the \
+  commit message."
 ```
+> docs: add hello.txt greeting
 
 No gitmoji, no `(domain)` — the skill's own required format wasn't
 applied, even though the skill was named in the prompt's wording. Asked
-the same thing but telling the model outright to *use* the skill:
+the same thing but telling the model outright to *use* the skill — this
+is Method C, which runs in CI every time:
 
-```console
-$ claude -p "Use the git-commit-helper skill. A new file docs/hello.txt \
+```bash
+claude -p "Use the git-commit-helper skill. A new file docs/hello.txt \
   with a greeting was just added to this repo as a new doc. Write the \
   commit message per that skill's exact format (gitmoji + type(domain): \
   title). Output only the commit message."
-📄 docs(docs): add hello greeting
 ```
+> 📄 docs(docs): add greeting file
 
-Correct on the second attempt — gitmoji, type, and `(domain):` all
-present. The gap between these two prompts is small in wording but large
-in outcome: Solar Open2 can follow a skill's contract precisely once told
-to load it, but doesn't reliably decide *on its own* that a skill applies
-just because its subject matches the skill's `description` trigger
-phrases the way Claude models tend to. **Practical takeaway:** when
-running Claude Code on Solar Open2, name the skill explicitly in prompts
-that need it rather than relying on automatic trigger-phrase matching.
+[Full output →](https://github.com/jyje/pilot-solar-2/actions/runs/29304170180/job/86994029784)
+
+Correct once the skill is explicitly invoked — gitmoji, type, and
+`(domain):` all present. The gap between these two prompts is small in
+wording but large in outcome: Solar Open2 can follow a skill's contract
+precisely once told to load it, but doesn't reliably decide *on its own*
+that a skill applies just because its subject matches the skill's
+`description` trigger phrases the way Claude models tend to. **Practical
+takeaway:** when running Claude Code on Solar Open2, name the skill
+explicitly in prompts that need it rather than relying on automatic
+trigger-phrase matching.
 
 ## Subagents stay on Solar Open2 too
 
@@ -196,17 +190,19 @@ that need it rather than relying on automatic trigger-phrase matching.
 calls (e.g. the Explore agent) on Solar Open2 instead of falling back to
 whatever the SDK's default subagent model would otherwise be. Verified
 directly — asked the harness to hand a file-listing task to the Explore
-subagent, and it came back with the real directory contents:
+subagent (this is Method D):
 
-```console
-$ claude -p "Use the Explore agent (a subagent) to list every file \
+```bash
+claude -p "Use the Explore agent (a subagent) to list every file \
   directly inside the current directory. Report just the file list."
-현재 디렉토리(`/.../01-solar-open2-harness/`)의 파일 목록입니다:
-
-- `.env.sample` (파일)
-- `README.md` (파일)
-- `scripts/` (디렉토리)
 ```
+> Files directly inside the current directory (`/home/runner/work/pilot-solar-2/pilot-solar-2/01-solar ...(truncated)
+
+[Full output →](https://github.com/jyje/pilot-solar-2/actions/runs/29304170180/job/86994029784)
+
+The reported path is the CI runner's actual checkout of this directory —
+confirming the subagent call really executed against the real filesystem,
+routed through `solar-open2` the whole way down.
 
 ## Verification
 

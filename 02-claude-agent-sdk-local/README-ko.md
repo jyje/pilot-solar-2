@@ -105,7 +105,20 @@ async for message in query(
 
 ## 검증된 방식
 
-근거 실행: *(이 주제의 첫 CI 실행 이후 추가 예정 — [검증](#검증) 참고)*
+아래는 `verify.sh`의 실제 CI 실행 결과(스크립트가 출력하는 것과 동일하게
+100자 이하로 truncate됨)이며, 손으로 고르거나 편집하지 않았습니다.
+링크를 클릭하면 truncate되지 않은 전체 응답을 직접 확인할 수 있습니다:
+
+**근거 실행:** [`verify` job, 2026-07-14](https://github.com/jyje/pilot-solar-2/actions/runs/29306803664/job/87001673982)
+(또는 최신 결과를 보려면 [전체 실행 목록](https://github.com/jyje/pilot-solar-2/actions/workflows/verify-claude-agent-sdk-local.yml) 참고)
+
+| 방식 | 결과 |
+| --- | --- |
+| A — `query()` | 확인된 메시지 타입: `SystemMessage`, `AssistantMessage`, `ResultMessage`; 응답: "Hello! I'm Solar Open2, an AI assistant trained by Upstage AI (a Korean startup). Nice to meet you!  ...(truncated)" |
+| B — `ClaudeSDKClient` 세션 메모리 | `42` (두 번째 턴에서 정확히 회상함) |
+| C — 툴 사용 가시성 | `saw_tool_use=True` (메시지 스트림에 실제 `ToolUseBlock`이 등장함) |
+
+[전체 출력 →](https://github.com/jyje/pilot-solar-2/actions/runs/29306803664/job/87001673982)
 
 ## 검증
 

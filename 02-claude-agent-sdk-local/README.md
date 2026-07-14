@@ -106,8 +106,20 @@ programmatic proof a tool call happened, not a string match on the reply.
 
 ## Verified methods
 
-Evidence run: *(added after the first CI run on this topic — see
-[Verification](#verification))*
+Real output from one CI run of `verify.sh` (<=100 chars, same truncation
+`demo.py` itself prints) — not hand-picked or edited. Click through to
+read the untruncated response yourself:
+
+**Evidence run:** [`verify` job, 2026-07-14](https://github.com/jyje/pilot-solar-2/actions/runs/29306803664/job/87001673982)
+(or browse [every run](https://github.com/jyje/pilot-solar-2/actions/workflows/verify-claude-agent-sdk-local.yml) for the latest)
+
+| Method | Result |
+| --- | --- |
+| A — `query()` | message types seen: `SystemMessage`, `AssistantMessage`, `ResultMessage`; reply: "Hello! I'm Solar Open2, an AI assistant trained by Upstage AI (a Korean startup). Nice to meet you!  ...(truncated)" |
+| B — `ClaudeSDKClient` session memory | `42` (recalled correctly in turn 2) |
+| C — tool-use visibility | `saw_tool_use=True` (a real `ToolUseBlock` appeared in the message stream) |
+
+[Full output →](https://github.com/jyje/pilot-solar-2/actions/runs/29306803664/job/87001673982)
 
 ## Verification
 

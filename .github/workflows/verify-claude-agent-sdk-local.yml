@@ -26,8 +26,6 @@ jobs:
         run: npm install -g @anthropic-ai/claude-code
 
       - uses: astral-sh/setup-uv@v5
-        with:
-          working-directory: 02-claude-agent-sdk-local/src
 
       - name: Lint, type-check, and test (python-lint)
         working-directory: 02-claude-agent-sdk-local/src

@@ -1,23 +1,126 @@
-# 03 — LangChain Upstage deepagents
+# Case 03 — LangChain Upstage deepagents
+
+[English](README.md) / [한국어](README-ko.md)
 
 [← back to repo overview](../README.md)
 
-**Status:** Planned
+**Status:** Verified — a `deepagents` agent initialized at the code level
+with `langchain-upstage` as the model backend, against Upstage's Solar
+Open2 model. All three methods confirmed working end to end (locally and
+in CI).
 
 ## Goal
 
-Initialize a `deepagents`-based agent at the code level using the
-**LangChain Upstage SDK** (`langchain-upstage`) as the model backend.
+Initialize a [`deepagents`](https://pypi.org/project/deepagents/) agent
+purely at the code level, using
+[`langchain-upstage`](https://pypi.org/project/langchain-upstage/) to
+supply Solar Open2 as the model. Unlike Cases 01-02, there's no Claude Code
+CLI involved anywhere in this path — this is LangChain/LangGraph talking
+to Upstage directly.
 
-## Approach
+## How it works
 
-- Start from the `create_deep_agent()` pattern and swap the model for
-  `langchain-upstage`.
-- Compose middleware following the style used in prior deepagents pilots.
-- Capture an example run for the writeup.
+`ChatUpstage` (from `langchain-upstage`) is a thin `BaseChatOpenAI`
+subclass pointed at Upstage's **OpenAI-compatible** endpoint
+(`https://api.upstage.ai/v1/solar` by default) and reads `UPSTAGE_API_KEY`
+from the environment automatically:
 
-## Planned tech
+```python
+from langchain_upstage import ChatUpstage
+from deepagents import create_deep_agent
 
-LangChain, `langchain-upstage`, `deepagents`
+model = ChatUpstage(model="solar-open2")
+agent = create_deep_agent(model=model, tools=[...], system_prompt="...")
+agent.invoke({"messages": [{"role": "user", "content": "..."}]})
+```
+
+That's the whole auth story — no `ANTHROPIC_BASE_URL`/`ANTHROPIC_AUTH_TOKEN`
+dance, no `claude` CLI subprocess. Cases 01-02 had to route through
+Anthropic's Messages API wire format (Upstage exposes that compatibility
+layer too, at a different host path); this case skips it entirely by
+using Upstage's native OpenAI-compatible endpoint through the LangChain
+integration Upstage itself publishes.
+
+## Finding: Python 3.14 doesn't work here (yet)
+
+This repo's other cases pin Python 3.14, but Case 03 pins **3.13**. Cause,
+confirmed by actually trying it: `langchain-upstage` depends on
+`tokenizers` (a Rust/PyO3 extension), and no `tokenizers` release —
+checked `0.20.3` through the current `0.23.1` — ships a `cp314` wheel
+yet. Building it from source also failed in this environment (a real
+`cargo`/PyO3 compile error, not a missing-toolchain issue). This is an
+upstream ecosystem gap, not a workaround-able config issue — Case 03 will
+move back to 3.14 once `tokenizers` (or an alternative Upstage integration
+that doesn't pull it in) supports it.
+
+## Three methods
+
+### Method A — tool use
+
+```python
+def get_weather(city: str) -> str:
+    """Get the weather for a city."""
+    return f"It is sunny in {city}."
+
+agent = create_deep_agent(model=model, tools=[get_weather], ...)
+agent.invoke({"messages": [{"role": "user", "content": "What is the weather in Seoul?"}]})
+```
+
+A plain custom tool the agent must call correctly to answer.
+
+### Method B — deepagents' built-in virtual filesystem
+
+```python
+agent = create_deep_agent(model=model, system_prompt="...file tools...")
+result = agent.invoke({"messages": [{"role": "user", "content":
+    "Write the text HELLO-DEEPAGENTS to a file named note.txt using your file tools."}]})
+result["files"]["/note.txt"]["content"]  # -> "HELLO-DEEPAGENTS"
+```
+
+`deepagents` ships a mock/virtual filesystem out of the box — no real
+disk I/O, the file lives in the agent's state. Deterministic to check.
+
+### Method C — subagent delegation
+
+```python
+subagents = [{
+    "name": "math-agent",
+    "description": "Use this subagent for any arithmetic/math task.",
+    "system_prompt": "You are a math specialist. Use the add_numbers tool.",
+    "tools": [add_numbers],
+}]
+agent = create_deep_agent(model=model, subagents=subagents, ...)
+agent.invoke({"messages": [{"role": "user", "content":
+    "Use the math-agent subagent to compute 17 + 25, then tell me the result."}]})
+```
+
+The main agent delegates arithmetic to a named subagent instead of doing
+it itself — both the main agent and the subagent run on Solar Open2.
+
+## Verified methods
+
+Evidence run: *(added after the first CI run on this case — see
+[Verification](#verification))*
+
+## Verification
+
+[`scripts/verify.sh`](scripts/verify.sh) runs `src/demo.py`, which
+executes all three methods for real against Solar Open2 and exits
+non-zero if any of them don't check out (Method A's answer missing
+"sunny"/"Seoul", Method B's file content wrong, or Method C's reply
+missing "42"). Python changes here go through the `python-lint` skill's
+workflow — `ruff check`, `ruff format --check`, `ty check`, `pytest` —
+before `verify.sh` runs, both locally and in CI.
+
+Run locally with `UPSTAGE_API_KEY` set:
+
+```bash
+UPSTAGE_API_KEY="..." ./scripts/verify.sh
+```
+
+Runs in CI on every push/PR that touches this directory:
+[`.github/workflows/verify-langchain-upstage-deepagents.yml`](../.github/workflows/verify-langchain-upstage-deepagents.yml) —
+no Node/`claude`-CLI install step needed, unlike Cases 01-02 — reusing the
+same `UPSTAGE_API_KEY` repository secret.
 
 See the repo-level [`PLAN.md`](../PLAN.md) for full context.

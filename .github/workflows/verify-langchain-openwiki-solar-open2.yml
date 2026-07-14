@@ -1,0 +1,47 @@
+name: verify-langchain-openwiki-solar-open2
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "04-langchain-openwiki-solar-open2/**"
+      - ".github/workflows/verify-langchain-openwiki-solar-open2.yml"
+  pull_request:
+    paths:
+      - "04-langchain-openwiki-solar-open2/**"
+      - ".github/workflows/verify-langchain-openwiki-solar-open2.yml"
+  workflow_dispatch: {}
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # openwiki's public npm release can't reach Solar Open2 correctly yet
+      # (see README.md's Finding: it streams tool_call function names, and
+      # Solar Open2 drops them mid-stream). Build the patched fork instead
+      # of `npm install -g openwiki` until the fix lands upstream.
+      - name: Check out patched openwiki fork
+        uses: actions/checkout@v4
+        with:
+          repository: jyje/openwiki
+          ref: fix/disable-streaming-for-tool-calling-providers
+          path: openwiki-fork
+
+      - name: Build and link patched openwiki
+        working-directory: openwiki-fork
+        run: |
+          npm install -g pnpm
+          pnpm install --frozen-lockfile
+          pnpm run build
+          npm link
+
+      - name: Run verification
+        env:
+          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+        run: ./04-langchain-openwiki-solar-open2/scripts/verify.sh

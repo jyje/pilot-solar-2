@@ -20,6 +20,13 @@
 
 set -euo pipefail
 
+# Always run from this topic's own directory, regardless of the caller's
+# cwd — Method D asks a subagent to list "the current directory," and that
+# must resolve the same way whether invoked as `./scripts/verify.sh` from
+# here or as `01-solar-open2-harness/scripts/verify.sh` from the repo root
+# (as CI does).
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
 fail() { printf '✗ %s\n' "$1" >&2; exit 1; }
 ok()   { printf '✓ %s\n' "$1"; }
 

@@ -27,7 +27,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
 fail() { printf '✗ %s\n' "$1" >&2; exit 1; }
 ok()   { printf '✓ %s\n' "$1"; }
-warn() { printf '⚠ %s\n' "$1"; }
+warn() { printf '⚠ %s\n' "$1" >&2; }
 
 # preview <text> — one line, <=100 chars, real content only.
 preview() {

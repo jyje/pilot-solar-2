@@ -1,15 +1,15 @@
 <div align="center">
 
-# jyje/pilot-solar-2
+# jyje/pilot-upstage-solar-open2
 
 <img width="96" src="https://unpkg.com/@lobehub/icons-static-svg@1.91.0/icons/upstage-color.svg" alt="Upstage" title="Upstage"/> <img width="96" src="https://unpkg.com/@lobehub/icons-static-svg@1.91.0/icons/claude-color.svg" alt="Claude" title="Claude"/>
 
 🧪 Three portfolio experiments in agent harnessing — Upstage Solar Open2, the Claude Agent SDK, and LangChain's Upstage integration with deepagents
 
-[![verify-solar-open2-harness](https://github.com/jyje/pilot-solar-2/actions/workflows/verify-solar-open2-harness.yml/badge.svg)](https://github.com/jyje/pilot-solar-2/actions/workflows/verify-solar-open2-harness.yml)
-[![verify-claude-agent-sdk-local](https://github.com/jyje/pilot-solar-2/actions/workflows/verify-claude-agent-sdk-local.yml/badge.svg)](https://github.com/jyje/pilot-solar-2/actions/workflows/verify-claude-agent-sdk-local.yml)
-[![verify-langchain-upstage-deepagents](https://github.com/jyje/pilot-solar-2/actions/workflows/verify-langchain-upstage-deepagents.yml/badge.svg)](https://github.com/jyje/pilot-solar-2/actions/workflows/verify-langchain-upstage-deepagents.yml)
-[![verify-langchain-openwiki-solar-open2](https://github.com/jyje/pilot-solar-2/actions/workflows/verify-langchain-openwiki-solar-open2.yml/badge.svg)](https://github.com/jyje/pilot-solar-2/actions/workflows/verify-langchain-openwiki-solar-open2.yml)
+[![verify-solar-open2-harness](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-solar-open2-harness.yml/badge.svg)](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-solar-open2-harness.yml)
+[![verify-claude-agent-sdk-local](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-claude-agent-sdk-local.yml/badge.svg)](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-claude-agent-sdk-local.yml)
+[![verify-langchain-upstage-deepagents](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-langchain-upstage-deepagents.yml/badge.svg)](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-langchain-upstage-deepagents.yml)
+[![verify-langchain-openwiki-solar-open2](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-langchain-openwiki-solar-open2.yml/badge.svg)](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-langchain-openwiki-solar-open2.yml)
 
 [English](README.md) / [한국어](README-ko.md)
 

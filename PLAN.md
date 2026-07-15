@@ -1,4 +1,4 @@
-# Plan: pilot-solar-2 — three agent-harness experiments
+# Plan: pilot-upstage-solar-open2 — three agent-harness experiments
 
 ## Context
 

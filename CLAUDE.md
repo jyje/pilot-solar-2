@@ -1,14 +1,22 @@
-# pilot-solar-2
+# pilot-upstage-solar-open2
 
 Portfolio/seminar repo hosting three independent agent-harness experiments
 built around Upstage's Solar Open2 model and the Claude/LangChain agent
 ecosystem. See [`PLAN.md`](PLAN.md) for the full plan and [`README.md`](README.md)
 for the public-facing overview.
 
+Renamed on GitHub from `pilot-solar-2` to `pilot-upstage-solar-open2`
+(the official name) on 2026-07-15. The local folder, git remote, badge
+history, and every hardcoded `pilot-solar-2` clone URL/link elsewhere in
+this repo intentionally still use the old name as an alias — GitHub
+redirects it to the new repository automatically, so nothing breaks.
+Only the display name (this file, the root README, `PLAN.md`) was
+updated; functional references were left alone on purpose.
+
 ## Structure
 
 ```
-pilot-solar-2/
+pilot-upstage-solar-open2/
 ├── .claude/skills/                    # skills available in this repo (see below)
 ├── PLAN.md                            # full plan (core Experiments + Special Use Cases)
 ├── README.md / README-ko.md           # portfolio front page

@@ -66,17 +66,30 @@ questions=(
   "What did the most recent commit change?"
   "How many experiment cases does this repo have, and what does each one demonstrate?"
 )
+ask() {
+  # Each question alone can consume most of Upstage's default
+  # 50k-tokens/minute budget (large system prompt + tool-calling round
+  # trips), so back off before every attempt to land in a fresh
+  # per-minute window. One retry with a longer backoff absorbs
+  # transient 429s from shared account usage without masking a real
+  # failure — it still requires an eventual real, successful answer.
+  local q="$1" out=""
+  sleep 75
+  if out="$(timeout 180 openwiki code -p "$q" 2>&1)" && [ -n "$out" ]; then
+    printf '%s' "$out"
+    return 0
+  fi
+  warn "first attempt failed (likely a transient rate limit) — retrying once after a longer backoff"
+  sleep 90
+  out="$(timeout 180 openwiki code -p "$q" 2>&1)" || return 1
+  [ -n "$out" ] || return 1
+  printf '%s' "$out"
+}
+
 for i in "${!questions[@]}"; do
   q="${questions[$i]}"
   echo "Q$((i + 1)): $q"
-  # Each question alone can consume most of Upstage's default
-  # 50k-tokens/minute budget (large system prompt + tool-calling round
-  # trips), so back off between every question — including before the
-  # first — to land each one in a fresh per-minute window.
-  sleep 75
-  a="$(timeout 180 openwiki code -p "$q" 2>&1)" \
-    || fail "question $((i + 1)) exited non-zero"
-  [ -n "$a" ] || fail "question $((i + 1)) produced no output"
+  a="$(ask "$q")" || fail "question $((i + 1)) failed after retry"
   preview "$a"
 done
 ok "all 3 questions answered"

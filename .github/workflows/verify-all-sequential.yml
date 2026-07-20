@@ -5,20 +5,14 @@ name: verify-all-sequential
 # means up to 10 jobs hit the same shared Upstage account/rate limit at
 # once; a real run of that escalated from 429s into a temporary 403 block
 # (see the run for commit 46f0fa9). This workflow instead runs every
-# case x model combination **one at a time, in one job, as separate
-# steps**, each continue-on-error so one failing combination doesn't hide
-# the rest.
-#
-# Between steps, instead of a blind fixed sleep, a tiny probe request
-# checks Upstage's own rate-limit response headers
-# (X-Upstage-RateLimit-Remaining-Requests/Tokens,
-# -Reset-Requests/Tokens, -Retry-After-Requests/Tokens — see
-# https://console.upstage.ai/ko/docs/guides/rate-limits) for the model
-# the *next* step is about to use, and only sleeps if that window is
-# actually low or already exceeded — waiting exactly until the reported
-# reset time, not a guessed duration. Manual-only (workflow_dispatch)
-# since a full sequential pass takes considerably longer than the
-# parallel one.
+# case x model combination **one at a time, as one of 10 steps** — each
+# step is scripts/verify-case.sh (shared with local ad-hoc runs), which
+# checks Upstage's own rate-limit response headers for the model it's
+# about to use and only waits if headroom is actually low (see
+# scripts/wait-for-upstage-headroom.sh), instead of a fixed guessed
+# delay. continue-on-error: true per step so one failing combination
+# doesn't hide the rest. Manual-only (workflow_dispatch) since a full
+# sequential pass takes considerably longer than the parallel one.
 
 on:
   workflow_dispatch: {}
@@ -60,126 +54,62 @@ jobs:
           pnpm run build
           npm link
 
-      - name: Wait for Upstage headroom (solar-open2)
-        env:
-          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-        run: ./scripts/wait-for-upstage-headroom.sh solar-open2
-
       - name: "Case 01 (solar-open2)"
         continue-on-error: true
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-          SOLAR_MODEL: solar-open2
-        run: |
-          export PATH="$HOME/.local/bin:$PATH"
-          ./01-solar-open2-harness/scripts/verify.sh
-
-      - name: Wait for Upstage headroom (solar-pro3)
-        env:
-          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-        run: ./scripts/wait-for-upstage-headroom.sh solar-pro3
+        run: ./scripts/verify-case.sh 01-solar-open2-harness solar-open2
 
       - name: "Case 01 (solar-pro3)"
         continue-on-error: true
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-          SOLAR_MODEL: solar-pro3
-        run: |
-          export PATH="$HOME/.local/bin:$PATH"
-          ./01-solar-open2-harness/scripts/verify.sh
-
-      - name: Wait for Upstage headroom (solar-open2)
-        env:
-          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-        run: ./scripts/wait-for-upstage-headroom.sh solar-open2
+        run: ./scripts/verify-case.sh 01-solar-open2-harness solar-pro3
 
       - name: "Case 02 (solar-open2)"
         continue-on-error: true
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-          SOLAR_MODEL: solar-open2
-        run: ./02-claude-agent-sdk-local/scripts/verify.sh
-
-      - name: Wait for Upstage headroom (solar-pro3)
-        env:
-          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-        run: ./scripts/wait-for-upstage-headroom.sh solar-pro3
+        run: ./scripts/verify-case.sh 02-claude-agent-sdk-local solar-open2
 
       - name: "Case 02 (solar-pro3)"
         continue-on-error: true
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-          SOLAR_MODEL: solar-pro3
-        run: ./02-claude-agent-sdk-local/scripts/verify.sh
-
-      - name: Wait for Upstage headroom (solar-open2)
-        env:
-          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-        run: ./scripts/wait-for-upstage-headroom.sh solar-open2
+        run: ./scripts/verify-case.sh 02-claude-agent-sdk-local solar-pro3
 
       - name: "Case 03 (solar-open2)"
         continue-on-error: true
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-          SOLAR_MODEL: solar-open2
-        run: ./03-langchain-upstage-deepagents/scripts/verify.sh
-
-      - name: Wait for Upstage headroom (solar-pro3)
-        env:
-          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-        run: ./scripts/wait-for-upstage-headroom.sh solar-pro3
+        run: ./scripts/verify-case.sh 03-langchain-upstage-deepagents solar-open2
 
       - name: "Case 03 (solar-pro3)"
         continue-on-error: true
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-          SOLAR_MODEL: solar-pro3
-        run: ./03-langchain-upstage-deepagents/scripts/verify.sh
-
-      - name: Wait for Upstage headroom (solar-open2)
-        env:
-          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-        run: ./scripts/wait-for-upstage-headroom.sh solar-open2
+        run: ./scripts/verify-case.sh 03-langchain-upstage-deepagents solar-pro3
 
       - name: "Case 04 (solar-open2)"
         continue-on-error: true
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-          SOLAR_MODEL: solar-open2
-        run: ./04-langchain-openwiki-solar-open2/scripts/verify.sh
-
-      - name: Wait for Upstage headroom (solar-pro3)
-        env:
-          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-        run: ./scripts/wait-for-upstage-headroom.sh solar-pro3
+        run: ./scripts/verify-case.sh 04-langchain-openwiki-solar-open2 solar-open2
 
       - name: "Case 04 (solar-pro3)"
         continue-on-error: true
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-          SOLAR_MODEL: solar-pro3
-        run: ./04-langchain-openwiki-solar-open2/scripts/verify.sh
-
-      - name: Wait for Upstage headroom (solar-open2)
-        env:
-          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-        run: ./scripts/wait-for-upstage-headroom.sh solar-open2
+        run: ./scripts/verify-case.sh 04-langchain-openwiki-solar-open2 solar-pro3
 
       - name: "Case 05 (solar-open2)"
         continue-on-error: true
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-          SOLAR_MODEL: solar-open2
-        run: ./05-hermes-agent-solar-open2/scripts/verify.sh
-
-      - name: Wait for Upstage headroom (solar-pro3)
-        env:
-          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-        run: ./scripts/wait-for-upstage-headroom.sh solar-pro3
+        run: ./scripts/verify-case.sh 05-hermes-agent-solar-open2 solar-open2
 
       - name: "Case 05 (solar-pro3)"
         continue-on-error: true
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-          SOLAR_MODEL: solar-pro3
-        run: ./05-hermes-agent-solar-open2/scripts/verify.sh
+        run: ./scripts/verify-case.sh 05-hermes-agent-solar-open2 solar-pro3

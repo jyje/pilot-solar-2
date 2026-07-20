@@ -83,5 +83,5 @@ for attempt in 1 2 3; do
 done
 printf '%s\n' "$chat_output"
 [ "$passed" = true ] \
-  || fail "Solar Open2 response did not contain hermes-ready after 3 attempts"
-ok "Hermes completed a live Solar Open2 round trip"
+  || fail "$SOLAR_MODEL response did not contain hermes-ready after 3 attempts"
+ok "Hermes completed a live $SOLAR_MODEL round trip"

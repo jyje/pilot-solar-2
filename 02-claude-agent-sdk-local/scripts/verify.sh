@@ -31,7 +31,7 @@ command -v claude >/dev/null 2>&1 || fail "claude CLI not found (npm install -g 
 cd src
 
 echo "== Model under test: $SOLAR_MODEL =="
-echo "== demo.py: Methods A/B/C against Solar Open2 =="
+echo "== demo.py: Methods A/B/C against $SOLAR_MODEL =="
 out=""
 passed=false
 for attempt in 1 2 3; do

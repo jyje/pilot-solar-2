@@ -158,7 +158,7 @@ printf '%s' "$method_c_out" | LC_ALL=C grep -q '[^ -~]' \
   || fail "skill output has no gitmoji: $method_c_out"
 printf '%s' "$method_c_out" | grep -Eq '\([A-Za-z0-9_.-]+\):' \
   || fail "skill output has no type(domain): segment after 3 attempts: $method_c_out"
-ok "git-commit-helper skill format honored via Solar Open2"
+ok "git-commit-helper skill format honored via $SOLAR_MODEL"
 preview "$method_c_out"
 
 echo

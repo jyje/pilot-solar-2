@@ -11,6 +11,12 @@ on:
       - "03-langchain-upstage-deepagents/**"
       - ".github/workflows/verify-langchain-upstage-deepagents.yml"
   workflow_dispatch: {}
+  workflow_call:
+    inputs:
+      model:
+        type: string
+        required: false
+        default: solar-open2
 
 jobs:
   verify:
@@ -31,4 +37,5 @@ jobs:
       - name: Run verification
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+          SOLAR_MODEL: ${{ inputs.model }}
         run: ./03-langchain-upstage-deepagents/scripts/verify.sh

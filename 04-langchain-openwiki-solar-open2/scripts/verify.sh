@@ -25,6 +25,8 @@ set -euo pipefail
 # Always run from this case's own directory, regardless of the caller's cwd.
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
+SOLAR_MODEL="${SOLAR_MODEL:-solar-open2}"
+
 fail() { printf '✗ %s\n' "$1" >&2; exit 1; }
 ok()   { printf '✓ %s\n' "$1"; }
 warn() { printf '⚠ %s\n' "$1" >&2; }
@@ -44,6 +46,7 @@ preview() {
 command -v openwiki >/dev/null 2>&1 || fail "openwiki not found (needs the jyje/openwiki patched build on PATH)"
 command -v git >/dev/null 2>&1 || fail "git not found"
 
+echo "== Model under test: $SOLAR_MODEL =="
 echo "== cloning a fresh shallow copy of pilot-upstage-solar-open2 into scratch/target =="
 rm -rf scratch
 mkdir -p scratch
@@ -56,7 +59,7 @@ cd scratch/target
 export OPENWIKI_PROVIDER=openai-compatible
 export OPENAI_COMPATIBLE_API_KEY="$UPSTAGE_API_KEY"
 export OPENAI_COMPATIBLE_BASE_URL="https://api.upstage.ai/v1/solar"
-export OPENWIKI_MODEL_ID=solar-open2
+export OPENWIKI_MODEL_ID="$SOLAR_MODEL"
 export OPENWIKI_DISABLE_STREAMING=true
 
 echo

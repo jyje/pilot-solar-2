@@ -11,6 +11,12 @@ on:
       - "04-langchain-openwiki-solar-open2/**"
       - ".github/workflows/verify-langchain-openwiki-solar-open2.yml"
   workflow_dispatch: {}
+  workflow_call:
+    inputs:
+      model:
+        type: string
+        required: false
+        default: solar-open2
 
 jobs:
   verify:
@@ -44,4 +50,5 @@ jobs:
       - name: Run verification
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+          SOLAR_MODEL: ${{ inputs.model }}
         run: ./04-langchain-openwiki-solar-open2/scripts/verify.sh

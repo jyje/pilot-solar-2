@@ -6,6 +6,8 @@ set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
+SOLAR_MODEL="${SOLAR_MODEL:-solar-open2}"
+
 fail() { printf '✗ %s\n' "$1" >&2; exit 1; }
 ok() { printf '✓ %s\n' "$1"; }
 
@@ -34,6 +36,8 @@ hermes() {
     "$image" "$@"
 }
 
+echo "== Model under test: $SOLAR_MODEL =="
+
 version="$(hermes --version)" || fail "Hermes Agent image did not start"
 printf '%s\n' "$version"
 printf '%s' "$version" | grep -q 'Hermes Agent' \
@@ -49,17 +53,29 @@ printf '%s' "$doctor_output" | grep -qi 'upstage' \
   || fail "hermes doctor did not detect the Upstage provider"
 ok "Hermes accepted the Upstage configuration"
 
-chat_output="$(hermes chat \
-  --provider upstage \
-  --model solar-open2 \
-  --query 'Reply with exactly: hermes-ready' \
-  --max-turns 2 \
-  --quiet \
-  --ignore-rules 2>&1)" || {
+# This repo's cases share one Upstage account/rate limit, so a chat call
+# can 429 simply because another case just ran — retry with backoff.
+chat_output=""
+passed=false
+for attempt in 1 2 3; do
+  if chat_output="$(hermes chat \
+    --provider upstage \
+    --model "$SOLAR_MODEL" \
+    --query 'Reply with exactly: hermes-ready' \
+    --max-turns 2 \
+    --quiet \
+    --ignore-rules 2>&1)" && printf '%s' "$chat_output" | grep -q 'hermes-ready'; then
+    passed=true
+    break
+  fi
   printf '%s\n' "$chat_output" >&2
-  fail "Hermes chat round trip failed"
-}
+  if [ "$attempt" -lt 3 ]; then
+    secs=$((attempt * 30))
+    printf '  attempt %s failed (possibly rate-limited) — retrying in %ss\n' "$attempt" "$secs" >&2
+    sleep "$secs"
+  fi
+done
 printf '%s\n' "$chat_output"
-printf '%s' "$chat_output" | grep -q 'hermes-ready' \
-  || fail "Solar Open2 response did not contain hermes-ready"
+[ "$passed" = true ] \
+  || fail "Solar Open2 response did not contain hermes-ready after 3 attempts"
 ok "Hermes completed a live Solar Open2 round trip"

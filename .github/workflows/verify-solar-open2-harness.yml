@@ -11,6 +11,12 @@ on:
       - "01-solar-open2-harness/**"
       - ".github/workflows/verify-solar-open2-harness.yml"
   workflow_dispatch: {}
+  workflow_call:
+    inputs:
+      model:
+        type: string
+        required: false
+        default: solar-open2
 
 jobs:
   verify:
@@ -31,6 +37,7 @@ jobs:
       - name: Run verification
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+          SOLAR_MODEL: ${{ inputs.model }}
         run: |
           export PATH="$HOME/.local/bin:$PATH"
           ./01-solar-open2-harness/scripts/verify.sh

@@ -11,6 +11,12 @@ on:
       - "02-claude-agent-sdk-local/**"
       - ".github/workflows/verify-claude-agent-sdk-local.yml"
   workflow_dispatch: {}
+  workflow_call:
+    inputs:
+      model:
+        type: string
+        required: false
+        default: solar-open2
 
 jobs:
   verify:
@@ -38,4 +44,5 @@ jobs:
       - name: Run verification
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+          SOLAR_MODEL: ${{ inputs.model }}
         run: ./02-claude-agent-sdk-local/scripts/verify.sh

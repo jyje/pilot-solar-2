@@ -1,0 +1,67 @@
+name: verify-all
+
+# Fans every case's reusable verify-<case>.yml workflow out into parallel
+# jobs (no `needs:` between them), across both cases and models — 5 cases
+# x 2 models = 10 parallel jobs. Each case workflow still triggers
+# standalone on its own path-scoped push/pull_request (solar-open2 only)
+# — this is the "verify everything, on every model" entry point on top
+# of that. fail-fast: false so one model failing for a case doesn't
+# cancel the other model's run for that same case.
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/**"
+
+jobs:
+  case-01:
+    strategy:
+      fail-fast: false
+      matrix:
+        model: [solar-open2, solar-pro3]
+    uses: ./.github/workflows/verify-solar-open2-harness.yml
+    with:
+      model: ${{ matrix.model }}
+    secrets: inherit
+
+  case-02:
+    strategy:
+      fail-fast: false
+      matrix:
+        model: [solar-open2, solar-pro3]
+    uses: ./.github/workflows/verify-claude-agent-sdk-local.yml
+    with:
+      model: ${{ matrix.model }}
+    secrets: inherit
+
+  case-03:
+    strategy:
+      fail-fast: false
+      matrix:
+        model: [solar-open2, solar-pro3]
+    uses: ./.github/workflows/verify-langchain-upstage-deepagents.yml
+    with:
+      model: ${{ matrix.model }}
+    secrets: inherit
+
+  case-04:
+    strategy:
+      fail-fast: false
+      matrix:
+        model: [solar-open2, solar-pro3]
+    uses: ./.github/workflows/verify-langchain-openwiki-solar-open2.yml
+    with:
+      model: ${{ matrix.model }}
+    secrets: inherit
+
+  case-05:
+    strategy:
+      fail-fast: false
+      matrix:
+        model: [solar-open2, solar-pro3]
+    uses: ./.github/workflows/verify-hermes-agent-solar-open2.yml
+    with:
+      model: ${{ matrix.model }}
+    secrets: inherit

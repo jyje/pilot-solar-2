@@ -8,13 +8,16 @@
 #   C. subagent delegation - a named subagent handles part of the task
 #
 # Unlike Cases 1-2, this never shells out to the `claude` CLI — only
-# `uv` and UPSTAGE_API_KEY are required.
+# `uv` and UPSTAGE_API_KEY are required. Model under test: $SOLAR_MODEL,
+# defaulting to solar-open2 (read by demo.py).
 
 set -euo pipefail
 
 # Always run from this case's own directory, regardless of the caller's
 # cwd (same reasoning as Cases 1-2's verify.sh).
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+export SOLAR_MODEL="${SOLAR_MODEL:-solar-open2}"
 
 fail() { printf '✗ %s\n' "$1" >&2; exit 1; }
 ok()   { printf '✓ %s\n' "$1"; }
@@ -24,6 +27,7 @@ command -v uv >/dev/null 2>&1 || fail "uv not found"
 
 cd src
 
+echo "== Model under test: $SOLAR_MODEL =="
 echo "== demo.py: Methods A/B/C against Solar Open2 =="
 out=""
 passed=false
@@ -34,7 +38,9 @@ for attempt in 1 2 3; do
   fi
   printf '%s\n' "$out" >&2
   if [ "$attempt" -lt 3 ]; then
-    printf '  attempt %s failed; retrying the complete A/B/C gate\n' "$attempt" >&2
+    secs=$((attempt * 30))
+    printf '  attempt %s failed (possibly rate-limited) — retrying in %ss\n' "$attempt" "$secs" >&2
+    sleep "$secs"
   fi
 done
 

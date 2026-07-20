@@ -8,13 +8,18 @@
 #   C. query() + tool use - a ToolUseBlock surfaces in the structured stream
 #
 # Requires: `uv` and `claude` (npm i -g @anthropic-ai/claude-code) on PATH,
-# UPSTAGE_API_KEY set.
+# UPSTAGE_API_KEY set. Model under test: $SOLAR_MODEL, defaulting to
+# solar-open2 (read by demo.py). Retries the full A/B/C run up to 3 times
+# with backoff — this repo's cases share one Upstage account/rate limit,
+# so a run can 429 simply because another case just ran.
 
 set -euo pipefail
 
 # Always run from this topic's own directory, regardless of the caller's
 # cwd (same reasoning as topic 01's verify.sh).
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+export SOLAR_MODEL="${SOLAR_MODEL:-solar-open2}"
 
 fail() { printf '✗ %s\n' "$1" >&2; exit 1; }
 ok()   { printf '✓ %s\n' "$1"; }
@@ -25,9 +30,23 @@ command -v claude >/dev/null 2>&1 || fail "claude CLI not found (npm install -g 
 
 cd src
 
+echo "== Model under test: $SOLAR_MODEL =="
 echo "== demo.py: Methods A/B/C against Solar Open2 =="
-out="$(timeout 180 uv run python demo.py 2>&1)" \
-  || fail "demo.py exited non-zero"
+out=""
+passed=false
+for attempt in 1 2 3; do
+  if out="$(timeout 180 uv run python demo.py 2>&1)"; then
+    passed=true
+    break
+  fi
+  printf '%s\n' "$out" >&2
+  if [ "$attempt" -lt 3 ]; then
+    secs=$((attempt * 30))
+    printf '  attempt %s failed (possibly rate-limited) — retrying in %ss\n' "$attempt" "$secs" >&2
+    sleep "$secs"
+  fi
+done
+[ "$passed" = true ] || fail "demo.py exited non-zero after 3 attempts"
 
 # Same noise-stripping as topic 01's verify.sh — this warning is emitted
 # by `claude` whenever an alternate auth source is set, it's not signal.

@@ -11,6 +11,12 @@ on:
       - "05-hermes-agent-solar-open2/**"
       - ".github/workflows/verify-hermes-agent-solar-open2.yml"
   workflow_dispatch: {}
+  workflow_call:
+    inputs:
+      model:
+        type: string
+        required: false
+        default: solar-open2
 
 jobs:
   verify:
@@ -21,4 +27,5 @@ jobs:
       - name: Verify Hermes Agent with Solar Open2
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+          SOLAR_MODEL: ${{ inputs.model }}
         run: ./05-hermes-agent-solar-open2/scripts/verify.sh

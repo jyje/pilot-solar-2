@@ -11,13 +11,14 @@ Three methods, each proving a distinct deepagents capability:
   C. subagent delegation    - a named subagent handles part of the task
 """
 
+import os
 import sys
 from typing import Any
 
 from deepagents import SubAgent, create_deep_agent
 from langchain_upstage import ChatUpstage
 
-SOLAR_MODEL = "solar-open2"
+SOLAR_MODEL = os.environ.get("SOLAR_MODEL", "solar-open2")
 
 
 def solar_model() -> ChatUpstage:

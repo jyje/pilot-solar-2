@@ -22,7 +22,7 @@ from claude_agent_sdk import (
     query,
 )
 
-SOLAR_MODEL = "solar-open2"
+SOLAR_MODEL = os.environ.get("SOLAR_MODEL", "solar-open2")
 SOLAR_BASE_URL = "https://api.upstage.ai"
 
 

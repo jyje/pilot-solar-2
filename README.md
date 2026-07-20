@@ -32,4 +32,19 @@ be read, run, and presented independently.
 | [Case 04 — Solar Open2 x LangChain OpenWiki](04-langchain-openwiki-solar-open2/) | Use `openwiki` to document this repo and answer questions about it, powered by Solar Open2 | Verified |
 | [Case 05 — Solar Open2 x Hermes Agent](05-hermes-agent-solar-open2/) | Run Hermes Agent through its officially bundled Upstage provider and the official Docker image | Verified |
 
+## Multi-model verification history
+
+Beyond the per-case CI badges above (which only check `solar-open2`),
+[`verify-all-sequential.yml`](.github/workflows/verify-all-sequential.yml)
+runs every case against multiple Solar models, one case x model
+combination at a time, waiting on Upstage's own rate-limit headers
+between steps. It assumes the account is on Upstage's **default
+(Tier 0)** rate limits, so occasional per-model flakiness — not a code
+bug — is expected; this table tracks real results across repeated runs
+rather than a single pass.
+
+| Date | Run | Result | Notes |
+| --- | --- | --- | --- |
+| 2026-07-20 | [run](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29786476787) | 6/10 | Cases 01, 02 (`solar-pro3` only): intermittent `400` from Upstage's Anthropic-compatible endpoint — passed in an earlier run the same day, so not a hard incompatibility. Case 04 (both models): rate-limit exhaustion from same-day repeat testing; the headroom safety margin was raised afterward (commit `5857fc2`). |
+
 See [`PLAN.md`](PLAN.md) for the full plan and [`AGENTS.md`](AGENTS.md) for repo conventions.

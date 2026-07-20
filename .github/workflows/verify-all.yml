@@ -7,13 +7,16 @@ name: verify-all
 # — this is the "verify everything, on every model" entry point on top
 # of that. fail-fast: false so one model failing for a case doesn't
 # cancel the other model's run for that same case.
+#
+# Manual-only (workflow_dispatch): this used to also auto-run on every
+# push touching .github/workflows/** , but that meant every workflow-file
+# commit re-fired all 10 parallel jobs — including while
+# verify-all-sequential.yml's rate-limit-aware run was already in
+# flight, competing for the same Upstage account's quota. Trigger it by
+# hand when you actually want the fast, parallel check.
 
 on:
   workflow_dispatch: {}
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/**"
 
 jobs:
   case-01:

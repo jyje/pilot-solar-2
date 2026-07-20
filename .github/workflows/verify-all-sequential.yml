@@ -15,6 +15,13 @@ name: verify-all-sequential
 # pass/fail of every step regardless. Manual-only (workflow_dispatch)
 # since a full sequential pass takes considerably longer than the
 # parallel one.
+#
+# This whole pipeline assumes the account behind UPSTAGE_API_KEY is on
+# Upstage's **default (Tier 0)** rate limits, not a paid commitment
+# tier — that's the whole reason it waits on real headroom instead of
+# firing everything at once. Expect a full run to take a while (tens
+# of minutes is normal); a higher tier would make the waits mostly
+# disappear, but nothing here assumes one.
 
 on:
   workflow_dispatch: {}

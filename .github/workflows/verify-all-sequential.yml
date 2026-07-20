@@ -1,0 +1,155 @@
+name: verify-all-sequential
+
+# Companion to verify-all.yml (left untouched — this does not replace it).
+# verify-all.yml fans every case x model out in parallel, which is fast but
+# means up to 10 jobs hit the same shared Upstage account/rate limit at
+# once; a real run of that escalated from 429s into a temporary 403 block
+# (see the run for commit 46f0fa9). This workflow instead runs every
+# case x model combination **one at a time, in one job, as separate
+# steps** — a minute of spacing between each gives the account's
+# per-minute budget room to recover, and one step per combination means
+# each one's pass/fail is independently visible in the Actions UI
+# (continue-on-error: true so one failing combination doesn't hide the
+# rest). Manual-only (workflow_dispatch) since a full sequential pass
+# takes considerably longer than the parallel one.
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  verify-sequential:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Install claude-upstage
+        run: curl -fsSL https://console.upstage.ai/claude-upstage.sh | sh -s install
+
+      # openwiki's public npm release can't reach Solar Open2 correctly yet
+      # (see 04-langchain-openwiki-solar-open2/README.md's Finding). Build
+      # the patched fork instead of `npm install -g openwiki`, same as
+      # verify-langchain-openwiki-solar-open2.yml does.
+      - name: Check out patched openwiki fork
+        uses: actions/checkout@v4
+        with:
+          repository: jyje/openwiki
+          ref: fix/disable-streaming-for-tool-calling-providers
+          path: openwiki-fork
+
+      - name: Build and link patched openwiki
+        working-directory: openwiki-fork
+        run: |
+          npm install -g pnpm
+          pnpm install --frozen-lockfile
+          pnpm run build
+          npm link
+
+      - name: "Case 01 (solar-open2)"
+        continue-on-error: true
+        env:
+          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+          SOLAR_MODEL: solar-open2
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          ./01-solar-open2-harness/scripts/verify.sh
+
+      - name: Wait 60s (rate-limit spacing)
+        run: sleep 60
+
+      - name: "Case 01 (solar-pro3)"
+        continue-on-error: true
+        env:
+          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+          SOLAR_MODEL: solar-pro3
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          ./01-solar-open2-harness/scripts/verify.sh
+
+      - name: Wait 60s (rate-limit spacing)
+        run: sleep 60
+
+      - name: "Case 02 (solar-open2)"
+        continue-on-error: true
+        env:
+          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+          SOLAR_MODEL: solar-open2
+        run: ./02-claude-agent-sdk-local/scripts/verify.sh
+
+      - name: Wait 60s (rate-limit spacing)
+        run: sleep 60
+
+      - name: "Case 02 (solar-pro3)"
+        continue-on-error: true
+        env:
+          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+          SOLAR_MODEL: solar-pro3
+        run: ./02-claude-agent-sdk-local/scripts/verify.sh
+
+      - name: Wait 60s (rate-limit spacing)
+        run: sleep 60
+
+      - name: "Case 03 (solar-open2)"
+        continue-on-error: true
+        env:
+          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+          SOLAR_MODEL: solar-open2
+        run: ./03-langchain-upstage-deepagents/scripts/verify.sh
+
+      - name: Wait 60s (rate-limit spacing)
+        run: sleep 60
+
+      - name: "Case 03 (solar-pro3)"
+        continue-on-error: true
+        env:
+          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+          SOLAR_MODEL: solar-pro3
+        run: ./03-langchain-upstage-deepagents/scripts/verify.sh
+
+      - name: Wait 60s (rate-limit spacing)
+        run: sleep 60
+
+      - name: "Case 04 (solar-open2)"
+        continue-on-error: true
+        env:
+          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+          SOLAR_MODEL: solar-open2
+        run: ./04-langchain-openwiki-solar-open2/scripts/verify.sh
+
+      - name: Wait 60s (rate-limit spacing)
+        run: sleep 60
+
+      - name: "Case 04 (solar-pro3)"
+        continue-on-error: true
+        env:
+          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+          SOLAR_MODEL: solar-pro3
+        run: ./04-langchain-openwiki-solar-open2/scripts/verify.sh
+
+      - name: Wait 60s (rate-limit spacing)
+        run: sleep 60
+
+      - name: "Case 05 (solar-open2)"
+        continue-on-error: true
+        env:
+          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+          SOLAR_MODEL: solar-open2
+        run: ./05-hermes-agent-solar-open2/scripts/verify.sh
+
+      - name: Wait 60s (rate-limit spacing)
+        run: sleep 60
+
+      - name: "Case 05 (solar-pro3)"
+        continue-on-error: true
+        env:
+          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+          SOLAR_MODEL: solar-pro3
+        run: ./05-hermes-agent-solar-open2/scripts/verify.sh

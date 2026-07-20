@@ -61,13 +61,19 @@ done
 
 # Otherwise, only wait if the remaining headroom looks thin — a whole
 # case can make several calls, so leave margin rather than cutting it
-# exactly to zero.
+# exactly to zero. The token margin is deliberately large: a single
+# heavy call (e.g. Case 04's openwiki, large system prompt + tool
+# calling) can burn tens of thousands of tokens by itself — a probe
+# showing "headroom available" isn't enough if that one call alone
+# would blow through most of what's left (seen live: Case 04 failed
+# with headroom reported "available" right before it, in run
+# 29786476787).
 if [ "$wait_until" -eq 0 ]; then
-  if [ -n "$remaining_requests" ] && [ "$remaining_requests" -le 2 ] 2>/dev/null \
+  if [ -n "$remaining_requests" ] && [ "$remaining_requests" -le 5 ] 2>/dev/null \
     && [ -n "$reset_requests" ] && [ "$reset_requests" -gt "$wait_until" ] 2>/dev/null; then
     wait_until="$reset_requests"
   fi
-  if [ -n "$remaining_tokens" ] && [ "$remaining_tokens" -le 2000 ] 2>/dev/null \
+  if [ -n "$remaining_tokens" ] && [ "$remaining_tokens" -le 25000 ] 2>/dev/null \
     && [ -n "$reset_tokens" ] && [ "$reset_tokens" -gt "$wait_until" ] 2>/dev/null; then
     wait_until="$reset_tokens"
   fi

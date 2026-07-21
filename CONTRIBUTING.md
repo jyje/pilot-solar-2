@@ -27,6 +27,12 @@ commands you'll actually run.
 
 ## Local development
 
+Looking for a step-by-step walkthrough instead — exact prerequisites and
+commands per case, with expected output and troubleshooting? See
+[`docs/REPRODUCE.md`](docs/REPRODUCE.md) (English/Korean). The rest of
+this section stays a quick reference for people already familiar with the
+repo.
+
 ### Prerequisites
 
 - `UPSTAGE_API_KEY` — every case's verification hits the real Upstage API.

@@ -51,6 +51,10 @@ API를 호출하는(모킹 없음) 자체 `scripts/verify.sh`, 그리고 공유 
 Case 추가나 로컬 실행 방법은 [`CONTRIBUTING.md`](CONTRIBUTING.md)를
 참고하세요.
 
+지금 바로, 단계별로 직접 재현해보고 싶다면?
+[`docs/REPRODUCE-ko.md`](docs/REPRODUCE-ko.md)에서 각 Case마다 필요한
+준비물과 정확한 명령어를 하나씩 안내합니다(영문/한글 모두 제공).
+
 ## Solar Open2가 기존 에이전트 하네스에 잘 맞는 이유
 
 위 모든 Case는 커스텀 클라이언트가 아니라, 주류 프레임워크가 이미

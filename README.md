@@ -2,7 +2,7 @@
 
 # jyje/pilot-upstage-solar-open2
 
-<img width="96" src="https://unpkg.com/@lobehub/icons-static-svg@1.91.0/icons/upstage-color.svg" alt="Upstage" title="Upstage"/> <img width="96" src="https://unpkg.com/@lobehub/icons-static-svg@1.91.0/icons/claude-color.svg" alt="Claude" title="Claude"/> <img width="96" src="https://unpkg.com/@lobehub/icons-static-svg@1.91.0/icons/nousresearch.svg" alt="Hermes Agent" title="Hermes Agent"/>
+<img height="240" src="https://raw.githubusercontent.com/jyje/pilot-upstage-solar-open2/main/docs/images/pilot-upstage-solar-open2.png" alt="Claude Code × Upstage Solar Open2 × Hermes Agent"/>
 
 🧪 Claude Code, the Claude Agent SDK, LangChain, OpenWiki, and Hermes Agent — every use case built on Upstage Solar Open2!
 
@@ -46,5 +46,6 @@ rather than a single pass.
 | Date | Run | Result | Notes |
 | --- | --- | --- | --- |
 | 2026-07-20 | [run](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29786476787) | 6/10 | Cases 01, 02 (`solar-pro3` only): intermittent `400` from Upstage's Anthropic-compatible endpoint — passed in an earlier run the same day, so not a hard incompatibility. Case 04 (both models): rate-limit exhaustion from same-day repeat testing; the headroom safety margin was raised afterward (commit `5857fc2`). |
+| 2026-07-21 | [run](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29820817298) | 7/10 | All 5 `solar-open2` runs and Case 03/05's `solar-pro3` passed cleanly, running in isolation after archiving the 6 other workflows that used to auto-fire mid-run and compete for the same account (see `.yaml_disabled` files in `.github/workflows/`). Remaining failures are all `solar-pro3`: Case 01/02 — same intermittent Anthropic-compatible-endpoint behavior as above; Case 04 — a real, root-caused Tier-0 capacity limit (see PLAN.md's Case 04, Finding 4), expected to pass on Tier 1+. |
 
 See [`PLAN.md`](PLAN.md) for the full plan and [`AGENTS.md`](AGENTS.md) for repo conventions.

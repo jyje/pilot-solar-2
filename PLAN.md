@@ -137,6 +137,20 @@ it without needing any of the others.
      run — a capacity/tier constraint, not a bug. The 3-question Q&A
      (cheap, single-turn) is the hard, reliably-passing verification
      gate; doc generation is attempted best-effort.
+  4. `solar-pro3` needs more than a Tier-0 account's 50k-tokens/minute
+     budget to answer even one question here: its agentic tool-calling
+     loop makes 4-5 sequential round trips per question, and each one
+     resends the cached system prompt + all 16 tool schemas
+     (~13-15k tokens/call) — cumulative usage across just 4 calls
+     already exceeds 50k. Confirmed with a local logging proxy showing
+     real per-call `usage`, alongside a `reasoning_effort=low` patch to
+     the fork (branch `feat/reasoning-effort-passthrough`, committed but
+     not yet pushed/merged) that ruled out reasoning overhead as the
+     cause — `reasoning_tokens: 0` on every call, same result. Not a
+     code bug: `solar-open2` needs fewer round trips for the same
+     question and comfortably fits the same budget. Expected to work on
+     Upstage's Tier 1 and above (higher RPM/TPM); just not verifiable on
+     this repo's Tier-0 account.
   Verified locally and in CI
   (`.github/workflows/verify-langchain-openwiki-solar-open2.yml`,
   building the patched fork from source, reusing the `UPSTAGE_API_KEY`

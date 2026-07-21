@@ -83,16 +83,20 @@ ask() {
   # transient 429s from shared account usage without masking a real
   # failure — it still requires an eventual real, successful answer.
   local q="$1" out=""
-  "$HEADROOM_SCRIPT" "$SOLAR_MODEL"
+  "$HEADROOM_SCRIPT" "$SOLAR_MODEL" >&2
   if out="$(timeout 180 openwiki code -p "$q" 2>&1)" && [ -n "$out" ]; then
     printf '%s' "$out"
     return 0
   fi
-  warn "first attempt failed (likely a transient rate limit) — retrying once after a longer backoff"
-  "$HEADROOM_SCRIPT" "$SOLAR_MODEL"
-  out="$(timeout 180 openwiki code -p "$q" 2>&1)" || return 1
-  [ -n "$out" ] || return 1
-  printf '%s' "$out"
+  warn "first attempt failed — retrying once after a fresh headroom check"
+  preview "$out" >&2
+  "$HEADROOM_SCRIPT" "$SOLAR_MODEL" >&2
+  if out="$(timeout 180 openwiki code -p "$q" 2>&1)" && [ -n "$out" ]; then
+    printf '%s' "$out"
+    return 0
+  fi
+  preview "$out" >&2
+  return 1
 }
 
 for i in "${!questions[@]}"; do

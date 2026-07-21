@@ -104,7 +104,7 @@ agent.invoke({"messages": [{"role": "user", "content":
 않았습니다. 링크를 클릭하면 실행 자체를 직접 확인할 수 있습니다:
 
 **근거 실행:** [`verify` job, 2026-07-14](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29313121694/job/87021080894)
-(또는 최신 결과를 보려면 [전체 실행 목록](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-langchain-upstage-deepagents.yml) 참고)
+(또는 최신 결과를 보려면 [전체 실행 목록](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml) 참고)
 
 | 방식 | 결과 |
 | --- | --- |
@@ -130,8 +130,8 @@ agent.invoke({"messages": [{"role": "user", "content":
 UPSTAGE_API_KEY="..." ./scripts/verify.sh
 ```
 
-이 디렉토리를 건드리는 모든 push/PR에서 CI에서도 실행됩니다:
-[`.github/workflows/verify-langchain-upstage-deepagents.yml`](../.github/workflows/verify-langchain-upstage-deepagents.yml) —
+CI에서도 한 단계로 실행됩니다(수동 실행, `solar-open2`만):
+[`.github/workflows/verify-all-sequential.yml`](../.github/workflows/verify-all-sequential.yml) —
 Case 01·02와 달리 Node/`claude` CLI 설치 과정이 필요 없습니다 — 동일한
 `UPSTAGE_API_KEY` 저장소 시크릿을 재사용합니다.
 

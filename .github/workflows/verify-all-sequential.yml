@@ -1,27 +1,27 @@
 name: verify-all-sequential
 
-# The single active verification workflow for this repo. Runs every
-# case x model combination **one at a time, as one of 10 steps** —
-# each step is scripts/verify-case.sh (shared with local ad-hoc runs),
-# which checks Upstage's own rate-limit response headers for the model
-# it's about to use and only waits if headroom is actually low (see
+# The single verification workflow for this repo. Runs all 5 cases
+# against solar-open2, one at a time as one of 5 steps — each step is
+# scripts/verify-case.sh (shared with local ad-hoc runs), which checks
+# Upstage's own rate-limit response headers for the model it's about to
+# use and only waits if headroom is actually low (see
 # scripts/wait-for-upstage-headroom.sh), instead of a fixed guessed
-# delay. continue-on-error: true per step so one failing combination
-# doesn't hide the rest — the final Recap step reports the real
-# pass/fail of every step regardless. Manual-only (workflow_dispatch).
+# delay. continue-on-error: true per step so one failing case doesn't
+# hide the rest — the final Recap step reports the real pass/fail of
+# every step regardless. Manual-only (workflow_dispatch).
 #
-# The other 6 verify-*.yml workflows (5 per-case + the parallel
-# verify-all) are archived as .yaml_disabled, not deleted — their own
-# push triggers used to fire mid-run and collide with this workflow
-# for the same Upstage account's quota (confirmed live). Rather than
-# try to coordinate multiple active workflows against each other, this
-# is now the only one GitHub Actions will even run.
+# solar-open2 only, by design: this repo's purpose is demonstrating
+# every use case on Solar Open2, not benchmarking Upstage's model
+# lineup. An earlier version of this workflow also ran solar-pro3 for
+# comparison, which surfaced a real, root-caused Tier-0 capacity limit
+# for Case 04 (see PLAN.md's Case 04, Finding 4) — useful as a finding,
+# but out of scope for this repo's ongoing verification going forward.
 #
-# This whole pipeline assumes the account behind UPSTAGE_API_KEY is on
-# Upstage's **default (Tier 0)** rate limits, not a paid commitment
-# tier — that's the whole reason it waits on real headroom instead of
-# firing everything at once. Expect a full run to take a while (tens
-# of minutes is normal); a higher tier would make the waits mostly
+# This assumes the account behind UPSTAGE_API_KEY is on Upstage's
+# **default (Tier 0)** rate limits, not a paid commitment tier — that's
+# the whole reason it waits on real headroom instead of firing
+# everything at once. Expect a full run to take a while (tens of
+# minutes is normal); a higher tier would make the waits mostly
 # disappear, but nothing here assumes one.
 
 on:
@@ -53,8 +53,7 @@ jobs:
       # release always streams, so it can't reach Solar Open2 correctly.
       # The jyje/openwiki fork below adds an opt-in
       # OPENWIKI_DISABLE_STREAMING env var that works around it; that fix
-      # hasn't landed upstream yet. Same as
-      # verify-langchain-openwiki-solar-open2.yml does. See
+      # hasn't landed upstream yet. See
       # 04-langchain-openwiki-solar-open2/README.md's Finding 2 for the
       # full writeup.
       - name: Check out patched openwiki fork
@@ -72,76 +71,40 @@ jobs:
           pnpm run build
           npm link
 
-      - name: "Case 01 (solar-open2)"
-        id: c01-open2
+      - name: "Case 01 — Solar Open2 x Claude Code"
+        id: c01
         continue-on-error: true
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
         run: ./scripts/verify-case.sh 01-solar-open2-harness solar-open2
 
-      - name: "Case 01 (solar-pro3)"
-        id: c01-pro3
-        continue-on-error: true
-        env:
-          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-        run: ./scripts/verify-case.sh 01-solar-open2-harness solar-pro3
-
-      - name: "Case 02 (solar-open2)"
-        id: c02-open2
+      - name: "Case 02 — Solar Open2 x Claude Agent SDK"
+        id: c02
         continue-on-error: true
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
         run: ./scripts/verify-case.sh 02-claude-agent-sdk-local solar-open2
 
-      - name: "Case 02 (solar-pro3)"
-        id: c02-pro3
-        continue-on-error: true
-        env:
-          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-        run: ./scripts/verify-case.sh 02-claude-agent-sdk-local solar-pro3
-
-      - name: "Case 03 (solar-open2)"
-        id: c03-open2
+      - name: "Case 03 — Solar Open2 x LangChain Deepagents"
+        id: c03
         continue-on-error: true
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
         run: ./scripts/verify-case.sh 03-langchain-upstage-deepagents solar-open2
 
-      - name: "Case 03 (solar-pro3)"
-        id: c03-pro3
-        continue-on-error: true
-        env:
-          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-        run: ./scripts/verify-case.sh 03-langchain-upstage-deepagents solar-pro3
-
-      - name: "Case 04 (solar-open2)"
-        id: c04-open2
+      - name: "Case 04 — Solar Open2 x LangChain OpenWiki"
+        id: c04
         continue-on-error: true
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
         run: ./scripts/verify-case.sh 04-langchain-openwiki-solar-open2 solar-open2
 
-      # solar-pro3 is skipped here on purpose, not run-and-ignored: its
-      # agentic tool-calling loop needs 4-5 round trips per question,
-      # each resending the ~13-15k-token system prompt + tool schemas,
-      # which exceeds Tier-0's 50k-tokens/minute budget before a single
-      # question completes (root-caused via a local logging proxy; see
-      # PLAN.md's Case 04, Finding 4). Not a code bug — expected to pass
-      # on Tier 1+, just not verifiable on this repo's Tier-0 account.
-
-      - name: "Case 05 (solar-open2)"
-        id: c05-open2
+      - name: "Case 05 — Solar Open2 x Hermes Agent"
+        id: c05
         continue-on-error: true
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
         run: ./scripts/verify-case.sh 05-hermes-agent-solar-open2 solar-open2
-
-      - name: "Case 05 (solar-pro3)"
-        id: c05-pro3
-        continue-on-error: true
-        env:
-          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
-        run: ./scripts/verify-case.sh 05-hermes-agent-solar-open2 solar-pro3
 
       # continue-on-error steps always report conclusion=success at the
       # job level, so this reads each step's real `outcome` (not
@@ -159,50 +122,31 @@ jobs:
             "Case 04 — Solar Open2 x LangChain OpenWiki"
             "Case 05 — Solar Open2 x Hermes Agent"
           )
-          open2_outcomes=(
-            "${{ steps.c01-open2.outcome }}"
-            "${{ steps.c02-open2.outcome }}"
-            "${{ steps.c03-open2.outcome }}"
-            "${{ steps.c04-open2.outcome }}"
-            "${{ steps.c05-open2.outcome }}"
-          )
-          # Case 04's solar-pro3 has no step to read an outcome from
-          # (skipped — see the step comment above); "skipped" here is a
-          # fixed label, not a live outcome, and is excluded from the
-          # pass/fail gate below.
-          pro3_outcomes=(
-            "${{ steps.c01-pro3.outcome }}"
-            "${{ steps.c02-pro3.outcome }}"
-            "${{ steps.c03-pro3.outcome }}"
-            "skipped"
-            "${{ steps.c05-pro3.outcome }}"
+          outcomes=(
+            "${{ steps.c01.outcome }}"
+            "${{ steps.c02.outcome }}"
+            "${{ steps.c03.outcome }}"
+            "${{ steps.c04.outcome }}"
+            "${{ steps.c05.outcome }}"
           )
 
-          mark() {
-            case "$1" in
-              success) echo "✅" ;;
-              skipped) echo "⏭️" ;;
-              *) echo "❌" ;;
-            esac
-          }
+          mark() { [ "$1" = success ] && echo "✅" || echo "❌"; }
 
           {
             echo "## verify-all-sequential recap"
             echo
-            echo "| Case | solar-open2 | solar-pro3 |"
-            echo "| --- | --- | --- |"
+            echo "| Case | solar-open2 |"
+            echo "| --- | --- |"
           } | tee -a "$GITHUB_STEP_SUMMARY"
 
           any_failed=false
           for i in "${!names[@]}"; do
-            open2="${open2_outcomes[$i]}"
-            pro3="${pro3_outcomes[$i]}"
-            echo "| ${names[$i]} | $(mark "$open2") $open2 | $(mark "$pro3") $pro3 |" | tee -a "$GITHUB_STEP_SUMMARY"
-            [ "$open2" = success ] || any_failed=true
-            [ "$pro3" = success ] || [ "$pro3" = skipped ] || any_failed=true
+            outcome="${outcomes[$i]}"
+            echo "| ${names[$i]} | $(mark "$outcome") $outcome |" | tee -a "$GITHUB_STEP_SUMMARY"
+            [ "$outcome" = success ] || any_failed=true
           done
 
           if [ "$any_failed" = true ]; then
-            echo "One or more case x model combinations failed — see that step's own log above." >&2
+            echo "One or more cases failed — see that step's own log above." >&2
             exit 1
           fi

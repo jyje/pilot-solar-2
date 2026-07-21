@@ -111,7 +111,7 @@ echo "hello" | claude-upstage
 수 있습니다:
 
 **근거 실행:** [`verify` job, 2026-07-14](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29304170180/job/86994029784)
-(또는 최신 결과를 보려면 [전체 실행 목록](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-solar-open2-harness.yml) 참고)
+(또는 최신 결과를 보려면 [전체 실행 목록](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml) 참고)
 
 ### 방식 A — `claude-upstage`, 파이프 stdin
 
@@ -216,8 +216,8 @@ claude -p "Use the Explore agent (a subagent) to list every file \
 UPSTAGE_API_KEY="..." ./scripts/verify.sh
 ```
 
-이 디렉토리를 건드리는 모든 push/PR에서 CI에서도 실행됩니다:
-[`.github/workflows/verify-solar-open2-harness.yml`](../.github/workflows/verify-solar-open2-harness.yml),
+CI에서도 한 단계로 실행됩니다(수동 실행, `solar-open2`만):
+[`.github/workflows/verify-all-sequential.yml`](../.github/workflows/verify-all-sequential.yml),
 `UPSTAGE_API_KEY` 저장소 시크릿을 사용합니다.
 
 전체 맥락은 리포 레벨의 [`PLAN.md`](../PLAN.md)를 참고하세요.

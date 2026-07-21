@@ -113,7 +113,7 @@ hand-picked or edited. Click through to read the untruncated response
 yourself:
 
 **Evidence run:** [`verify` job, 2026-07-14](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29304170180/job/86994029784)
-(or browse [every run](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-solar-open2-harness.yml) for the latest)
+(or browse [every run](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml) for the latest)
 
 ### Method A — `claude-upstage`, piped stdin
 
@@ -224,8 +224,8 @@ Run it locally with `UPSTAGE_API_KEY` set:
 UPSTAGE_API_KEY="..." ./scripts/verify.sh
 ```
 
-It also runs in CI on every push/PR that touches this directory:
-[`.github/workflows/verify-solar-open2-harness.yml`](../.github/workflows/verify-solar-open2-harness.yml),
+It also runs as a step in CI (manual dispatch, solar-open2 only):
+[`.github/workflows/verify-all-sequential.yml`](../.github/workflows/verify-all-sequential.yml),
 using the `UPSTAGE_API_KEY` repository secret.
 
 See the repo-level [`PLAN.md`](../PLAN.md) for full context.

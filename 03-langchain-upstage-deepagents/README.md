@@ -103,7 +103,7 @@ Real output from one CI run of `verify.sh` — not hand-picked or edited.
 Click through to read the run yourself:
 
 **Evidence run:** [`verify` job, 2026-07-14](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29313121694/job/87021080894)
-(or browse [every run](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-langchain-upstage-deepagents.yml) for the latest)
+(or browse [every run](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml) for the latest)
 
 | Method | Result |
 | --- | --- |
@@ -129,8 +129,8 @@ Run locally with `UPSTAGE_API_KEY` set:
 UPSTAGE_API_KEY="..." ./scripts/verify.sh
 ```
 
-Runs in CI on every push/PR that touches this directory:
-[`.github/workflows/verify-langchain-upstage-deepagents.yml`](../.github/workflows/verify-langchain-upstage-deepagents.yml) —
+Runs as a step in CI (manual dispatch, solar-open2 only):
+[`.github/workflows/verify-all-sequential.yml`](../.github/workflows/verify-all-sequential.yml) —
 no Node/`claude`-CLI install step needed, unlike Cases 01-02 — reusing the
 same `UPSTAGE_API_KEY` repository secret.
 

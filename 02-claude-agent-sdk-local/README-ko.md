@@ -110,7 +110,7 @@ async for message in query(
 링크를 클릭하면 truncate되지 않은 전체 응답을 직접 확인할 수 있습니다:
 
 **근거 실행:** [`verify` job, 2026-07-14](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29306803664/job/87001673982)
-(또는 최신 결과를 보려면 [전체 실행 목록](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-claude-agent-sdk-local.yml) 참고)
+(또는 최신 결과를 보려면 [전체 실행 목록](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml) 참고)
 
 | 방식 | 결과 |
 | --- | --- |
@@ -135,8 +135,8 @@ async for message in query(
 UPSTAGE_API_KEY="..." ./scripts/verify.sh
 ```
 
-이 디렉토리를 건드리는 모든 push/PR에서 CI에서도 실행됩니다:
-[`.github/workflows/verify-claude-agent-sdk-local.yml`](../.github/workflows/verify-claude-agent-sdk-local.yml),
+CI에서도 한 단계로 실행됩니다(수동 실행, `solar-open2`만):
+[`.github/workflows/verify-all-sequential.yml`](../.github/workflows/verify-all-sequential.yml),
 Case 01에서 만들어둔 동일한 `UPSTAGE_API_KEY` 저장소 시크릿을 재사용합니다 —
 새 시크릿도, 별도 Anthropic 키 비용도 필요 없습니다.
 

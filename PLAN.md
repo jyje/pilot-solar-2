@@ -51,7 +51,7 @@ it without needing any of the others.
   `claude`) and the plain `claude` CLI pointed at Upstage's
   Anthropic-compatible endpoint via `ANTHROPIC_BASE_URL`/`ANTHROPIC_AUTH_TOKEN`.
   Both confirmed locally and wired into CI
-  (`.github/workflows/verify-solar-open2-harness.yml`). See
+  (`.github/workflows/verify-all-sequential.yml`). See
   `01-solar-open2-harness/README.md` for transcripts and the finding about
   `claude-upstage`'s argument passthrough.
 
@@ -75,7 +75,7 @@ it without needing any of the others.
   `query()` structured message types, `ClaudeSDKClient` multi-turn session
   memory (a number recalled across turns), and `ToolUseBlock` visibility
   for a tool call. Verified locally and in CI
-  (`.github/workflows/verify-claude-agent-sdk-local.yml`), reusing the
+  (`.github/workflows/verify-all-sequential.yml`), reusing the
   `UPSTAGE_API_KEY` secret from Case 01. See
   `02-claude-agent-sdk-local/README.md` for details.
 
@@ -105,7 +105,7 @@ it without needing any of the others.
   verified: tool use (weather lookup), deepagents' built-in virtual
   filesystem (write + read back a file), and subagent delegation (a
   named `math-agent` subagent computing `17 + 25`). Verified locally and
-  in CI (`.github/workflows/verify-langchain-upstage-deepagents.yml`,
+  in CI (`.github/workflows/verify-all-sequential.yml`,
   reusing the `UPSTAGE_API_KEY` secret, no Node/`claude`-CLI step
   needed). See `03-langchain-upstage-deepagents/README.md` for details.
 
@@ -152,7 +152,7 @@ it without needing any of the others.
      Upstage's Tier 1 and above (higher RPM/TPM); just not verifiable on
      this repo's Tier-0 account.
   Verified locally and in CI
-  (`.github/workflows/verify-langchain-openwiki-solar-open2.yml`,
+  (`.github/workflows/verify-all-sequential.yml`,
   building the patched fork from source, reusing the `UPSTAGE_API_KEY`
   secret). See `04-langchain-openwiki-solar-open2/README.md` for
   details.

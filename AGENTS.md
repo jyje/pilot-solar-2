@@ -26,10 +26,11 @@ between "core" and "special" cases.
 Each case directory is a self-contained experiment with its own `src/`
 (uv-managed, or a Node project for Case 04), or a Docker-based runnable
 configuration for Case 05. All are implemented and verified. Each has its
-own `scripts/verify.sh` and a matching
-`.github/workflows/verify-<case>.yml` that reuses the same
-`UPSTAGE_API_KEY` secret. Case 03 pins Python 3.13 instead of 3.14 (the
-default elsewhere) — see its README for why.
+own `scripts/verify.sh`; all 5 are run, solar-open2 only, as steps in the
+single `.github/workflows/verify-all-sequential.yml` workflow (manual
+`workflow_dispatch`), which reuses the same `UPSTAGE_API_KEY` secret.
+Case 03 pins Python 3.13 instead of 3.14 (the default elsewhere) — see
+its README for why.
 
 ## Skills available
 

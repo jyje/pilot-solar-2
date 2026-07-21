@@ -2,7 +2,9 @@
 
 [English](README.md) / [한국어](README-ko.md)
 
-[← 리포 개요로 돌아가기](../README.md)
+[← 리포 개요로 돌아가기](../README.md) · 직접 실행해보고 싶다면?
+[`REPRODUCE-ko.md`](REPRODUCE-ko.md)에서 단계별 로컬 실행 방법을
+확인하세요.
 
 **상태:** 검증 완료 — Claude Code가 Upstage의 Solar Open2 모델을 두 가지
 방식으로 정상 구동하며, 커스텀 스킬 시스템과 서브에이전트/Task 호출까지

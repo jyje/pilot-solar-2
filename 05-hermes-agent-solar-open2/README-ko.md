@@ -2,7 +2,9 @@
 
 [English](README.md) / [한국어](README-ko.md)
 
-[← 리포 개요로 돌아가기](../README-ko.md)
+[← 리포 개요로 돌아가기](../README-ko.md) · 직접 실행해보고 싶다면?
+[`REPRODUCE-ko.md`](REPRODUCE-ko.md)에서 단계별 로컬 실행 방법을
+확인하세요.
 
 **상태:** 검증 완료 — 공식 Hermes Agent 이미지가 내장 Upstage
 provider를 통해 `solar-open2`와 라이브 라운드트립을 완료했습니다.

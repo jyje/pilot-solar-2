@@ -2,7 +2,8 @@
 
 [English](README.md) / [한국어](README-ko.md)
 
-[← back to repo overview](../README.md)
+[← back to repo overview](../README.md) · Want to run this yourself?
+See [`REPRODUCE.md`](REPRODUCE.md) for step-by-step local setup.
 
 **Status:** Verified — [`openwiki`](https://github.com/langchain-ai/openwiki)
 answers real questions about this very repo, powered by Upstage's Solar

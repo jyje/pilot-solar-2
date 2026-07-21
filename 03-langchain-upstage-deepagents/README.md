@@ -2,7 +2,8 @@
 
 [English](README.md) / [한국어](README-ko.md)
 
-[← back to repo overview](../README.md)
+[← back to repo overview](../README.md) · Want to run this yourself?
+See [`REPRODUCE.md`](REPRODUCE.md) for step-by-step local setup.
 
 **Status:** Verified — a `deepagents` agent initialized at the code level
 with `langchain-upstage` as the model backend, against Upstage's Solar

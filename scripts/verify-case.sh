@@ -1,12 +1,18 @@
 #!/usr/bin/env bash
 #
-# Waits for Upstage rate-limit headroom for the given model (via
-# wait-for-upstage-headroom.sh), then runs the given case's own
-# scripts/verify.sh with that model. Shared by verify-all-sequential.yml
-# (CI) and available for local ad-hoc runs — same script, same behavior
-# either way. Not case-specific, so it lives here at the repo root like
-# wait-for-upstage-headroom.sh, not inside any single case's own
-# scripts/ directory.
+# Waits until Upstage's rate-limit budget for the given model is fully
+# reset (via wait-for-upstage-full-reset.sh, 10-minute cap), then runs
+# the given case's own scripts/verify.sh with that model. Every case
+# gets a full budget at its own start, regardless of what earlier cases
+# in the same sequential run already consumed — a lighter "wait only if
+# headroom looks thin" check (wait-for-upstage-headroom.sh) wasn't
+# enough on its own: Case 04 still starved partway through because it
+# started with partial leftover headroom from Cases 01-03 that looked
+# "enough" by that threshold but wasn't. Shared by
+# verify-all-sequential.yml (CI) and available for local ad-hoc runs —
+# same script, same behavior either way. Not case-specific, so it lives
+# here at the repo root like wait-for-upstage-full-reset.sh, not inside
+# any single case's own scripts/ directory.
 #
 # Usage: verify-case.sh <case-dir> <model>
 #   e.g. verify-case.sh 01-solar-open2-harness solar-open2
@@ -30,7 +36,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."
 # other case too.
 export PATH="$HOME/.local/bin:$PATH"
 
-./scripts/wait-for-upstage-headroom.sh "$model"
+./scripts/wait-for-upstage-full-reset.sh "$model"
 
 echo
 SOLAR_MODEL="$model" "./$case_dir/scripts/verify.sh"

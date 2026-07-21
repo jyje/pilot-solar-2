@@ -2,13 +2,16 @@ name: verify-all-sequential
 
 # The single verification workflow for this repo. Runs all 5 cases
 # against solar-open2, one at a time as one of 5 steps — each step is
-# scripts/verify-case.sh (shared with local ad-hoc runs), which checks
-# Upstage's own rate-limit response headers for the model it's about to
-# use and only waits if headroom is actually low (see
-# scripts/wait-for-upstage-headroom.sh), instead of a fixed guessed
-# delay. continue-on-error: true per step so one failing case doesn't
-# hide the rest — the final Recap step reports the real pass/fail of
-# every step regardless. Manual-only (workflow_dispatch).
+# scripts/verify-case.sh (shared with local ad-hoc runs), which waits
+# until Upstage's rate-limit budget for the model is *fully* reset (see
+# scripts/wait-for-upstage-full-reset.sh, 10-minute cap) before that
+# case starts, rather than a fixed guessed delay or a "headroom looks
+# thin" threshold — a case starting with partial leftover headroom from
+# the case before it was seen to starve partway through even though
+# that headroom looked "enough" at the time. continue-on-error: true per
+# step so one failing case doesn't hide the rest — the final Recap step
+# reports the real pass/fail of every step regardless. Manual-only
+# (workflow_dispatch).
 #
 # solar-open2 only, by design: this repo's purpose is demonstrating
 # every use case on Solar Open2, not benchmarking Upstage's model

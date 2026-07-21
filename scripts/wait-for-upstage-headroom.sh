@@ -80,7 +80,10 @@ if [ "$wait_until" -eq 0 ]; then
 fi
 
 if [ "$wait_until" -gt "$now" ] 2>/dev/null; then
-  secs=$((wait_until - now + 2))
+  # +12s, not +2: confirmed live that a request landing right at the
+  # reported reset instant can still 429 (window refill isn't perfectly
+  # instantaneous, and there's real network/API latency on top).
+  secs=$((wait_until - now + 12))
   echo "Headroom low — waiting ${secs}s for Upstage's rate-limit window to reset."
   sleep "$secs"
 else

@@ -79,22 +79,23 @@ ask() {
   # Each question alone can consume most of Upstage's default
   # 50k-tokens/minute budget (large system prompt + tool-calling round
   # trips), so check real headroom before every attempt instead of a
-  # fixed guessed delay. One retry (with a fresh headroom check) absorbs
-  # transient 429s from shared account usage without masking a real
-  # failure — it still requires an eventual real, successful answer.
+  # fixed guessed delay. 3 attempts (matching Cases 01/03's retry
+  # count), each preceded by a fresh headroom check, absorb a real
+  # per-minute exhaustion (confirmed live: question 3 hit an actual 429
+  # with the reported reset a few seconds out — one retry wasn't always
+  # enough) without masking a genuine failure.
   local q="$1" out=""
-  "$HEADROOM_SCRIPT" "$SOLAR_MODEL" >&2
-  if out="$(timeout 180 openwiki code -p "$q" 2>&1)" && [ -n "$out" ]; then
-    printf '%s' "$out"
-    return 0
-  fi
-  warn "first attempt failed — retrying once after a fresh headroom check"
-  preview "$out" >&2
-  "$HEADROOM_SCRIPT" "$SOLAR_MODEL" >&2
-  if out="$(timeout 180 openwiki code -p "$q" 2>&1)" && [ -n "$out" ]; then
-    printf '%s' "$out"
-    return 0
-  fi
+  for attempt in 1 2 3; do
+    "$HEADROOM_SCRIPT" "$SOLAR_MODEL" >&2
+    if out="$(timeout 180 openwiki code -p "$q" 2>&1)" && [ -n "$out" ]; then
+      printf '%s' "$out"
+      return 0
+    fi
+    if [ "$attempt" -lt 3 ]; then
+      warn "attempt $attempt failed — retrying after a fresh headroom check"
+      preview "$out" >&2
+    fi
+  done
   preview "$out" >&2
   return 1
 }

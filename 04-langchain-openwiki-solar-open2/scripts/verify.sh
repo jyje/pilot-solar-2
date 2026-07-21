@@ -26,6 +26,12 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
 SOLAR_MODEL="${SOLAR_MODEL:-solar-open2}"
+# Absolute path, captured before any `cd` below — ask() calls this once
+# per question, not just once for the whole case (a single upfront
+# check isn't enough: each question alone can burn a large chunk of the
+# per-minute token budget, so headroom that looked fine before question
+# 1 can be gone by question 3; confirmed live in run 29799496532).
+HEADROOM_SCRIPT="$(cd .. && pwd)/scripts/wait-for-upstage-headroom.sh"
 
 fail() { printf '✗ %s\n' "$1" >&2; exit 1; }
 ok()   { printf '✓ %s\n' "$1"; }
@@ -72,18 +78,18 @@ questions=(
 ask() {
   # Each question alone can consume most of Upstage's default
   # 50k-tokens/minute budget (large system prompt + tool-calling round
-  # trips), so back off before every attempt to land in a fresh
-  # per-minute window. One retry with a longer backoff absorbs
+  # trips), so check real headroom before every attempt instead of a
+  # fixed guessed delay. One retry (with a fresh headroom check) absorbs
   # transient 429s from shared account usage without masking a real
   # failure — it still requires an eventual real, successful answer.
   local q="$1" out=""
-  sleep 75
+  "$HEADROOM_SCRIPT" "$SOLAR_MODEL"
   if out="$(timeout 180 openwiki code -p "$q" 2>&1)" && [ -n "$out" ]; then
     printf '%s' "$out"
     return 0
   fi
   warn "first attempt failed (likely a transient rate limit) — retrying once after a longer backoff"
-  sleep 90
+  "$HEADROOM_SCRIPT" "$SOLAR_MODEL"
   out="$(timeout 180 openwiki code -p "$q" 2>&1)" || return 1
   [ -n "$out" ] || return 1
   printf '%s' "$out"

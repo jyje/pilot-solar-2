@@ -26,12 +26,19 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
 SOLAR_MODEL="${SOLAR_MODEL:-solar-open2}"
-# Absolute path, captured before any `cd` below — ask() calls this once
-# per question, not just once for the whole case (a single upfront
-# check isn't enough: each question alone can burn a large chunk of the
-# per-minute token budget, so headroom that looked fine before question
-# 1 can be gone by question 3; confirmed live in run 29799496532).
-HEADROOM_SCRIPT="$(cd .. && pwd)/scripts/wait-for-upstage-headroom.sh"
+# Absolute path, captured before any `cd` below — ask() calls this before
+# every attempt of every question, not just once for the whole case. A
+# single upfront check isn't enough: one question alone (openwiki's
+# multi-round-trip tool-calling loop) can burn most of the per-minute
+# token budget by itself (confirmed live in run 29869480343: question 1
+# alone used 36,440 of a 49,998-token budget), so headroom that looked
+# fine before question 1 can be gone by question 3. A lighter "wait only
+# if headroom looks thin" threshold check wasn't enough either: retries
+# kept reporting 0 tokens remaining even after waiting past the reported
+# reset instant, since Upstage's limit is a rolling per-minute window,
+# not a hard reset clock — so this waits for a *full* reset instead
+# (wait-for-upstage-full-reset.sh, 10-minute cap per wait).
+FULL_RESET_SCRIPT="$(cd .. && pwd)/scripts/wait-for-upstage-full-reset.sh"
 
 fail() { printf '✗ %s\n' "$1" >&2; exit 1; }
 ok()   { printf '✓ %s\n' "$1"; }
@@ -78,14 +85,15 @@ questions=(
 ask() {
   # Each question alone can consume most of Upstage's default
   # 50k-tokens/minute budget (large system prompt + tool-calling round
-  # trips), so check real headroom before every attempt instead of a
-  # fixed guessed delay. 5 attempts, each preceded by a fresh headroom
-  # check, absorb a real per-minute exhaustion (confirmed live: question
-  # 3 hit an actual 429 right after the reported reset instant — one
-  # retry wasn't always enough) without masking a genuine failure.
+  # trips), so wait for a *full* budget reset before every attempt
+  # instead of a fixed guessed delay or a "some headroom" threshold. 5
+  # attempts, each preceded by a fresh full-reset wait, absorb a real
+  # per-minute exhaustion (confirmed live: question 3 kept 429ing across
+  # every retry despite waiting past the reported reset instant, because
+  # the limit is a rolling window) without masking a genuine failure.
   local q="$1" out=""
   for attempt in 1 2 3 4 5; do
-    "$HEADROOM_SCRIPT" "$SOLAR_MODEL" >&2
+    "$FULL_RESET_SCRIPT" "$SOLAR_MODEL" >&2
     if out="$(timeout 180 openwiki code -p "$q" 2>&1)" && [ -n "$out" ]; then
       printf '%s' "$out"
       return 0

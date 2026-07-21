@@ -5,10 +5,10 @@
 # the given case's own scripts/verify.sh with that model. Every case
 # gets a full budget at its own start, regardless of what earlier cases
 # in the same sequential run already consumed — a lighter "wait only if
-# headroom looks thin" check (wait-for-upstage-headroom.sh) wasn't
-# enough on its own: Case 04 still starved partway through because it
-# started with partial leftover headroom from Cases 01-03 that looked
-# "enough" by that threshold but wasn't. Shared by
+# headroom looks thin" threshold check wasn't enough on its own: Case 04
+# still starved partway through because it started with partial leftover
+# headroom from Cases 01-03 that looked "enough" by that threshold but
+# wasn't. Shared by
 # verify-all-sequential.yml (CI) and available for local ad-hoc runs —
 # same script, same behavior either way. Not case-specific, so it lives
 # here at the repo root like wait-for-upstage-full-reset.sh, not inside

@@ -1,22 +1,22 @@
 #!/usr/bin/env bash
 #
-# Waits, at the start of each case, until Upstage's rate-limit window for
-# $1 is fully reset (not just "some headroom") before letting that case
-# begin — so every case starts with a full budget regardless of what
-# earlier cases in the same sequential run already used. Confirmed live
-# (run 29841216939): Case 04 starved on its 3rd question because it
-# started with only ~15k tokens left over from Cases 01-03, even though
-# wait-for-upstage-headroom.sh's threshold check (25k) had judged that
-# "enough" headroom to begin the case at all.
+# Waits until Upstage's rate-limit window for $1 is fully reset (not
+# just "some headroom") before letting the caller proceed. Used two
+# ways: once at the start of each case (verify-case.sh), so every case
+# starts with a full budget regardless of what earlier cases in the same
+# sequential run already used; and before every retry attempt inside
+# Case 04's own scripts/verify.sh, since a single question there
+# (openwiki's multi-round-trip tool-calling loop) can burn most of the
+# budget by itself. A lighter "wait only if headroom looks thin"
+# threshold check was tried first and wasn't enough in either case: a
+# case could start with partial leftover headroom that looked "enough"
+# by that threshold but wasn't (run 29841216939), and retries kept
+# reporting 0 tokens remaining even after waiting past the reported
+# reset instant, since Upstage's limit is a rolling per-minute window,
+# not a hard reset clock (run 29869480343).
 #
 # Hard 10-minute cap: if the window hasn't shown as fully reset by then,
 # fail loudly rather than hang the whole sequential run indefinitely.
-#
-# Distinct from wait-for-upstage-headroom.sh, which Case 04's own
-# scripts/verify.sh still uses internally between its 3 questions (a
-# lighter "is there enough left for one more call" check, not a full
-# reset) — this script is only for the once-per-case entry point in
-# verify-case.sh.
 #
 # Usage: wait-for-upstage-full-reset.sh <model>
 # Requires: UPSTAGE_API_KEY set.

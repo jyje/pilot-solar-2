@@ -9,9 +9,10 @@
 #
 # Requires: `uv` and `claude` (npm i -g @anthropic-ai/claude-code) on PATH,
 # UPSTAGE_API_KEY set. Model under test: $SOLAR_MODEL, defaulting to
-# solar-open2 (read by demo.py). Retries the full A/B/C run up to 3 times
-# with backoff — this repo's cases share one Upstage account/rate limit,
-# so a run can 429 simply because another case just ran.
+# solar-open2 (read by demo.py). Retries the full A/B/C run up to 5 times
+# with a flat 30s backoff — this repo's cases share one Upstage
+# account/rate limit, so a run can 429 simply because another case just
+# ran.
 
 set -euo pipefail
 
@@ -34,19 +35,18 @@ echo "== Model under test: $SOLAR_MODEL =="
 echo "== demo.py: Methods A/B/C against $SOLAR_MODEL =="
 out=""
 passed=false
-for attempt in 1 2 3; do
+for attempt in 1 2 3 4 5; do
   if out="$(timeout 180 uv run python demo.py 2>&1)"; then
     passed=true
     break
   fi
   printf '%s\n' "$out" >&2
-  if [ "$attempt" -lt 3 ]; then
-    secs=$((attempt * 30))
-    printf '  attempt %s failed (possibly rate-limited) — retrying in %ss\n' "$attempt" "$secs" >&2
-    sleep "$secs"
+  if [ "$attempt" -lt 5 ]; then
+    printf '  attempt %s failed (possibly rate-limited) — retrying in 30s\n' "$attempt" >&2
+    sleep 30
   fi
 done
-[ "$passed" = true ] || fail "demo.py exited non-zero after 3 attempts"
+[ "$passed" = true ] || fail "demo.py exited non-zero after 5 attempts"
 
 # Same noise-stripping as topic 01's verify.sh — this warning is emitted
 # by `claude` whenever an alternate auth source is set, it's not signal.

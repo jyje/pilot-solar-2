@@ -63,7 +63,7 @@ echo "== Check 3: live chat round trip via the built-in Upstage provider =="
 # can 429 simply because another case just ran — retry with backoff.
 chat_output=""
 passed=false
-for attempt in 1 2 3; do
+for attempt in 1 2 3 4 5; do
   if chat_output="$(hermes chat \
     --provider upstage \
     --model "$SOLAR_MODEL" \
@@ -75,13 +75,12 @@ for attempt in 1 2 3; do
     break
   fi
   printf '%s\n' "$chat_output" >&2
-  if [ "$attempt" -lt 3 ]; then
-    secs=$((attempt * 30))
-    printf '  attempt %s failed (possibly rate-limited) — retrying in %ss\n' "$attempt" "$secs" >&2
-    sleep "$secs"
+  if [ "$attempt" -lt 5 ]; then
+    printf '  attempt %s failed (possibly rate-limited) — retrying in 30s\n' "$attempt" >&2
+    sleep 30
   fi
 done
 printf '%s\n' "$chat_output"
 [ "$passed" = true ] \
-  || fail "$SOLAR_MODEL response did not contain hermes-ready after 3 attempts"
+  || fail "$SOLAR_MODEL response did not contain hermes-ready after 5 attempts"
 ok "Hermes completed a live $SOLAR_MODEL round trip"

@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 #
 # Probes Upstage's rate-limit response headers for $1 (the model the
-# *next* CI step is about to use) and sleeps only if headroom is
-# actually low or already exceeded — waiting exactly until the reported
-# reset/retry-after time, not a guessed fixed duration. Used between
-# steps in verify-all-sequential.yml; not part of any case's own
-# scripts/verify.sh, since it isn't case-specific.
+# *next* CI step is about to use) and sleeps a flat 30s if headroom is
+# actually low or already exceeded. Deliberately not "wait exactly
+# until the reported reset time" — that was tried first and still 429'd
+# immediately after the calculated reset instant (window refill isn't
+# perfectly instantaneous, plus real network/API latency), so a fixed
+# 30s floor is simpler and safer: even if the window has technically
+# already reset, wait the full 30s anyway before checking again. Used
+# between steps in verify-all-sequential.yml; not part of any case's
+# own scripts/verify.sh, since it isn't case-specific.
 #
 # Every Upstage API response (success or 429) carries these headers —
 # there's no separate "check quota" endpoint. See:
@@ -80,12 +84,8 @@ if [ "$wait_until" -eq 0 ]; then
 fi
 
 if [ "$wait_until" -gt "$now" ] 2>/dev/null; then
-  # +12s, not +2: confirmed live that a request landing right at the
-  # reported reset instant can still 429 (window refill isn't perfectly
-  # instantaneous, and there's real network/API latency on top).
-  secs=$((wait_until - now + 12))
-  echo "Headroom low — waiting ${secs}s for Upstage's rate-limit window to reset."
-  sleep "$secs"
+  echo "Headroom low — waiting 30s for Upstage's rate-limit window to reset."
+  sleep 30
 else
   echo "Headroom available — proceeding immediately."
 fi

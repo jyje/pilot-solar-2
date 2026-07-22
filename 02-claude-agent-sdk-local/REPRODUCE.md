@@ -16,7 +16,7 @@ this page assumes both are already handled.
 ## What you need
 
 - [`uv`](https://docs.astral.sh/uv/)
-- the official Claude Code CLI (same install as [Case 01](../01-solar-open2-harness/REPRODUCE.md#install))
+- the official Claude Code CLI (same install as [Case 01A](../01-solar-open2-harness/REPRODUCE.md#install--case-01a-official-claude-code-cli))
 
 ## Run it
 

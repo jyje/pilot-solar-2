@@ -16,7 +16,7 @@
 ## 필요한 것
 
 - [`uv`](https://docs.astral.sh/uv/)
-- 공식 Claude Code CLI ([Case 01](../01-solar-open2-harness/REPRODUCE-ko.md#설치)과 설치 방법 동일)
+- 공식 Claude Code CLI ([Case 01A](../01-solar-open2-harness/REPRODUCE-ko.md#설치--case-01a-공식-claude-code-cli)과 설치 방법 동일)
 
 ## 실행
 

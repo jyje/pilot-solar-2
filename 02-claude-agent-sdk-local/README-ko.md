@@ -2,7 +2,9 @@
 
 [English](README.md) / [한국어](README-ko.md)
 
-[← 리포 개요로 돌아가기](../README.md)
+[← 리포 개요로 돌아가기](../README.md) · 직접 실행해보고 싶다면?
+[`REPRODUCE-ko.md`](REPRODUCE-ko.md)에서 단계별 로컬 실행 방법을
+확인하세요.
 
 **상태:** 검증 완료 — Python Claude Agent SDK(`claude-agent-sdk`)만으로
 로컬 Claude Code 세션을 완전히 프로그래밍 방식으로 구동하며, Upstage의

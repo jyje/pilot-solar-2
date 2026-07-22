@@ -2,7 +2,9 @@
 
 [English](README.md) / [한국어](README-ko.md)
 
-[← 리포 개요로 돌아가기](../README.md)
+[← 리포 개요로 돌아가기](../README.md) · 직접 실행해보고 싶다면?
+[`REPRODUCE-ko.md`](REPRODUCE-ko.md)에서 단계별 로컬 실행 방법을
+확인하세요.
 
 **상태:** 검증 완료 — [`openwiki`](https://github.com/langchain-ai/openwiki)가
 Upstage의 Solar Open2 모델로 구동되어 이 리포 자체에 대한 실제 질문에

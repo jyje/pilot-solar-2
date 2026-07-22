@@ -2,7 +2,8 @@
 
 [English](README.md) / [한국어](README-ko.md)
 
-[← back to repo overview](../README.md)
+[← back to repo overview](../README.md) · Want to run this yourself?
+See [`REPRODUCE.md`](REPRODUCE.md) for step-by-step local setup.
 
 **Status:** Verified — Claude Code runs against Upstage's Solar Open2 model
 two different ways, and both its custom-skill system and subagent/Task

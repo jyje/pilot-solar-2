@@ -27,6 +27,12 @@ commands you'll actually run.
 
 ## Local development
 
+Looking for a step-by-step walkthrough instead — exact prerequisites and
+commands per case, with expected output and troubleshooting? See the
+[Use Case Guide](docs/REPRODUCE.md) (English/Korean). The rest of this
+section stays a quick reference for people already familiar with the
+repo.
+
 ### Prerequisites
 
 - `UPSTAGE_API_KEY` — every case's verification hits the real Upstage API.
@@ -106,16 +112,18 @@ actionlint .github/workflows/*.yml
 1. Create `0N-<short-slug>/` at the top level, flat alongside the
    existing cases — no split between "core" and "special" cases.
 2. Give it its own `README.md` + `README-ko.md` (centered header, per
-   `.claude/skills/centered-readme/SKILL.md`) and its own
-   `scripts/verify.sh` that exercises the real Upstage API and exits
-   non-zero on failure.
+   `.claude/skills/centered-readme/SKILL.md`), its own `REPRODUCE.md` +
+   `REPRODUCE-ko.md` (step-by-step local setup, following the existing
+   cases' pages as a template), and its own `scripts/verify.sh` that
+   exercises the real Upstage API and exits non-zero on failure.
 3. Wire it into
    [`.github/workflows/verify-all-sequential.yml`](.github/workflows/verify-all-sequential.yml)
    as one more `continue-on-error: true` step, invoked through
    `scripts/verify-case.sh` so it gets the same full-reset rate-limit
    wait as every other case.
-4. Update `PLAN.md`'s summary table and the root `README.md`/`README-ko.md`
-   Cases table.
+4. Update `PLAN.md`'s summary table, the root `README.md`/`README-ko.md`
+   Cases table, and `docs/REPRODUCE.md`/`docs/REPRODUCE-ko.md`'s use case
+   guide table.
 
 ## Pull requests
 

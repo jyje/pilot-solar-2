@@ -52,6 +52,10 @@ full plan and findings behind each case, [`AGENTS.md`](AGENTS.md) for repo
 structure and conventions, and [`CONTRIBUTING.md`](CONTRIBUTING.md) for how
 to add a new case or run everything locally.
 
+Want to run a case yourself, step by step, right now? The
+[Use Case Guide](docs/REPRODUCE.md) walks through the exact prerequisites
+and commands for every case, one case at a time (English/Korean).
+
 ## Why Solar Open2 fits existing agent harnesses
 
 Every case above reached Solar Open2 through a wire-compatible endpoint a

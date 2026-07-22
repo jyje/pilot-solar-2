@@ -2,7 +2,9 @@
 
 [English](README.md) / [한국어](README-ko.md)
 
-[← 리포 개요로 돌아가기](../README.md)
+[← 리포 개요로 돌아가기](../README.md) · 직접 실행해보고 싶다면?
+[`REPRODUCE-ko.md`](REPRODUCE-ko.md)에서 단계별 로컬 실행 방법을
+확인하세요.
 
 **상태:** 검증 완료 — `langchain-upstage`를 모델 백엔드로 사용해 코드
 레벨에서 `deepagents` 에이전트를 초기화했으며, Upstage의 Solar Open2

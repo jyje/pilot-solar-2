@@ -7,22 +7,22 @@
 확인하세요.
 
 **상태:** 검증 완료 — Python Claude Agent SDK(`claude-agent-sdk`)만으로
-로컬 Claude Code 세션을 완전히 프로그래밍 방식으로 구동하며, Upstage의
-Solar Open2 모델을 대상으로 합니다. 3가지 방식 모두 로컬과 CI에서
-end-to-end로 확인되었습니다.
+로컬 Claude Code 세션을 완전히 프로그래밍 방식으로 실행하며, Upstage의
+Solar Open2 모델을 기반으로 합니다. 3가지 방식 모두 로컬과 CI에서
+종단 간 검증되었습니다.
 
 ## 목표
 
-수동 CLI 조작 없이, 공식 Python `claude-agent-sdk`만으로 Claude Code를
-**프로그래밍 방식**으로 구동하고, 이것이 Case 01의 원시 CLI + 셸 스크립트
+터미널에서 CLI를 직접 조작하지 않고, 공식 Python `claude-agent-sdk`만으로 Claude Code를
+**프로그래밍 방식**으로 실행하며, 이것이 Case 01의 원시 CLI + 셸 스크립트
 방식 대비 실제로 무엇을 가져다주는지 보여줍니다: stdout 텍스트를
-긁어내는 대신 **구조화된, 타입이 있는 메시지 객체**를 받는다는 점입니다.
+파싱하거나 텍스트 기반으로 추출하는 대신 **구조화된, 타입이 있는 메시지 객체**를 받는다는 점입니다.
 
 ## 동작 원리
 
 `claude-agent-sdk`(PyPI, `pip install claude-agent-sdk` / 이 리포에서는
 `uv add claude-agent-sdk`)는 동일한 `claude` CLI 바이너리를 서브프로세스로
-구동합니다. 별도 구현체가 아니므로, [Case 01](../01-solar-open2-harness/README-ko.md#동작-원리)에서
+실행됩니다. 별도 구현체가 아니므로, [Case 01](../01-solar-open2-harness/README-ko.md#동작-원리)에서
 검증한 Solar Open2 env var 레시피가 그대로 적용됩니다 — 셸 `export` 대신
 `ClaudeAgentOptions(env={...})`로 전달할 뿐입니다:
 
@@ -54,7 +54,7 @@ options = ClaudeAgentOptions(
 
 ## 두 가지 진입점, 세 가지 방식
 
-`claude-agent-sdk`는 세션을 구동하는 두 가지 방법을 제공합니다:
+`claude-agent-sdk`는 세션을 실행하는 두 가지 방법을 제공합니다:
 단발성 호출을 위한 [`query()`](https://code.claude.com/docs/en/agent-sdk/python)와,
 여러 턴에 걸쳐 컨텍스트를 유지하는 `ClaudeSDKClient`. 각각 다른 것을
 증명하는 세 가지 방식을 검증합니다:

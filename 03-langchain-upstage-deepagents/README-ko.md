@@ -6,15 +6,15 @@
 [`REPRODUCE-ko.md`](REPRODUCE-ko.md)에서 단계별 로컬 실행 방법을
 확인하세요.
 
-**상태:** 검증 완료 — `langchain-upstage`를 모델 백엔드로 사용해 코드
-레벨에서 `deepagents` 에이전트를 초기화했으며, Upstage의 Solar Open2
-모델을 대상으로 합니다. 3가지 방식 모두 로컬과 CI에서 end-to-end로
-확인되었습니다.
+**상태:** 검증 완료 — `langchain-upstage`를 모델을 기반으로 사용해 코드
+수준에서 `deepagents` 에이전트를 초기화했으며, Upstage의 Solar Open2
+모델을 기반으로 합니다. 3가지 방식 모두 로컬과 CI에서
+종단 간 검증되었습니다.
 
 ## 목표
 
 [`deepagents`](https://pypi.org/project/deepagents/) 에이전트를 순수
-코드 레벨에서 초기화하되, [`langchain-upstage`](https://pypi.org/project/langchain-upstage/)로
+코드 수준에서 초기화하되, [`langchain-upstage`](https://pypi.org/project/langchain-upstage/)로
 Solar Open2를 모델로 공급합니다. Case 01·02와 달리 이 경로에는 Claude Code
 CLI가 전혀 관여하지 않습니다 — LangChain/LangGraph가 Upstage와 직접
 통신합니다.

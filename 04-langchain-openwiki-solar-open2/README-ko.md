@@ -7,16 +7,16 @@
 확인하세요.
 
 **상태:** 검증 완료 — [`openwiki`](https://github.com/langchain-ai/openwiki)가
-Upstage의 Solar Open2 모델로 구동되어 이 리포 자체에 대한 실제 질문에
+Upstage의 Solar Open2 모델로 실행되어 이 리포 자체에 대한 실제 질문에
 답합니다. 그 과정에서 발견한 실제 스트리밍 버그를 고친 패치 빌드를
 사용합니다.
 
 ## 목표
 
 `openwiki`(코드베이스용 에이전트 읽기용 위키를 만들고 유지하는 CLI)를
-평소의 Anthropic/OpenAI 기본값이 아닌 **Solar Open2**로 구동해, **이
+평소의 Anthropic/OpenAI 기본값이 아닌 **Solar Open2**로 실행해, **이
 리포 자체**(`pilot-upstage-solar-open2`)를 대상으로 최신 커밋을 문서화하고 질문에
-답하게 합니다.
+답변합니다.
 
 ## 동작 원리
 

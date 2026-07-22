@@ -7,10 +7,38 @@
 🧪 Claude Code, Claude Agent SDK, LangChain, OpenWiki, Hermes Agent까지 — Upstage Solar Open2를 활용한 모든 유즈케이스!
 
 [![verify-all-sequential](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml/badge.svg)](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml)
+[![Model on Hugging Face](https://huggingface.co/datasets/huggingface/badges/resolve/main/model-on-hf-md.svg)](https://huggingface.co/upstage/Solar-Open2-250B)
+[![Technical Report](https://img.shields.io/badge/📄_Technical_Report-PDF-blue)](https://huggingface.co/upstage/Solar-Open2-250B/blob/main/Solar_Open_2_Tech_Report.pdf)
+[![Launch Event](https://img.shields.io/badge/📺_Launch_Event-YouTube-red)](https://www.youtube.com/live/6XX-yR3qomM)
 
 [English](README.md) / [한국어](README-ko.md)
 
 </div>
+
+## Solar Open2
+
+[Solar Open2](https://huggingface.co/upstage/Solar-Open2-250B)는 Upstage의
+공개 가중치 250B-A15B(총 2500억, 활성 150억) Mixture-of-Experts 모델로,
+1M 토큰 컨텍스트에서 툴 사용·다단계 추론·엔드투엔드 태스크 실행 같은
+장기 에이전틱(long-horizon agentic) 작업을 위해 하이브리드
+linear/softmax attention 스택으로 설계됐습니다. 비슷한 크기의 공개
+가중치 모델들 중 MMLU-Pro, LiveCodeBench, APEX-Agents 에이전틱 스위트에서
+선두이며, 한국어 벤치마크에서는 fast-tier 폐쇄형 API를 포함한 비교
+대상 중 가장 높은 평균 점수를 기록합니다.
+
+| | |
+| --- | --- |
+| 파라미터 | 총 2500억, 활성 150억 (MoE) |
+| 컨텍스트 | 1M 토큰 |
+| 라이선스 | Upstage Solar License |
+| 리포트 | [Solar Open 2 Technical Report](https://huggingface.co/upstage/Solar-Open2-250B/blob/main/Solar_Open_2_Tech_Report.pdf) (2026-07-22) |
+| 소개 행사 | [Solar Open Weight Day (YouTube Live)](https://www.youtube.com/live/6XX-yR3qomM) |
+
+이 리포는 모델 자체를 다시 설명하지 않습니다 — 전체 내용은
+[모델 카드](https://huggingface.co/upstage/Solar-Open2-250B)와
+[technical report](https://huggingface.co/upstage/Solar-Open2-250B/blob/main/Solar_Open_2_Tech_Report.pdf)를
+참고하세요. 아래부터는 이 모델 위에 에이전트 하네스를 구축하는
+방법입니다.
 
 Upstage의 Solar Open2 모델을 Claude, LangChain, OpenWiki, Hermes Agent
 생태계의 에이전트 하네스로 구축하고 구동해보는 여러 독립적인

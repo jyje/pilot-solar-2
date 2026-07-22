@@ -7,10 +7,38 @@
 🧪 Claude Code, the Claude Agent SDK, LangChain, OpenWiki, and Hermes Agent — every use case built on Upstage Solar Open2!
 
 [![verify-all-sequential](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml/badge.svg)](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml)
+[![Model on Hugging Face](https://huggingface.co/datasets/huggingface/badges/resolve/main/model-on-hf-md.svg)](https://huggingface.co/upstage/Solar-Open2-250B)
+[![Technical Report](https://img.shields.io/badge/📄_Technical_Report-PDF-blue)](https://huggingface.co/upstage/Solar-Open2-250B/blob/main/Solar_Open_2_Tech_Report.pdf)
+[![Launch Event](https://img.shields.io/badge/📺_Launch_Event-YouTube-red)](https://www.youtube.com/live/6XX-yR3qomM)
 
 [English](README.md) / [한국어](README-ko.md)
 
 </div>
+
+## Solar Open2
+
+[Solar Open2](https://huggingface.co/upstage/Solar-Open2-250B) is Upstage's
+open-weight, 250B-A15B (250B total, 15B active) Mixture-of-Experts model,
+purpose-built for long-horizon agentic tasks — tool use, multi-step
+reasoning, and end-to-end task execution — over a 1M-token context via a
+hybrid linear/softmax attention stack. It leads comparably sized
+open-weight models on MMLU-Pro, LiveCodeBench, and the APEX-Agents agentic
+suite, and posts the highest average of any model compared, including
+fast-tier closed APIs, on Korean benchmarks.
+
+| | |
+| --- | --- |
+| Parameters | 250B total, 15B active (MoE) |
+| Context | 1M tokens |
+| License | Upstage Solar License |
+| Report | [Solar Open 2 Technical Report](https://huggingface.co/upstage/Solar-Open2-250B/blob/main/Solar_Open_2_Tech_Report.pdf) (Jul 22, 2026) |
+| Launch event | [Solar Open Weight Day (YouTube Live)](https://www.youtube.com/live/6XX-yR3qomM) |
+
+This repo doesn't re-explain the model itself — see the
+[model card](https://huggingface.co/upstage/Solar-Open2-250B) and
+[technical report](https://huggingface.co/upstage/Solar-Open2-250B/blob/main/Solar_Open_2_Tech_Report.pdf)
+for full details. What follows is how to build agent harnesses on top of
+it.
 
 A single repo hosting several independent, seminar-ready use cases around
 building and running agent harnesses on Upstage's Solar Open2 model across

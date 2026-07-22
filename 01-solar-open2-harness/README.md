@@ -5,18 +5,19 @@
 [← back to repo overview](../README.md) · Want to run this yourself?
 See [`REPRODUCE.md`](REPRODUCE.md) for step-by-step local setup.
 
-**Status:** Verified — Claude Code runs against Upstage's Solar Open2 model
-two independent ways (Case 01A, Case 01B below), and both its custom-skill
-system and subagent/Task calls work through that backend too. All four
-checks are confirmed working end to end (locally and in CI).
+**Status:** Verified. Claude Code runs on Upstage's Solar Open2 model in
+two independent ways — Case 01A and Case 01B below. Its custom-skill
+system and its subagent/Task calls both work through that same backend
+too. All four checks are confirmed end to end, locally and in CI.
 
 ## Goal
 
-Show that a Claude Code harness can run against Upstage's **Solar Open2**
-model instead of Anthropic's own models. This case verifies two
-independent, self-contained methods for doing that — covered as two
-separate sub-cases below, each with its own setup and its own verified
-transcript:
+Show that a Claude Code harness can run on Upstage's **Solar Open2**
+model instead of Anthropic's own models.
+
+This case verifies two independent, self-contained ways to do that. Each
+one gets its own sub-case below, with its own setup steps and its own
+verified transcript:
 
 - **[Case 01A](#case-01a--official-claude-code-cli)** — the **official**
   `claude` CLI, configured with plain environment variables. No wrapper,
@@ -24,11 +25,12 @@ transcript:
 - **[Case 01B](#case-01b--claude-upstage-wrapper)** — Upstage's own
   `claude-upstage` convenience wrapper.
 
-Case 01A's configuration is also what the rest of the harness runs on:
-this repo's custom `.claude/skills/` and its subagent/Task-tool support
-are verified against Case 01A specifically, further down in that section.
+Case 01A's configuration is also what the rest of the harness runs on.
+This repo's custom `.claude/skills/` and its subagent/Task-tool support
+are both verified against Case 01A specifically, further down in that
+section.
 
-An API key from <https://console.upstage.ai/api-keys> is required for
+You'll need an API key from <https://console.upstage.ai/api-keys> for
 either sub-case.
 
 ---
@@ -39,8 +41,8 @@ either sub-case.
 
 Upstage exposes an Anthropic Messages API-compatible endpoint at
 `https://api.upstage.ai`. The official `claude` CLI already knows how to
-talk to any Anthropic-compatible endpoint via environment variables, so
-pointing it at Upstage instead of Anthropic is just:
+talk to any Anthropic-compatible endpoint through environment variables.
+So pointing it at Upstage instead of Anthropic is simple:
 
 ```bash
 export ANTHROPIC_BASE_URL="https://api.upstage.ai"
@@ -56,23 +58,26 @@ export CLAUDE_CODE_SUBAGENT_MODEL="solar-open2"
 claude -p "hello"
 ```
 
-Every model *slot* Claude Code has needs to point at `solar-open2` —
+Every model *slot* Claude Code has needs to point at `solar-open2`.
 Upstage only serves that one model, so any slot left unmapped risks a
-background or subagent call requesting a model name the backend doesn't
-have. `ANTHROPIC_DEFAULT_FABLE_MODEL` and `CLAUDE_CODE_SUBAGENT_MODEL`
-(per the [model configuration docs](https://code.claude.com/docs/en/model-config#environment-variables))
-close two slots that Case 01B's `claude-upstage` wrapper doesn't cover —
-its own `set_claude_env` maps haiku/sonnet/opus/small-fast but predates
-both the `fable` alias and the dedicated subagent-model variable, so a
-`fable`-aliased or subagent/Task-tool call routed purely through
-`claude-upstage` isn't guaranteed to land on Solar Open2. That's one
-reason Case 01A's plain-env-var setup, not Case 01B's wrapper, is what the
-skill and subagent checks below run against.
+background or subagent call asking for a model name the backend doesn't
+have.
 
-No fork, no patch, no proxy — the stock `claude` binary from
+Two of these variables close gaps that Case 01B's `claude-upstage`
+wrapper leaves open: `ANTHROPIC_DEFAULT_FABLE_MODEL` and
+`CLAUDE_CODE_SUBAGENT_MODEL` (see the
+[model configuration docs](https://code.claude.com/docs/en/model-config#environment-variables)).
+The wrapper's own `set_claude_env` maps haiku/sonnet/opus/small-fast, but
+it predates both the `fable` alias and the dedicated subagent-model
+variable. That means a `fable`-aliased or subagent/Task-tool call routed
+purely through `claude-upstage` isn't guaranteed to land on Solar Open2.
+That's one reason the skill and subagent checks below run against Case
+01A's plain-env-var setup, not Case 01B's wrapper.
+
+No fork, no patch, no proxy. The stock `claude` binary from
 `@anthropic-ai/claude-code` just needs to be told where to send requests.
-`claude-upstage` (Case 01B, below) is a convenience wrapper that sets most
-of these variables for you and then `exec`s `claude`.
+`claude-upstage` (Case 01B, below) is a convenience wrapper that sets
+most of these variables for you and then `exec`s `claude`.
 
 ### Installation
 
@@ -85,9 +90,10 @@ claude --version
 
 ### Verified: hello check
 
-Real output from one CI run of `verify.sh` (truncated to <=100 chars,
-same as the script itself prints) — not hand-picked or edited. Click
-through to read the untruncated response yourself:
+Here's real output from one CI run of `verify.sh`, truncated to 100
+characters just like the script itself prints. Nothing here is
+hand-picked or edited. Click through to read the full, untruncated
+response yourself:
 
 **Evidence run:** [`verify` job, 2026-07-14](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29304170180/job/86994029784)
 (or browse [every run](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml) for the latest)
@@ -103,23 +109,29 @@ claude -p "hello"
 [Full output →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29304170180/job/86994029784)
 
 This is what `scripts/verify.sh` calls **Method B**. The response reads
-this repo's actual `AGENTS.md`/state, not a canned reply, confirming
-Solar Open2 answers through the full agentic Claude Code harness (tool
-access included), not just a raw chat completion.
+this repo's actual `AGENTS.md`/state — not a canned reply. That confirms
+Solar Open2 answers through the full agentic Claude Code harness, tool
+access included, not just a raw chat completion.
 
 ### Skills through Solar Open2
 
-The harness ships three custom skills (`.claude/skills/`, ported from
-`jyje/skills` in an earlier pass). Do they actually get honored when Solar
-Open2 is the model, not just when a Claude model is? Tested with
-`git-commit-helper`, whose output format is strict enough to check
-mechanically: `<gitmoji> <type>(<domain>): <title>`.
+This repo ships three small custom skills under `.claude/skills/`. One
+formats a README's header into a consistent centered layout. One
+enforces a gitmoji + conventional-commit style for every commit message.
+One runs the lint/type-check/test workflow whenever Python code changes.
 
-**Finding: autonomous skill-selection is unreliable, explicit invocation
-is not.** Asked to just "write the commit message" (no skill named, a
-one-off manual check, not part of the automated suite), Solar Open2
-produced a plausible-looking message that silently dropped the required
-format:
+Do these skills actually get honored when Solar Open2 is the model, not
+just when a Claude model is? We tested with `git-commit-helper`, since
+its output format is strict enough to check mechanically:
+`<gitmoji> <type>(<domain>): <title>`.
+
+**Finding: autonomous skill-selection is unreliable. Explicit invocation
+is not.**
+
+First, we asked — without naming any skill — "write the commit message"
+for a new file. This was a one-off manual check, not part of the
+automated suite. Solar Open2 produced a plausible-looking message, but it
+silently dropped the required format:
 
 ```bash
 claude -p "Using this repo's git-commit-helper skill conventions, write \
@@ -128,11 +140,13 @@ claude -p "Using this repo's git-commit-helper skill conventions, write \
 ```
 > docs: add hello.txt greeting
 
-No gitmoji, no `(domain)` — the skill's own required format wasn't
-applied, even though the skill was named in the prompt's wording. Asked
-the same thing but telling the model outright to *use* the skill — this
-is what `scripts/verify.sh` calls **Method C**, and it runs in CI every
-time (still on Case 01A's plain-env-var setup):
+No gitmoji, no `(domain)`. The skill's required format wasn't applied,
+even though "git-commit-helper" appeared right there in the prompt's
+wording.
+
+Then we asked the same thing again, but this time told the model outright
+to *use* the skill. This is what `scripts/verify.sh` calls **Method C**,
+and it runs in CI every time (still on Case 01A's plain-env-var setup):
 
 ```bash
 claude -p "Use the git-commit-helper skill. A new file docs/hello.txt \
@@ -144,24 +158,28 @@ claude -p "Use the git-commit-helper skill. A new file docs/hello.txt \
 
 [Full output →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29304170180/job/86994029784)
 
-Correct once the skill is explicitly invoked — gitmoji, type, and
-`(domain):` all present. The gap between these two prompts is small in
-wording but large in outcome: Solar Open2 can follow a skill's contract
-precisely once told to load it, but doesn't reliably decide *on its own*
-that a skill applies just because its subject matches the skill's
-`description` trigger phrases the way Claude models tend to. **Practical
-takeaway:** when running Claude Code on Solar Open2, name the skill
-explicitly in prompts that need it rather than relying on automatic
+Correct, once the skill is explicitly invoked: gitmoji, type, and
+`(domain):` are all present.
+
+The gap between these two prompts is small in wording but large in
+outcome. Solar Open2 can follow a skill's contract precisely once it's
+told to load it. But it doesn't reliably decide *on its own* that a skill
+applies just because the topic matches the skill's `description` trigger
+phrases — the way Claude models tend to.
+
+**Practical takeaway:** when running Claude Code on Solar Open2, name the
+skill explicitly in any prompt that needs it. Don't rely on automatic
 trigger-phrase matching.
 
 ### Subagents stay on Solar Open2 too
 
 `CLAUDE_CODE_SUBAGENT_MODEL="solar-open2"` is what keeps subagent/Task-tool
-calls (e.g. the Explore agent) on Solar Open2 instead of falling back to
-whatever the SDK's default subagent model would otherwise be. Verified
-directly — asked the harness to hand a file-listing task to the Explore
-subagent (this is what `scripts/verify.sh` calls **Method D**, also on
-Case 01A's setup):
+calls — like the Explore agent — on Solar Open2, instead of falling back
+to whatever the SDK's default subagent model would otherwise be.
+
+We verified this directly: asked the harness to hand a file-listing task
+to the Explore subagent. This is what `scripts/verify.sh` calls
+**Method D**, also run on Case 01A's setup:
 
 ```bash
 claude -p "Use the Explore agent (a subagent) to list every file \
@@ -171,9 +189,9 @@ claude -p "Use the Explore agent (a subagent) to list every file \
 
 [Full output →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29304170180/job/86994029784)
 
-The reported path is the CI runner's actual checkout of this directory —
-confirming the subagent call really executed against the real filesystem,
-routed through `solar-open2` the whole way down.
+The reported path is the CI runner's actual checkout of this directory.
+That confirms the subagent call really executed against the real
+filesystem, routed through `solar-open2` the whole way down.
 
 ---
 
@@ -183,9 +201,11 @@ routed through `solar-open2` the whole way down.
 
 `claude-upstage` is Upstage's own convenience wrapper, published at
 `console.upstage.ai`. It sets most of Case 01A's `ANTHROPIC_*` variables
-for you — via its own `set_claude_env` — and then `exec`s the same stock
-`claude` binary. No fork, no patch of `claude` itself; the wrapper is
-just a thinner way to reach the same endpoint Case 01A talks to directly.
+for you, through its own `set_claude_env`, and then `exec`s the same
+stock `claude` binary.
+
+No fork, no patch of `claude` itself. The wrapper is just a thinner way
+to reach the same endpoint Case 01A talks to directly.
 
 ### Installation
 
@@ -201,23 +221,25 @@ less claude-upstage.sh && sh claude-upstage.sh
 curl -fsSL https://console.upstage.ai/claude-upstage.sh | sh -s install
 ```
 
-`claude-upstage login` saves the API key to the OS keychain, or export
-`UPSTAGE_API_KEY` for the current shell instead.
+`claude-upstage login` saves the API key to the OS keychain. Or just
+export `UPSTAGE_API_KEY` for the current shell instead.
 
 ### Finding: `claude-upstage` doesn't pass `-p` through
 
 The literal form the harness was expected to support —
 `claude-upstage -p "hello"` — **fails**: `claude-upstage: unknown command
-'-p'`. Checked in both the locally installed copy and the current
-canonical script fetched fresh from `console.upstage.ai` (byte-identical
-apart from one unrelated line) — this isn't a stale-install issue, it's how
-the wrapper's argument parser is currently written. `claude-upstage` only
-forwards `--model`, `-c`/`--continue`, and `-r`/`--resume` to `claude`;
-anything else is rejected before `claude` is ever invoked.
+'-p'`.
+
+We checked both the locally installed copy and the current canonical
+script fetched fresh from `console.upstage.ai` (byte-identical apart from
+one unrelated line). So this isn't a stale-install issue — it's how the
+wrapper's argument parser is currently written. `claude-upstage` only
+forwards `--model`, `-c`/`--continue`, and `-r`/`--resume` to `claude`.
+Anything else gets rejected before `claude` is ever invoked.
 
 The workaround that does work non-interactively: pipe input to
 `claude-upstage` instead of passing `-p`. With stdin not a tty, the
-underlying `claude` process treats it as a single-shot prompt just like
+underlying `claude` process treats it as a single-shot prompt, just like
 `-p` would:
 
 ```bash
@@ -226,8 +248,9 @@ echo "hello" | claude-upstage
 
 ### Verified: piped-stdin hello check
 
-Real output from the same CI run of `verify.sh` (truncated to <=100
-chars, same as the script itself prints) — not hand-picked or edited:
+Here's real output from that same CI run of `verify.sh`, truncated to 100
+characters just like the script itself prints. Nothing here is
+hand-picked or edited:
 
 **Evidence run:** [`verify` job, 2026-07-14](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29304170180/job/86994029784)
 (or browse [every run](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml) for the latest)
@@ -240,8 +263,8 @@ echo "hello" | claude-upstage
 [Full output →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29304170180/job/86994029784)
 
 This is what `scripts/verify.sh` calls **Method A**. The response reads
-this repo's actual `AGENTS.md`/state too, just like Case 01A's — the
-wrapper reaches the same full agentic Claude Code harness, not a raw
+this repo's actual `AGENTS.md`/state too, just like Case 01A's. The
+wrapper reaches the same full agentic Claude Code harness — not a raw
 chat completion.
 
 ---
@@ -249,17 +272,22 @@ chat completion.
 ## Verification
 
 [`scripts/verify.sh`](scripts/verify.sh) runs both sub-cases and the
-skill/subagent checks in one pass — `claude-upstage doctor`, Case 01B's
+skill/subagent checks in one pass: `claude-upstage doctor`, Case 01B's
 piped-stdin check (Method A), Case 01A's hello check (Method B), the
 explicit `git-commit-helper` skill invocation (Method C), and a subagent
-call gated on `CLAUDE_CODE_SUBAGENT_MODEL` (Method D) — and fails loudly
-if any of them don't hold up. The skill check doesn't pin exact wording
-(the title text isn't deterministic); it asserts the two structural
-things the skill's format contract requires: a gitmoji (a non-ASCII byte)
-and a `(domain):` segment. The subagent check looks for `README.md` — a
-file that's always present in this directory — in the subagent's report,
-as a deterministic proxy for "it actually ran against the real
-filesystem." Run it locally with `UPSTAGE_API_KEY` set:
+call gated on `CLAUDE_CODE_SUBAGENT_MODEL` (Method D). It fails loudly if
+any of them don't hold up.
+
+The skill check doesn't pin exact wording, since the title text isn't
+deterministic. Instead it checks the two structural things the skill's
+format contract requires: a gitmoji (a non-ASCII byte) and a `(domain):`
+segment.
+
+The subagent check looks for `README.md` — a file that's always present
+in this directory — in the subagent's report. That's a deterministic
+proxy for "it actually ran against the real filesystem."
+
+Run it locally with `UPSTAGE_API_KEY` set:
 
 ```bash
 UPSTAGE_API_KEY="..." ./scripts/verify.sh

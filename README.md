@@ -28,7 +28,7 @@ open-weight models on MMLU-Pro, LiveCodeBench, and the APEX-Agents agentic
 suite, and posts the highest average of any model compared, including
 fast-tier closed APIs, on Korean benchmarks.
 
-| | |
+| Feature | Description |
 | --- | --- |
 | Parameters | 250B total, 15B active (MoE) |
 | Context | 1M tokens |

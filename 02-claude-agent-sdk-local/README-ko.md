@@ -111,7 +111,7 @@ async for message in query(
 100자 이하로 truncate됨)이며, 손으로 고르거나 편집하지 않았습니다.
 링크를 클릭하면 truncate되지 않은 전체 응답을 직접 확인할 수 있습니다:
 
-**근거 실행:** [`verify` job, 2026-07-14](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29306803664/job/87001673982)
+**검증 실행:** [`verify` job, 2026-07-14](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29306803664/job/87001673982)
 (또는 최신 결과를 보려면 [전체 실행 목록](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml) 참고)
 
 | 방식 | 결과 |

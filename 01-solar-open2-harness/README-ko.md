@@ -86,6 +86,10 @@ npm install -g @anthropic-ai/claude-code
 claude --version
 ```
 
+이 리포는 버전을 고정하지 않습니다. 그래서 `npm install -g
+@anthropic-ai/claude-code`는 항상 CI 실행 시점의 최신 버전을 설치합니다.
+아래 검증 실행은 Claude Code CLI **v2.1.208**을 기준으로 검증했습니다.
+
 ### 검증: hello 체크
 
 아래는 `verify.sh`의 실제 CI 실행 결과입니다. 스크립트가 출력하는 것과
@@ -222,6 +226,15 @@ curl -fsSL https://console.upstage.ai/claude-upstage.sh | sh -s install
 `claude-upstage login`으로 OS 키체인에 API 키를 저장할 수 있습니다.
 현재 셸에서만 쓸 거라면 `UPSTAGE_API_KEY`를 export하는 것으로
 충분합니다.
+
+`claude-upstage`는 자체 버전 번호가 없습니다. Upstage가
+`console.upstage.ai`에서 계속 갱신하는 롤링 스크립트일 뿐, 고정된
+릴리스가 아닙니다. Claude Code 자체를 설치하거나 번들링하지도
+않습니다 — PATH에 이미 있는 `claude`를 확인해서 그 실행 파일을 그대로
+`exec`할 뿐입니다. 그래서 Case 01A가 쓰는 로컬 Claude Code 설치본과
+완전히 동일한 버전으로 동작합니다 — 비슷한 버전이 아니라 같은 파일,
+같은 버전입니다. 아래 검증 실행 기준으로는 Claude Code CLI
+**v2.1.208**이었습니다.
 
 ### 발견: `claude-upstage`는 `-p`를 전달하지 않음
 

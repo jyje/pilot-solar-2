@@ -88,6 +88,10 @@ npm install -g @anthropic-ai/claude-code
 claude --version
 ```
 
+This repo doesn't pin a version, so `npm install -g @anthropic-ai/claude-code`
+always grabs whatever's latest at CI run time. The evidence run below was
+verified against Claude Code CLI **v2.1.208**.
+
 ### Verified: hello check
 
 Here's real output from one CI run of `verify.sh`, truncated to 100
@@ -223,6 +227,14 @@ curl -fsSL https://console.upstage.ai/claude-upstage.sh | sh -s install
 
 `claude-upstage login` saves the API key to the OS keychain. Or just
 export `UPSTAGE_API_KEY` for the current shell instead.
+
+`claude-upstage` doesn't carry its own version number — it's a rolling
+script that Upstage updates in place at `console.upstage.ai`, not a
+pinned release. It also doesn't install or bundle Claude Code itself: it
+just checks that `claude` is already on `PATH` and `exec`s that exact
+binary. So it always runs on the exact same local Claude Code install as
+Case 01A — same file, same version, not just a matching one. For the
+evidence run below, that was Claude Code CLI **v2.1.208**.
 
 ### Finding: `claude-upstage` doesn't pass `-p` through
 

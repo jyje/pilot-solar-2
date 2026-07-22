@@ -38,21 +38,23 @@ agent.invoke({"messages": [{"role": "user", "content": "..."}]})
 That's the whole auth story — no `ANTHROPIC_BASE_URL`/`ANTHROPIC_AUTH_TOKEN`
 dance, no `claude` CLI subprocess. Cases 01-02 had to route through
 Anthropic's Messages API wire format (Upstage exposes that compatibility
-layer too, at a different host path); this case skips it entirely by
+layer too, at a different host path). This case skips it entirely,
 using Upstage's native OpenAI-compatible endpoint through the LangChain
 integration Upstage itself publishes.
 
 ## Finding: Python 3.14 doesn't work here (yet)
 
-This repo's other cases pin Python 3.14, but Case 03 pins **3.13**. Cause,
-confirmed by actually trying it: `langchain-upstage` depends on
-`tokenizers` (a Rust/PyO3 extension), and no `tokenizers` release —
+This repo's other cases pin Python 3.14, but Case 03 pins **3.13**.
+
+The cause, confirmed by actually trying it: `langchain-upstage` depends
+on `tokenizers` (a Rust/PyO3 extension), and no `tokenizers` release —
 checked `0.20.3` through the current `0.23.1` — ships a `cp314` wheel
-yet. Building it from source also failed in this environment (a real
-`cargo`/PyO3 compile error, not a missing-toolchain issue). This is an
-upstream ecosystem gap, not a workaround-able config issue — Case 03 will
-move back to 3.14 once `tokenizers` (or an alternative Upstage integration
-that doesn't pull it in) supports it.
+yet. Building it from source also failed in this environment: a real
+`cargo`/PyO3 compile error, not a missing-toolchain issue.
+
+This is an upstream ecosystem gap, not something a config change can work
+around. Case 03 will move back to 3.14 once `tokenizers` (or an
+alternative Upstage integration that doesn't pull it in) supports it.
 
 ## Three methods
 
@@ -117,12 +119,14 @@ Click through to read the run yourself:
 ## Verification
 
 [`scripts/verify.sh`](scripts/verify.sh) runs `src/demo.py`, which
-executes all three methods for real against Solar Open2 and exits
-non-zero if any of them don't check out (Method A's answer missing
+executes all three methods for real against Solar Open2. It exits
+non-zero if any of them don't check out: Method A's answer missing
 "sunny"/"Seoul", Method B's file content wrong, or Method C's reply
-missing "42"). Python changes here go through the `python-lint` skill's
-workflow — `ruff check`, `ruff format --check`, `ty check`, `pytest` —
-before `verify.sh` runs, both locally and in CI.
+missing "42".
+
+Python changes here go through the `python-lint` skill's workflow —
+`ruff check`, `ruff format --check`, `ty check`, `pytest` — before
+`verify.sh` runs, both locally and in CI.
 
 Run locally with `UPSTAGE_API_KEY` set:
 

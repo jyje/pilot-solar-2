@@ -43,11 +43,11 @@ There is an important distinction between **Hermes provider support** and
 - Upstage's current public console examples use `solar-pro3`; they do not
   currently advertise `solar-open2` as the default public model.
 
-Therefore this case does not claim that every new Upstage account can select
-`solar-open2`. The authenticated round trip is the authority for whether the
-model remains enabled on the account used by this repository. Cases 01–04
-previously verified that account against `solar-open2`, and Case 05 confirmed
-it again on 2026-07-20.
+So this case doesn't claim that every new Upstage account can select
+`solar-open2`. The authenticated round trip below is the real authority
+for whether the model stays enabled on the account this repo uses.
+Cases 01-04 already verified that account against `solar-open2`, and
+Case 05 confirmed it again on 2026-07-20.
 
 ## Run
 

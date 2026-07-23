@@ -59,7 +59,7 @@ presented independently.
 | [Case 03 — Solar Open 2 x Claude Agent SDK](03-claude-agent-sdk-local/) | Extend | Drive a local Claude Code instance programmatically with the Claude Agent SDK | Verified |
 | [Case 04 — Solar Open 2 x LangChain Deepagents](04-langchain-upstage-deepagents/) | Extend | Initialize deepagents at the code level using the LangChain Upstage SDK | Verified |
 | [Case 05 — Solar Open 2 x LangChain OpenWiki](05-langchain-openwiki-solar-open2/) | Extend | Use `openwiki` to document this repo and answer questions about it, powered by Solar Open 2 | Verified |
-| [Case 06 — Solar Open 2 x Grok Build](06-grok-build-solar-open2/) | Extend | Run xAI's Grok Build CLI against Solar Open 2 as a custom model provider | Partially verified |
+| [Case 06 — Solar Open 2 x Grok Build](06-grok-build-solar-open2/) | Extend | Run xAI's Grok Build CLI against Solar Open 2 as a custom model provider | Verified |
 
 **Review** cases validate that Solar Open 2 works correctly in an
 existing, official harness path. **Extend** cases go further, wiring

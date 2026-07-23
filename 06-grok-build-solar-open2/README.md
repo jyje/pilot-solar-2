@@ -5,10 +5,10 @@
 [← back to repo overview](../README.md) · Want to run this yourself?
 See [`REPRODUCE.md`](REPRODUCE.md) for step-by-step local setup.
 
-**Status:** Partially verified — [xAI's Grok Build](https://github.com/xai-org/grok-build)
+**Status:** Verified — [xAI's Grok Build](https://github.com/xai-org/grok-build)
 CLI answers real prompts against Solar Open 2 as a custom model
-provider, but its built-in tool-calling hits the same Upstage streaming
-bug documented in
+provider; all three methods below pass in CI. Known limitation: its
+built-in tool-calling hits the same Upstage streaming bug documented in
 [Case 05's Finding 2](../05-langchain-openwiki-solar-open2/README.md#finding-2-solar-open-2-drops-the-tool_call-function-name-when-streaming),
 with no client-side workaround available (Grok Build is closed-source).
 

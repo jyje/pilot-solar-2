@@ -31,7 +31,7 @@ it without needing any of the others.
 | Case 03 — Solar Open 2 x Claude Agent SDK | Drive a local Claude Code instance programmatically via the Claude Agent SDK (no manual CLI interaction) | Claude Agent SDK, Python | Verified |
 | Case 04 — Solar Open 2 x LangChain Deepagents | Initialize a `deepagents`-based agent at the code level using the LangChain Upstage SDK (`langchain-upstage`) as the model backend | LangChain, `langchain-upstage`, `deepagents` | Verified |
 | Case 05 — Solar Open 2 x LangChain OpenWiki | Document this repo itself with `openwiki`, configured to run on Solar Open 2 | LangChain, `openwiki`, Solar Open 2 | Verified |
-| Case 06 — Solar Open 2 x Grok Build | Run xAI's Grok Build CLI against Solar Open 2 as a custom model provider | Grok Build, Solar Open 2 | Partially verified |
+| Case 06 — Solar Open 2 x Grok Build | Run xAI's Grok Build CLI against Solar Open 2 as a custom model provider | Grok Build, Solar Open 2 | Verified |
 
 ## Case 01 — Solar Open 2 x Claude Code
 
@@ -203,7 +203,7 @@ it without needing any of the others.
   generated `config.toml`, with `api_backend = "chat_completions"` so
   Grok Build speaks Upstage's actual OpenAI-compatible wire format
   instead of the Responses API protocol Codex is locked to.
-- **Result**: partially done, with two real findings.
+- **Result**: done, with two real findings along the way.
   1. Custom models only load from a *user-level* `config.toml` — a
      project-local `.grok/config.toml` is silently ignored for models
      (Grok Build's own docs confirm project configs are limited to MCP
@@ -235,8 +235,8 @@ policy).
 
 ## Next steps
 
-Cases 01-05 are implemented and verified; Case 06 is implemented and
-partially verified (see its two findings above). Open items:
+Cases 01-06 are implemented and verified (Case 06's tool-calling has a
+known, documented limitation — see its two findings above). Open items:
 - Find or wait for a client-side way to disable streaming (or otherwise
   route around the dropped tool_call name) for Grok Build's custom
   providers, to unblock Case 06's tool-calling method — no such flag

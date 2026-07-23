@@ -6,9 +6,10 @@
 [`REPRODUCE-ko.md`](REPRODUCE-ko.md)에서 단계별 로컬 실행 방법을
 확인하세요.
 
-**상태:** 부분 검증 완료 — [xAI의 Grok Build](https://github.com/xai-org/grok-build)
+**상태:** 검증 완료 — [xAI의 Grok Build](https://github.com/xai-org/grok-build)
 CLI가 커스텀 모델 provider로 Solar Open 2를 상대로 실제 응답을
-생성하지만, 내장 tool-calling에서는
+생성하며, 아래 세 가지 방식 모두 CI를 통과합니다. 알려진 한계: 내장
+tool-calling에서는
 [Case 05의 Finding 2](../05-langchain-openwiki-solar-open2/README-ko.md#발견-2-스트리밍-시-solar-open-2가-tool_call의-function-name을-누락함)에서
 문서화한 것과 동일한 Upstage 스트리밍 버그가 발생하며, Grok Build가
 closed-source라 클라이언트 쪽 우회 방법이 없습니다.

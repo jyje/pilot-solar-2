@@ -29,9 +29,9 @@ between "core" and "special" cases.
 Each case directory is a self-contained experiment with its own `src/`
 (uv-managed, or a Node project for Case 05), a Docker-based runnable
 configuration for Case 02, or a standalone installed CLI for Case 06
-(Grok Build, no `src/`). All are implemented; all but Case 06 are fully
-verified — Case 06 is partially verified, see its README for the two
-open findings.
+(Grok Build, no `src/`). All are implemented and verified — Case 06's
+tool-calling has a known, documented limitation (see its README), but
+its three gated methods all pass.
 
 Each has its own `scripts/verify.sh`. All 6 run, solar-open2 only, as
 steps in the single `.github/workflows/verify-all-sequential.yml`

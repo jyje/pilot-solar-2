@@ -49,6 +49,9 @@ repo.
   `pnpm install && pnpm run build && npm link` — the public npm release
   doesn't have the streaming fix Case 05 needs yet (see its README).
 - Docker — Case 02 runs the official, digest-pinned `nousresearch/hermes-agent` image.
+- Grok Build's `grok` CLI (`curl -fsSL https://x.ai/cli/install.sh | bash`)
+  — Case 06 drives it headlessly against a custom Solar Open 2 model
+  provider.
 
 ### Running one case
 
@@ -60,6 +63,7 @@ UPSTAGE_API_KEY="..." ./02-hermes-agent-solar-open2/scripts/verify.sh
 UPSTAGE_API_KEY="..." ./03-claude-agent-sdk-local/scripts/verify.sh
 UPSTAGE_API_KEY="..." ./04-langchain-upstage-deepagents/scripts/verify.sh
 UPSTAGE_API_KEY="..." ./05-langchain-openwiki-solar-open2/scripts/verify.sh
+UPSTAGE_API_KEY="..." ./06-grok-build-solar-open2/scripts/verify.sh
 ```
 
 Or through the shared, rate-limit-aware wrapper CI itself uses. It waits
@@ -79,7 +83,8 @@ for case in \
   02-hermes-agent-solar-open2 \
   03-claude-agent-sdk-local \
   04-langchain-upstage-deepagents \
-  05-langchain-openwiki-solar-open2
+  05-langchain-openwiki-solar-open2 \
+  06-grok-build-solar-open2
 do
   UPSTAGE_API_KEY="..." ./scripts/verify-case.sh "$case" solar-open2
 done
@@ -118,15 +123,20 @@ actionlint .github/workflows/*.yml
    exercises the real Upstage API and exits non-zero on failure.
 3. Wire it into
    [`.github/workflows/verify-all-sequential.yml`](.github/workflows/verify-all-sequential.yml)
-   as one more `continue-on-error: true` step, invoked through
-   `scripts/verify-case.sh` so it gets the same full-reset rate-limit
-   wait as every other case.
-4. Update `PLAN.md`'s summary table, the root `README.md`/`README-ko.md`
+   as one more `continue-on-error: true` step (plus its row in the Recap
+   step's arrays), invoked through `scripts/verify-case.sh` so it gets
+   the same full-reset rate-limit wait as every other case.
+4. Add its own single-case workflow,
+   `.github/workflows/verify-0N-<short-slug>.yml` — manual-dispatch
+   only, same shape as the other `verify-0N-*.yml` files, so this one
+   case can be re-run on its own without waiting on the other 5+.
+5. Update `PLAN.md`'s summary table, the root `README.md`/`README-ko.md`
    Cases table, and `docs/REPRODUCE.md`/`docs/REPRODUCE-ko.md`'s use case
    guide table.
 
 ## Pull requests
 
-CI (`verify-all-sequential.yml`) is manual-dispatch only and hits the real
-Upstage API, so it isn't wired to run automatically on every PR. Note in
-your PR description which case(s) you verified locally and how.
+CI (`verify-all-sequential.yml`, and each case's own `verify-0N-*.yml`) is
+manual-dispatch only and hits the real Upstage API, so none of it is
+wired to run automatically on every PR. Note in your PR description
+which case(s) you verified locally and how.

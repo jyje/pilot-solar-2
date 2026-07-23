@@ -46,9 +46,9 @@ it.
 
 A single repo hosting several independent, seminar-ready use cases around
 building and running agent harnesses on Upstage's Solar Open 2 model across
-the Claude, LangChain, OpenWiki, and Hermes Agent ecosystems. Each case
-lives in its own top-level directory and can be read, run, and presented
-independently.
+the Claude, LangChain, OpenWiki, Hermes Agent, and Grok Build ecosystems.
+Each case lives in its own top-level directory and can be read, run, and
+presented independently.
 
 ## Cases
 
@@ -59,6 +59,7 @@ independently.
 | [Case 03 — Solar Open 2 x Claude Agent SDK](03-claude-agent-sdk-local/) | Extend | Drive a local Claude Code instance programmatically with the Claude Agent SDK | Verified |
 | [Case 04 — Solar Open 2 x LangChain Deepagents](04-langchain-upstage-deepagents/) | Extend | Initialize deepagents at the code level using the LangChain Upstage SDK | Verified |
 | [Case 05 — Solar Open 2 x LangChain OpenWiki](05-langchain-openwiki-solar-open2/) | Extend | Use `openwiki` to document this repo and answer questions about it, powered by Solar Open 2 | Verified |
+| [Case 06 — Solar Open 2 x Grok Build](06-grok-build-solar-open2/) | Extend | Run xAI's Grok Build CLI against Solar Open 2 as a custom model provider | Partially verified |
 
 **Review** cases validate that Solar Open 2 works correctly in an
 existing, official harness path. **Extend** cases go further, wiring
@@ -81,6 +82,8 @@ use, not something that requires bespoke tooling:
   supplying the model.
 - **Case 05** — `openwiki` (LangChain AI), an agent-readable-wiki
   generator, documenting this very repo.
+- **Case 06** — xAI's Grok Build CLI, via its own "any custom model"
+  config mechanism.
 
 Every case is self-contained: its own `README.md`/`README-ko.md`, its own
 `scripts/verify.sh` that exercises real Upstage API calls (no mocks), and
@@ -114,6 +117,14 @@ mainstream framework already speaks, not a custom client:
   endpoint rejects `x-api-key` outright — see
   [Case 05's README](05-langchain-openwiki-solar-open2/README.md) for the
   full trace.
+- Case 06's Grok Build lets a custom model declare its own wire
+  protocol (`chat_completions`, `responses`, or `messages`) per entry —
+  pointed at `chat_completions`, it reaches Solar Open 2 directly. Basic
+  chat works; tool-calling hits the same streamed-response bug as Case
+  05's Finding 2, with no client-side fix available since Grok Build is
+  closed-source — see
+  [Case 06's README](06-grok-build-solar-open2/README.md) for the full
+  trace.
 
 The practical upshot: adding a new agent harness to this list is mostly
 configuration (base URL, auth style, model ID), not new integration code,

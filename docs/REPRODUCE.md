@@ -40,7 +40,7 @@ it to `.env` locally if you prefer a file over an export, but never commit
 
 ### 2. Know the shared rate limit
 
-All 5 cases share one Upstage account.
+All 6 cases share one Upstage account.
 
 The default account tier (**Tier 0**) allows 100 requests/minute and
 50,000 tokens/minute for Solar chat models.
@@ -92,10 +92,11 @@ The wrapper just adds a wait in front.
 | Case 03 | Claude Code driven programmatically via the Claude Agent SDK | [`03-claude-agent-sdk-local/REPRODUCE.md`](../03-claude-agent-sdk-local/REPRODUCE.md) |
 | Case 04 | `deepagents` initialized at the code level via `langchain-upstage` | [`04-langchain-upstage-deepagents/REPRODUCE.md`](../04-langchain-upstage-deepagents/REPRODUCE.md) |
 | Case 05 | `openwiki` documenting this repo, powered by Solar Open 2 | [`05-langchain-openwiki-solar-open2/REPRODUCE.md`](../05-langchain-openwiki-solar-open2/REPRODUCE.md) |
+| Case 06 | Grok Build CLI against Solar Open 2 as a custom model provider | [`06-grok-build-solar-open2/REPRODUCE.md`](../06-grok-build-solar-open2/REPRODUCE.md) |
 
 Each page has its own Korean twin — follow the `[한국어]` link at its top.
 
-## Running all 5 in sequence, like CI does
+## Running all 6 in sequence, like CI does
 
 Same order CI uses, each case waiting for a full rate-limit reset before
 it starts:
@@ -108,7 +109,8 @@ for case in \
   02-hermes-agent-solar-open2 \
   03-claude-agent-sdk-local \
   04-langchain-upstage-deepagents \
-  05-langchain-openwiki-solar-open2
+  05-langchain-openwiki-solar-open2 \
+  06-grok-build-solar-open2
 do
   ./scripts/verify-case.sh "$case" solar-open2
 done

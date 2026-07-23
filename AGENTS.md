@@ -17,7 +17,8 @@ pilot-upstage-solar-open2/
 ├── 02-hermes-agent-solar-open2/       # Case 02: Hermes Agent via its built-in Upstage provider
 ├── 03-claude-agent-sdk-local/         # Case 03: local Claude Code via Claude Agent SDK
 ├── 04-langchain-upstage-deepagents/   # Case 04: deepagents init via LangChain Upstage SDK
-└── 05-langchain-openwiki-solar-open2/ # Case 05: openwiki documents this repo via Solar Open 2
+├── 05-langchain-openwiki-solar-open2/ # Case 05: openwiki documents this repo via Solar Open 2
+└── 06-grok-build-solar-open2/         # Case 06: Grok Build CLI as a custom Solar Open 2 provider
 ```
 
 Referred to as **Case 01 / Case 02 / ...** in prose and docs — the
@@ -26,10 +27,13 @@ target. All cases live at the top level as one flat list, with no split
 between "core" and "special" cases.
 
 Each case directory is a self-contained experiment with its own `src/`
-(uv-managed, or a Node project for Case 05), or a Docker-based runnable
-configuration for Case 02. All are implemented and verified.
+(uv-managed, or a Node project for Case 05), a Docker-based runnable
+configuration for Case 02, or a standalone installed CLI for Case 06
+(Grok Build, no `src/`). All are implemented; all but Case 06 are fully
+verified — Case 06 is partially verified, see its README for the two
+open findings.
 
-Each has its own `scripts/verify.sh`. All 5 run, solar-open2 only, as
+Each has its own `scripts/verify.sh`. All 6 run, solar-open2 only, as
 steps in the single `.github/workflows/verify-all-sequential.yml`
 workflow (manual `workflow_dispatch`), which reuses the same
 `UPSTAGE_API_KEY` secret. Cases 03 and 04 (the two `uv`-managed Python

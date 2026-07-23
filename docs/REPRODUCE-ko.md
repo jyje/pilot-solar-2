@@ -42,7 +42,7 @@ export UPSTAGE_API_KEY="up_..."
 
 ### 2. 공유 레이트리밋 이해하기
 
-5개 케이스 모두 하나의 Upstage 계정을 공유합니다.
+6개 케이스 모두 하나의 Upstage 계정을 공유합니다.
 
 기본 계정 등급(**Tier 0**)은 Solar 챗 모델 기준 분당 100 요청, 분당
 5만 토큰까지 허용합니다.
@@ -96,10 +96,11 @@ UPSTAGE_API_KEY="..." ./scripts/verify-case.sh 01-solar-open2-harness solar-open
 | Case 03 | Claude Agent SDK로 Claude Code를 프로그래밍 방식 구동 | [`03-claude-agent-sdk-local/REPRODUCE-ko.md`](../03-claude-agent-sdk-local/REPRODUCE-ko.md) |
 | Case 04 | `langchain-upstage`로 `deepagents`를 코드 레벨에서 초기화 | [`04-langchain-upstage-deepagents/REPRODUCE-ko.md`](../04-langchain-upstage-deepagents/REPRODUCE-ko.md) |
 | Case 05 | `openwiki`가 이 리포를 문서화, Solar Open 2로 구동 | [`05-langchain-openwiki-solar-open2/REPRODUCE-ko.md`](../05-langchain-openwiki-solar-open2/REPRODUCE-ko.md) |
+| Case 06 | Grok Build CLI를 커스텀 모델 provider로 Solar Open 2 구동 | [`06-grok-build-solar-open2/REPRODUCE-ko.md`](../06-grok-build-solar-open2/REPRODUCE-ko.md) |
 
 각 문서 상단의 `[English]` 링크를 따라가면 영문판도 볼 수 있습니다.
 
-## CI처럼 5개를 순차로 전부 실행하기
+## CI처럼 6개를 순차로 전부 실행하기
 
 CI와 동일한 순서로, 각 케이스가 시작 전에 레이트리밋이 완전히 리셋될
 때까지 기다립니다:
@@ -112,7 +113,8 @@ for case in \
   02-hermes-agent-solar-open2 \
   03-claude-agent-sdk-local \
   04-langchain-upstage-deepagents \
-  05-langchain-openwiki-solar-open2
+  05-langchain-openwiki-solar-open2 \
+  06-grok-build-solar-open2
 do
   ./scripts/verify-case.sh "$case" solar-open2
 done

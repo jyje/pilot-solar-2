@@ -15,6 +15,8 @@ seminar-ready home:
    **LangChain Upstage SDK**.
 5. Documenting this repo itself with **LangChain OpenWiki**, powered by
    Solar Open 2.
+6. Running xAI's **Grok Build** CLI against Solar Open 2 as a custom
+   model provider.
 
 Each case is scoped to be independently readable, runnable, and
 presentable — someone should be able to open one case's folder and follow
@@ -29,6 +31,7 @@ it without needing any of the others.
 | Case 03 — Solar Open 2 x Claude Agent SDK | Drive a local Claude Code instance programmatically via the Claude Agent SDK (no manual CLI interaction) | Claude Agent SDK, Python | Verified |
 | Case 04 — Solar Open 2 x LangChain Deepagents | Initialize a `deepagents`-based agent at the code level using the LangChain Upstage SDK (`langchain-upstage`) as the model backend | LangChain, `langchain-upstage`, `deepagents` | Verified |
 | Case 05 — Solar Open 2 x LangChain OpenWiki | Document this repo itself with `openwiki`, configured to run on Solar Open 2 | LangChain, `openwiki`, Solar Open 2 | Verified |
+| Case 06 — Solar Open 2 x Grok Build | Run xAI's Grok Build CLI against Solar Open 2 as a custom model provider | Grok Build, Solar Open 2 | Partially verified |
 
 ## Case 01 — Solar Open 2 x Claude Code
 
@@ -191,6 +194,38 @@ it without needing any of the others.
   secret). See `05-langchain-openwiki-solar-open2/README.md` for
   details.
 
+## Case 06 — Solar Open 2 x Grok Build
+
+- **Goal**: run xAI's Grok Build CLI (launched May 2026) against Solar
+  Open 2 using Grok Build's own documented "any custom model" mechanism,
+  not a protocol bridge.
+- **Approach**: register `solar-open2` as a `[model.X]` entry in a
+  generated `config.toml`, with `api_backend = "chat_completions"` so
+  Grok Build speaks Upstage's actual OpenAI-compatible wire format
+  instead of the Responses API protocol Codex is locked to.
+- **Result**: partially done, with two real findings.
+  1. Custom models only load from a *user-level* `config.toml` — a
+     project-local `.grok/config.toml` is silently ignored for models
+     (Grok Build's own docs confirm project configs are limited to MCP
+     servers, plugins, and permission rules). Worked around by pointing
+     `$GROK_HOME` at a throwaway temp directory for the run, same
+     isolation pattern as Case 02's Hermes home and Case 03's
+     `CODEX_HOME`.
+  2. Built-in tool-calling fails every time with `400 Invalid function
+     name: ''` — the identical signature to Case 05's Finding 2 (Upstage
+     drops the tool_call function name in streamed responses). Case 05
+     could patch around it because `openwiki` is open source; Grok
+     Build is a closed-source binary with no equivalent flag, so this
+     stays an unresolved blocker here.
+  Three non-tool-use methods verified: a deterministic single-turn
+  reply, a reasoning-heavy prompt checked for the correct numeric
+  answer, and a small coding task (a `Python is_prime(n)` function)
+  checked for correct, working code.
+  Verified locally and in CI
+  (`.github/workflows/verify-all-sequential.yml`, installing `grok` via
+  its official installer, reusing the `UPSTAGE_API_KEY` secret). See
+  `06-grok-build-solar-open2/README.md` for details.
+
 ## Repo structure
 
 See [`AGENTS.md`](AGENTS.md) for the directory tree and repo conventions
@@ -200,7 +235,12 @@ policy).
 
 ## Next steps
 
-Cases 01-05 are implemented and verified. Open items:
+Cases 01-05 are implemented and verified; Case 06 is implemented and
+partially verified (see its two findings above). Open items:
+- Find or wait for a client-side way to disable streaming (or otherwise
+  route around the dropped tool_call name) for Grok Build's custom
+  providers, to unblock Case 06's tool-calling method — no such flag
+  exists today, unlike the openwiki fork's fix for Case 05.
 - Revisit Case 04's Python 3.13 pin once `tokenizers` ships a `cp314`
   wheel — Case 03 was moved down to 3.13 to unify both Python cases
   in the meantime, rather than wait on upstream.

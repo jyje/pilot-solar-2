@@ -1,7 +1,7 @@
 name: verify-all-sequential
 
-# The single verification workflow for this repo. Runs all 5 cases
-# against solar-open2, one at a time as one of 5 steps — each step is
+# The single verification workflow for this repo. Runs all 6 cases
+# against solar-open2, one at a time as one of 6 steps — each step is
 # scripts/verify-case.sh (shared with local ad-hoc runs), which waits
 # until Upstage's rate-limit budget for the model is *fully* reset (see
 # scripts/wait-for-upstage-full-reset.sh, 10-minute cap) before that
@@ -74,6 +74,12 @@ jobs:
           pnpm run build
           npm link
 
+      - name: Install Grok Build CLI
+        run: |
+          curl -fsSL https://x.ai/cli/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          echo "$HOME/.grok/bin" >> "$GITHUB_PATH"
+
       - name: "Case 01 — Solar Open 2 x Claude Code"
         id: c01
         continue-on-error: true
@@ -109,6 +115,13 @@ jobs:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
         run: ./scripts/verify-case.sh 05-langchain-openwiki-solar-open2 solar-open2
 
+      - name: "Case 06 — Solar Open 2 x Grok Build"
+        id: c06
+        continue-on-error: true
+        env:
+          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+        run: ./scripts/verify-case.sh 06-grok-build-solar-open2 solar-open2
+
       # continue-on-error steps always report conclusion=success at the
       # job level, so this reads each step's real `outcome` (not
       # overridden) to report what actually happened, and fails the job
@@ -127,10 +140,12 @@ jobs:
             "Case 03 — Solar Open 2 x Claude Agent SDK"
             "Case 04 — Solar Open 2 x LangChain Deepagents"
             "Case 05 — Solar Open 2 x LangChain OpenWiki"
+            "Case 06 — Solar Open 2 x Grok Build"
           )
           categories=(
             "Review"
             "Review"
+            "Extend"
             "Extend"
             "Extend"
             "Extend"
@@ -141,6 +156,7 @@ jobs:
             "${{ steps.c03.outcome }}"
             "${{ steps.c04.outcome }}"
             "${{ steps.c05.outcome }}"
+            "${{ steps.c06.outcome }}"
           )
 
           mark() { [ "$1" = success ] && echo "✅" || echo "❌"; }

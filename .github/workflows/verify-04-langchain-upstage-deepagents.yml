@@ -1,0 +1,23 @@
+name: verify-04-langchain-upstage-deepagents
+
+# Manual, single-case counterpart to verify-all-sequential.yml — run just
+# this one case without waiting for the other 5. Same
+# scripts/verify-case.sh wrapper (full rate-limit reset wait, solar-open2
+# only), so behavior matches what this case does inside the sequential
+# run. Manual-only by design, same as verify-all-sequential.yml.
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  verify:
+    runs-on: ubuntu-26.04-arm
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+
+      - name: "Case 04 — Solar Open 2 x LangChain Deepagents"
+        env:
+          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+        run: ./scripts/verify-case.sh 04-langchain-upstage-deepagents solar-open2

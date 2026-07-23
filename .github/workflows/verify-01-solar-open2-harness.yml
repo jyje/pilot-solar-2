@@ -1,0 +1,31 @@
+name: verify-01-solar-open2-harness
+
+# Manual, single-case counterpart to verify-all-sequential.yml — run just
+# this one case without waiting for the other 5. Same
+# scripts/verify-case.sh wrapper (full rate-limit reset wait, solar-open2
+# only), so behavior matches what this case does inside the sequential
+# run. Manual-only by design, same as verify-all-sequential.yml.
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  verify:
+    runs-on: ubuntu-26.04-arm
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Install claude-upstage
+        run: curl -fsSL https://console.upstage.ai/claude-upstage.sh | sh -s install
+
+      - name: "Case 01 — Solar Open 2 x Claude Code"
+        env:
+          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+        run: ./scripts/verify-case.sh 01-solar-open2-harness solar-open2

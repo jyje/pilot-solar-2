@@ -1,0 +1,21 @@
+name: verify-02-hermes-agent-solar-open2
+
+# Manual, single-case counterpart to verify-all-sequential.yml — run just
+# this one case without waiting for the other 5. Same
+# scripts/verify-case.sh wrapper (full rate-limit reset wait, solar-open2
+# only), so behavior matches what this case does inside the sequential
+# run. Manual-only by design, same as verify-all-sequential.yml.
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  verify:
+    runs-on: ubuntu-26.04-arm
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Case 02 — Solar Open 2 x Hermes Agent"
+        env:
+          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+        run: ./scripts/verify-case.sh 02-hermes-agent-solar-open2 solar-open2

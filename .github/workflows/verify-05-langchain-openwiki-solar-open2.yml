@@ -1,0 +1,43 @@
+name: verify-05-langchain-openwiki-solar-open2
+
+# Manual, single-case counterpart to verify-all-sequential.yml — run just
+# this one case without waiting for the other 5. Same
+# scripts/verify-case.sh wrapper (full rate-limit reset wait, solar-open2
+# only), so behavior matches what this case does inside the sequential
+# run. Manual-only by design, same as verify-all-sequential.yml.
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  verify:
+    runs-on: ubuntu-26.04-arm
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # Why a fork instead of `npm install -g openwiki`: see
+      # verify-all-sequential.yml's own comment on this same step, and
+      # 05-langchain-openwiki-solar-open2/README.md's Finding 2.
+      - name: Check out patched openwiki fork
+        uses: actions/checkout@v4
+        with:
+          repository: jyje/openwiki
+          ref: fix/disable-streaming-for-tool-calling-providers
+          path: openwiki-fork
+
+      - name: Build and link patched openwiki
+        working-directory: openwiki-fork
+        run: |
+          npm install -g pnpm
+          pnpm install --frozen-lockfile
+          pnpm run build
+          npm link
+
+      - name: "Case 05 — Solar Open 2 x LangChain OpenWiki"
+        env:
+          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+        run: ./scripts/verify-case.sh 05-langchain-openwiki-solar-open2 solar-open2

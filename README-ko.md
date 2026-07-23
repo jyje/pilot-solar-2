@@ -2,7 +2,7 @@
 
 # jyje/pilot-upstage-solar-open2
 
-<img height="240" src="https://raw.githubusercontent.com/jyje/pilot-upstage-solar-open2/main/docs/images/pilot-upstage-solar-open2.png" alt="Claude Code × Upstage Solar Open 2 × Hermes Agent"/>
+<img height="300" src="https://raw.githubusercontent.com/jyje/pilot-upstage-solar-open2/main/docs/images/pilot-upstage-solar-open2.png" alt="Claude Code × Upstage Solar Open 2 × Hermes Agent"/>
 
 ✨ 업스테이지 Solar Open 2 모델을 활용한 여러 에이전트 하네스 시험: Claude Code, Hermes Agent, Claude Agent SDK, LangChain Deepagents 그리고 OpenWiki 까지
 

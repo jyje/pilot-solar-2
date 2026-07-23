@@ -32,8 +32,10 @@ configuration for Case 02. All are implemented and verified.
 Each has its own `scripts/verify.sh`. All 5 run, solar-open2 only, as
 steps in the single `.github/workflows/verify-all-sequential.yml`
 workflow (manual `workflow_dispatch`), which reuses the same
-`UPSTAGE_API_KEY` secret. Case 04 pins Python 3.13 instead of 3.14 (the
-default elsewhere) — see its README for why.
+`UPSTAGE_API_KEY` secret. Cases 03 and 04 (the two `uv`-managed Python
+cases) both pin Python 3.13 — Case 04 requires it (`tokenizers` has no
+`cp314` wheel yet); Case 03 matches it for consistency, see Case 04's
+README for the underlying finding.
 
 ## Solar Open 2 naming reference
 

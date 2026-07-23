@@ -128,10 +128,12 @@ it without needing any of the others.
   Solar Open 2 to `create_deep_agent()` — no `claude` CLI, no
   `ANTHROPIC_BASE_URL`/`ANTHROPIC_AUTH_TOKEN` dance, just `UPSTAGE_API_KEY`
   read automatically via Upstage's OpenAI-compatible endpoint.
-  Finding: Python 3.14 (this repo's default elsewhere) doesn't work here
-  yet. `tokenizers`, a `langchain-upstage` dependency, has no `cp314`
-  wheel as of any release through `0.23.1`, and building it from source
-  fails in this environment. Case 04 pins Python 3.13 instead.
+  Finding: Python 3.14 doesn't work here yet. `tokenizers`, a
+  `langchain-upstage` dependency, has no `cp314` wheel as of any release
+  through `0.23.1`, and building it from source fails in this
+  environment. Case 04 pins Python 3.13 instead — Case 03 (the repo's
+  other `uv`-managed Python case) was moved onto 3.13 too, to unify
+  every Python case on one version rather than wait on upstream.
   Three methods verified: tool use (weather lookup), deepagents' built-in
   virtual filesystem (write + read back a file), and subagent delegation
   (a named `math-agent` subagent computing `17 + 25`).
@@ -199,8 +201,9 @@ policy).
 ## Next steps
 
 Cases 01-05 are implemented and verified. Open items:
-- Revisit Case 04's Python 3.14 pin once `tokenizers` ships a `cp314`
-  wheel, to bring every case onto the same Python version.
+- Revisit Case 04's Python 3.13 pin once `tokenizers` ships a `cp314`
+  wheel — Case 03 was moved down to 3.13 to unify both Python cases
+  in the meantime, rather than wait on upstream.
 - Decide whether to open an upstream issue/PR against
   `langchain-ai/openwiki` for Case 05's two findings (the `anthropic`
   provider auth gap and the streaming tool-name bug) — not done yet,

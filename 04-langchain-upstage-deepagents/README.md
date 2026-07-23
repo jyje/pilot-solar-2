@@ -44,7 +44,9 @@ integration Upstage itself publishes.
 
 ## Finding: Python 3.14 doesn't work here (yet)
 
-This repo's other cases pin Python 3.14, but Case 04 pins **3.13**.
+Case 04 pins **3.13**. Case 03 (the repo's other `uv`-managed Python
+case) was moved down to 3.13 too, so both Python cases stay on one
+version instead of leaving Case 03 ahead on 3.14.
 
 The cause, confirmed by actually trying it: `langchain-upstage` depends
 on `tokenizers` (a Rust/PyO3 extension), and no `tokenizers` release —

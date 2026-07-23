@@ -44,7 +44,7 @@ Why a fork at all? Solar Open 2 drops the tool-call function name in
 **streamed** responses. The public `openwiki` has no switch to turn
 streaming off. This fork adds one (`OPENWIKI_DISABLE_STREAMING=true`).
 Full trace of how that was diagnosed is in
-[`README.md`](README.md#finding-2-solar-open2-drops-the-tool_call-function-name-when-streaming)'s
+[`README.md`](README.md#finding-2-solar-open-2-drops-the-tool_call-function-name-when-streaming)'s
 Finding 2.
 
 ## Run it
@@ -93,5 +93,5 @@ case.
 - **Doc-generation step fails/warns** — expected on a Tier-0 account, per
   Finding 3 in [`README.md`](README.md). It doesn't fail the script.
 - **`solar-pro3` (not `solar-open2`) times out or rate-limits** — expected
-  on Tier 0, per [`PLAN.md`](../PLAN.md#case-05--solar-open2-x-langchain-openwiki)'s
+  on Tier 0, per [`PLAN.md`](../PLAN.md#case-05--solar-open-2-x-langchain-openwiki)'s
   Case 05, Finding 4. This repo only verifies `solar-open2`.

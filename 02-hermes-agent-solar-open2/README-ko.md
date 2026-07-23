@@ -91,17 +91,24 @@ hermes chat \
 
 ## 검증 결과
 
-2026-07-20에 다음 구성으로 로컬 검증했습니다.
+2026-07-20에 로컬로 검증했고, 2026-07-23 CI
+([`verify` job](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882))에서
+다시 확인했습니다. 구성은 다음과 같습니다.
 
 - Hermes Agent v0.18.2 (`2026.7.7.2`, upstream `59fdd41f`)
 - digest로 고정한 공식 `nousresearch/hermes-agent` 이미지
 - Hermes에 번들된 `upstage` provider
 - Upstage 모델 ID `solar-open2`
 
-`hermes doctor`는 `Upstage Solar` 연결을 정상으로 판정했고,
-non-interactive chat은 예상한 라이브 응답을 반환했습니다.
+`hermes doctor`는 `Upstage Solar` 연결을 정상으로 판정했습니다. 다른
+Case들과 달리 이 스크립트는 채팅 출력을 전혀 자르지 않습니다 —
+2026-07-23 CI 실행의 실제 응답에는 Solar Open 2가 정해진 답을 내놓기
+전에 거친 짧은 추론 과정까지 그대로 담겨 있습니다.
 
 ```text
+The user wants me to reply with exactly "hermes-ready" with no other
+text or formatting.The user wants me to reply with exactly
+"hermes-ready" with no other text or formatting.
 hermes-ready
 ```
 

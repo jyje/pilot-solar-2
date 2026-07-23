@@ -105,19 +105,21 @@ agent.invoke({"messages": [{"role": "user", "content":
 
 ## 검증된 방식
 
-아래는 `verify.sh`의 실제 CI 실행 결과이며, 손으로 고르거나 편집하지
-않았습니다. 링크를 클릭하면 실행 자체를 직접 확인할 수 있습니다:
+아래는 `verify.sh`의 실제 CI 실행 결과입니다. `demo.py` 자체의
+미리보기가 이제 100자 한 줄이 아니라 다른 모든 Case와 동일하게 최대
+~700자(10줄 이상)까지 보여줍니다. 손으로 고르거나 편집하지 않았습니다.
+링크를 클릭하면 실행 자체를 직접 확인할 수 있습니다:
 
-**검증 실행:** [`verify` job, 2026-07-14](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29313121694/job/87021080894)
+**검증 실행:** [`verify` job, 2026-07-23](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 (또는 최신 결과를 보려면 [전체 실행 목록](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml) 참고)
 
 | 방식 | 결과 |
 | --- | --- |
-| A — 툴 사용 | `It is sunny in Seoul.` |
+| A — 툴 사용 | `It's sunny in Seoul!` |
 | B — 가상 파일시스템 | `HELLO-DEEPAGENTS` (`result["files"]["/note.txt"]["content"]`) |
-| C — 서브에이전트 위임 | `17 + 25 = 42` (`math-agent` 서브에이전트로부터) |
+| C — 서브에이전트 위임 | `17 + 25 = **42**` (`math-agent` 서브에이전트로부터) |
 
-[전체 출력 →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29313121694/job/87021080894)
+[전체 출력 →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 
 ## 검증
 

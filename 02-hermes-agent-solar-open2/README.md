@@ -89,17 +89,24 @@ The matching GitHub Actions workflow reuses the repository's existing
 
 ## Verification result
 
-Verified locally on 2026-07-20 with:
+Verified locally on 2026-07-20, and reconfirmed in CI on 2026-07-23
+([`verify` job](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)),
+with:
 
 - Hermes Agent v0.18.2 (`2026.7.7.2`, upstream `59fdd41f`);
 - the official `nousresearch/hermes-agent` image pinned by digest;
 - Hermes's bundled `upstage` provider; and
 - Upstage model ID `solar-open2`.
 
-`hermes doctor` reported `Upstage Solar` connectivity as healthy, and the
-non-interactive chat returned the expected live response:
+`hermes doctor` reported `Upstage Solar` connectivity as healthy. Unlike
+the other cases, this script never truncates the chat output — the full,
+real response from the 2026-07-23 CI run shows Solar Open 2's own short
+reasoning pass before it settles on the required reply:
 
 ```text
+The user wants me to reply with exactly "hermes-ready" with no other
+text or formatting.The user wants me to reply with exactly
+"hermes-ready" with no other text or formatting.
 hermes-ready
 ```
 

@@ -113,18 +113,68 @@ hand-picked or edited:
 ## Verified methods
 
 Real output from one CI run of `verify.sh` — not hand-picked or edited.
-Click through to read the run yourself:
+The script's own preview now shows up to ~700 characters (10+ wrapped
+lines) per answer instead of a single 100-char fragment, specifically so
+you can judge how the model reasoned through each question, not just
+that it answered. Click through to read the run yourself:
 
-**Evidence run:** [`verify` job, 2026-07-15](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29380954792/job/87244280144)
+**Evidence run:** [`verify` job, 2026-07-23](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 (or browse [every run](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml) for the latest)
 
-| Question | Answer (truncated preview) |
-| --- | --- |
-| Q1 — what is this repo about | This repository (`jyje/pilot-upstage-solar-open2`, pilot-upstage-solar-open2) is a single repo hosting **three i ...(truncated) |
-| Q2 — what did the latest commit change | The most recent commit (`003c1a8`) is a large init-style commit that adds: - **Bug fix**: `warn()` i ...(truncated) |
-| Q3 — how many cases, what do they demonstrate | There are **4 experiment cases** in this repo. Let me read their detail pages to give you a full bre ...(truncated) |
+**Q1 — what is this repo about:**
+> I'll explore the repository to understand what it's about.Let me read
+> more of the README and other key files.This is the
+> **pilot-upstage-solar-open2** repository by **jyje** — a
+> seminar-ready collection of 5 independent use cases demonstrating how
+> **Upstage's Solar Open 2** (a 250B-A15B MoE open-weight model with
+> 1M-token context) integrates with popular action-harness frameworks:
+>
+> | Case | Focus | Ecosystem |
+> |---|---|---|
+> | **Case 01** | Claude Code harness (skills, project config) on Solar
+> Open 2 | Anthropic Claude Code |
+> | **Case 02** | Hermes Agent via its official bundled Upstage
+> provider | Hermes Agent / Docker |
+> | **Case 03** | Local Claude Code driven programmatically via Claude
+> Age
+> ...(truncated)
 
-[Full output →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29380954792/job/87244280144)
+**Q2 — what did the latest commit change:**
+> The most recent commit is `6e2ed3fd5b925799c2d58082d5213e4d3d25374b`
+> (Jul 23 21:50).
+>
+> - **Message:** `🔨 build(ci): move the runner to ubuntu-26.04-arm`
+> - **Intent:** Switch CI to run on `ubuntu-26.04-arm` instead of
+> `ubuntu-latest` to better match production/target hardware.
+> - **Co-authors listed:** Upstage Solar Open 2 and Claude Sonnet 5.
+>
+> If you want, I can dig into the exact diff for the CI workflow
+> file(s), the new files added in this commit, or both.
+
+**Q3 — how many cases, what do they demonstrate:**
+> I'll explore the repository to find information about experiment
+> cases.Let me explore the numbered folders and key documentation files
+> to understand the structure.Let me explore each case directory in
+> detail to understand their specific implementations.Based on my
+> review of the repository, there are **5 experiment cases** (Cases 01
+> through 05). Each demonstrates a different way to use Upstage's Solar
+> Open 2 model with various agent harnesses and frameworks. Here's what
+> each one demonstrates:
+>
+> ---
+>
+> ### **Case 01 — Solar Open 2 x Claude Code** *(Review category)*
+> **Goal:** Show that Claude Code can run on Solar Open 2 instead of
+> Anthropic's models.
+> - **01A:** Uses the official `claude` CLI wit
+> ...(truncated)
+
+Q2's answer landed under the new ~700-char cap, so that one isn't even
+truncated — a real example of Solar Open 2 giving a complete, cited
+answer (commit hash, message, intent, and co-authors) about this very
+repo's own git history.
+
+[Full output →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 
 ## Verification
 

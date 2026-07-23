@@ -110,18 +110,67 @@ rate limit을 초과하기 충분합니다.
 ## 검증된 방식
 
 `verify.sh`의 실제 CI 실행 결과입니다 — 손으로 고르거나 편집하지
-않았습니다. 직접 클릭해서 실행 로그를 확인할 수 있습니다:
+않았습니다. 이제 스크립트 자체의 미리보기가 답변마다 100자 한 조각이
+아니라 최대 ~700자(10줄 이상)까지 보여줍니다 — 답했다는 사실뿐 아니라
+각 질문에 어떻게 추론했는지도 판단할 수 있도록 하기 위해서입니다.
+직접 클릭해서 실행 로그를 확인할 수 있습니다:
 
-**검증 실행:** [`verify` job, 2026-07-15](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29380954792/job/87244280144)
+**검증 실행:** [`verify` job, 2026-07-23](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 (또는 [모든 실행](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml) 목록에서 최신 것을 확인하세요)
 
-| 질문 | 답변(잘린 미리보기) |
-| --- | --- |
-| Q1 — 이 리포는 무엇에 관한 것인가 | This repository (`jyje/pilot-upstage-solar-open2`, pilot-upstage-solar-open2) is a single repo hosting **three i ...(truncated) |
-| Q2 — 최신 커밋이 무엇을 바꿨는가 | The most recent commit (`003c1a8`) is a large init-style commit that adds: - **Bug fix**: `warn()` i ...(truncated) |
-| Q3 — 몇 개의 Case가 있고 각각 무엇을 보여주는가 | There are **4 experiment cases** in this repo. Let me read their detail pages to give you a full bre ...(truncated) |
+**Q1 — 이 리포는 무엇에 관한 것인가:**
+> I'll explore the repository to understand what it's about.Let me read
+> more of the README and other key files.This is the
+> **pilot-upstage-solar-open2** repository by **jyje** — a
+> seminar-ready collection of 5 independent use cases demonstrating how
+> **Upstage's Solar Open 2** (a 250B-A15B MoE open-weight model with
+> 1M-token context) integrates with popular action-harness frameworks:
+>
+> | Case | Focus | Ecosystem |
+> |---|---|---|
+> | **Case 01** | Claude Code harness (skills, project config) on Solar
+> Open 2 | Anthropic Claude Code |
+> | **Case 02** | Hermes Agent via its official bundled Upstage
+> provider | Hermes Agent / Docker |
+> | **Case 03** | Local Claude Code driven programmatically via Claude
+> Age
+> ...(truncated)
 
-[전체 출력 보기 →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29380954792/job/87244280144)
+**Q2 — 최신 커밋이 무엇을 바꿨는가:**
+> The most recent commit is `6e2ed3fd5b925799c2d58082d5213e4d3d25374b`
+> (Jul 23 21:50).
+>
+> - **Message:** `🔨 build(ci): move the runner to ubuntu-26.04-arm`
+> - **Intent:** Switch CI to run on `ubuntu-26.04-arm` instead of
+> `ubuntu-latest` to better match production/target hardware.
+> - **Co-authors listed:** Upstage Solar Open 2 and Claude Sonnet 5.
+>
+> If you want, I can dig into the exact diff for the CI workflow
+> file(s), the new files added in this commit, or both.
+
+**Q3 — 몇 개의 Case가 있고 각각 무엇을 보여주는가:**
+> I'll explore the repository to find information about experiment
+> cases.Let me explore the numbered folders and key documentation files
+> to understand the structure.Let me explore each case directory in
+> detail to understand their specific implementations.Based on my
+> review of the repository, there are **5 experiment cases** (Cases 01
+> through 05). Each demonstrates a different way to use Upstage's Solar
+> Open 2 model with various agent harnesses and frameworks. Here's what
+> each one demonstrates:
+>
+> ---
+>
+> ### **Case 01 — Solar Open 2 x Claude Code** *(Review category)*
+> **Goal:** Show that Claude Code can run on Solar Open 2 instead of
+> Anthropic's models.
+> - **01A:** Uses the official `claude` CLI wit
+> ...(truncated)
+
+Q2의 답변은 새 ~700자 한도 안에 다 들어가서 잘리지도 않았습니다 — 이
+리포 자체의 git 히스토리에 대해 Solar Open 2가 커밋 해시, 메시지,
+의도, 공저자까지 완결된 답변을 내놓은 실제 사례입니다.
+
+[전체 출력 보기 →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 
 ## 검증
 

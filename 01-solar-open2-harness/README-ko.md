@@ -88,16 +88,17 @@ claude --version
 
 이 리포는 버전을 고정하지 않습니다. 그래서 `npm install -g
 @anthropic-ai/claude-code`는 항상 CI 실행 시점의 최신 버전을 설치합니다.
-아래 검증 실행은 Claude Code CLI **v2.1.208**을 기준으로 검증했습니다.
+아래 검증 실행은 Claude Code CLI **v2.1.218**을 기준으로 검증했습니다.
 
 ### 검증: hello 체크
 
-아래는 `verify.sh`의 실제 CI 실행 결과입니다. 스크립트가 출력하는 것과
-동일하게 100자 이하로 truncate했으며, 손으로 고르거나 편집하지
-않았습니다. 링크를 클릭하면 truncate되지 않은 전체 응답을 직접 확인할
-수 있습니다:
+아래는 `verify.sh`의 실제 CI 실행 결과입니다. 이제 스크립트 자체의
+미리보기가 100자 한 줄이 아니라 최대 ~700자(10줄 이상)까지 보여주도록
+바뀌었습니다 — 응답했다는 사실뿐 아니라 실제로 어떻게 추론했는지도
+판단할 수 있도록 하기 위해서입니다. 손으로 고르거나 편집하지
+않았습니다. 그보다 더 긴 내용은 링크를 클릭해서 확인하세요:
 
-**검증 실행:** [`verify` job, 2026-07-14](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29304170180/job/86994029784)
+**검증 실행:** [`verify` job, 2026-07-23](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 (또는 최신 결과를 보려면 [전체 실행 목록](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml) 참고)
 
 ```bash
@@ -106,9 +107,11 @@ export ANTHROPIC_AUTH_TOKEN="$UPSTAGE_API_KEY"
 export ANTHROPIC_MODEL="solar-open2"
 claude -p "hello"
 ```
-> Hello! 👋 I'm ready to help you with your `pilot-upstage-solar-open2` project. This repo contains three agent-har ...(truncated)
+> Hello! 👋 I'm Solar Open2, an AI assistant built by Upstage AI. I'm
+> here to help you with coding tasks, research, analysis, and more.
+> What can I help you with today?
 
-[전체 출력 →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29304170180/job/86994029784)
+[전체 출력 →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 
 `scripts/verify.sh`에서는 이를 **방식 B**라고 부릅니다. 이 응답은 이
 리포의 실제 `AGENTS.md`/상태를 읽고 답한 것이지, 정해진 답변이
@@ -156,9 +159,9 @@ claude -p "Use the git-commit-helper skill. A new file docs/hello.txt \
   commit message per that skill's exact format (gitmoji + type(domain): \
   title). Output only the commit message."
 ```
-> 📄 docs(docs): add greeting file
+> 📄 docs(docs): add hello greeting
 
-[전체 출력 →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29304170180/job/86994029784)
+[전체 출력 →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 
 스킬을 명시적으로 호출하니 정확합니다. gitmoji, type, `(domain):` 모두
 있습니다.
@@ -187,11 +190,19 @@ claude -p "Use the git-commit-helper skill. A new file docs/hello.txt \
 claude -p "Use the Explore agent (a subagent) to list every file \
   directly inside the current directory. Report just the file list."
 ```
-> Files directly inside the current directory (`/home/runner/work/pilot-upstage-solar-open2/pilot-upstage-solar-open2/01-solar ...(truncated)
+> Here are the files directly inside the current directory:
+>
+> 1. `.env.sample`
+> 2. `README-ko.md`
+> 3. `README.md`
+> 4. `REPRODUCE-ko.md`
+> 5. `REPRODUCE.md`
 
-[전체 출력 →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29304170180/job/86994029784)
+[전체 출력 →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 
-보고된 경로는 CI 러너가 실제로 체크아웃한 이 디렉토리의 경로입니다.
+이 파일 목록은 이 디렉토리의 실제 내용과 정확히 일치합니다 — 검증
+스크립트 자체는 `README.md`가 있는지만 확인하지만, 서브에이전트가
+보고한 전체 목록이 실제로 여기 있는 모든 파일과 맞아떨어집니다.
 서브에이전트 호출이 실제 파일시스템에 대해 실행됐고, 끝까지
 `solar-open2`를 통해 라우팅됐다는 뜻입니다.
 
@@ -234,7 +245,7 @@ curl -fsSL https://console.upstage.ai/claude-upstage.sh | sh -s install
 `exec`할 뿐입니다. 그래서 Case 01A가 쓰는 로컬 Claude Code 설치본과
 완전히 동일한 버전으로 동작합니다 — 비슷한 버전이 아니라 같은 파일,
 같은 버전입니다. 아래 검증 실행 기준으로는 Claude Code CLI
-**v2.1.208**이었습니다.
+**v2.1.218**이었습니다.
 
 ### 발견: `claude-upstage`는 `-p`를 전달하지 않음
 
@@ -259,19 +270,20 @@ echo "hello" | claude-upstage
 
 ### 검증: 파이프 stdin hello 체크
 
-아래는 같은 CI 실행에서 나온 실제 `verify.sh` 결과입니다. 스크립트가
-출력하는 것과 동일하게 100자 이하로 truncate했으며, 손으로 고르거나
-편집하지 않았습니다:
+아래는 같은 CI 실행에서 나온 실제 `verify.sh` 결과입니다. 이제 100자
+한 줄이 아니라 최대 ~700자까지 보여줍니다. 손으로 고르거나 편집하지
+않았습니다:
 
-**검증 실행:** [`verify` job, 2026-07-14](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29304170180/job/86994029784)
+**검증 실행:** [`verify` job, 2026-07-23](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 (또는 최신 결과를 보려면 [전체 실행 목록](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml) 참고)
 
 ```bash
 echo "hello" | claude-upstage
 ```
-> Hello! 👋 How can I help you with the `pilot-upstage-solar-open2` project today? I can assist with the three inde ...(truncated)
+> Hello! 👋 I'm Solar Open2, an AI assistant trained by Upstage AI, a
+> Korean startup. How can I help you today?
 
-[전체 출력 →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29304170180/job/86994029784)
+[전체 출력 →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 
 `scripts/verify.sh`에서는 이를 **방식 A**라고 부릅니다. 이 응답 역시
 Case 01A와 마찬가지로 이 리포의 실제 `AGENTS.md`/상태를 읽고 답한

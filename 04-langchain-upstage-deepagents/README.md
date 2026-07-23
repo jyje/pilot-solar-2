@@ -102,19 +102,21 @@ it itself — both the main agent and the subagent run on Solar Open 2.
 
 ## Verified methods
 
-Real output from one CI run of `verify.sh` — not hand-picked or edited.
-Click through to read the run yourself:
+Real output from one CI run of `verify.sh` — `demo.py`'s own preview now
+shows up to ~700 chars (10+ wrapped lines) instead of a single <=100-char
+line, same as every other case. Not hand-picked or edited. Click through
+to read the run yourself:
 
-**Evidence run:** [`verify` job, 2026-07-14](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29313121694/job/87021080894)
+**Evidence run:** [`verify` job, 2026-07-23](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 (or browse [every run](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml) for the latest)
 
 | Method | Result |
 | --- | --- |
-| A — tool use | `It is sunny in Seoul.` |
+| A — tool use | `It's sunny in Seoul!` |
 | B — virtual filesystem | `HELLO-DEEPAGENTS` (`result["files"]["/note.txt"]["content"]`) |
-| C — subagent delegation | `17 + 25 = 42` (from the `math-agent` subagent) |
+| C — subagent delegation | `17 + 25 = **42**` (from the `math-agent` subagent) |
 
-[Full output →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29313121694/job/87021080894)
+[Full output →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 
 ## Verification
 

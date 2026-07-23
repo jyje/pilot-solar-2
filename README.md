@@ -158,16 +158,30 @@ would make the waits mostly disappear, but nothing here assumes one.
 ## Latest verification run
 
 ✅ 5/5 cases passed against `solar-open2` —
-[run 29870650705](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29870650705)
-(2026-07-21):
+[run 30008688179](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179)
+(2026-07-23), on the `ubuntu-26.04-arm` runner. The recap splits by
+Category, matching the Cases table above:
+
+**Review**
 
 | Case | solar-open2 |
 | --- | --- |
 | Case 01 — Solar Open 2 x Claude Code | ✅ |
 | Case 02 — Solar Open 2 x Hermes Agent | ✅ |
+
+**Extend**
+
+| Case | solar-open2 |
+| --- | --- |
 | Case 03 — Solar Open 2 x Claude Agent SDK | ✅ |
 | Case 04 — Solar Open 2 x LangChain Deepagents | ✅ |
 | Case 05 — Solar Open 2 x LangChain OpenWiki | ✅ |
+
+Every case's own README now quotes real, unedited excerpts from this
+run — up to ~700 characters (10+ wrapped lines) per answer instead of a
+single 100-char fragment, specifically so the model's actual reasoning
+is visible, not just a pass/fail line. See each case's own README for
+its real questions and answers.
 
 See the badge above for the latest status, or browse
 [every run](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml).

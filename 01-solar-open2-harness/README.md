@@ -90,16 +90,17 @@ claude --version
 
 This repo doesn't pin a version, so `npm install -g @anthropic-ai/claude-code`
 always grabs whatever's latest at CI run time. The evidence run below was
-verified against Claude Code CLI **v2.1.208**.
+verified against Claude Code CLI **v2.1.218**.
 
 ### Verified: hello check
 
-Here's real output from one CI run of `verify.sh`, truncated to 100
-characters just like the script itself prints. Nothing here is
-hand-picked or edited. Click through to read the full, untruncated
-response yourself:
+Here's real output from one CI run of `verify.sh` — the script's own
+preview now shows up to ~700 characters (10+ wrapped lines) instead of a
+single 100-char fragment, specifically so you can judge how the model
+actually reasons, not just that it responded. Nothing here is
+hand-picked or edited. Click through for anything longer than that:
 
-**Evidence run:** [`verify` job, 2026-07-14](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29304170180/job/86994029784)
+**Evidence run:** [`verify` job, 2026-07-23](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 (or browse [every run](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml) for the latest)
 
 ```bash
@@ -108,9 +109,11 @@ export ANTHROPIC_AUTH_TOKEN="$UPSTAGE_API_KEY"
 export ANTHROPIC_MODEL="solar-open2"
 claude -p "hello"
 ```
-> Hello! 👋 I'm ready to help you with your `pilot-upstage-solar-open2` project. This repo contains three agent-har ...(truncated)
+> Hello! 👋 I'm Solar Open2, an AI assistant built by Upstage AI. I'm
+> here to help you with coding tasks, research, analysis, and more.
+> What can I help you with today?
 
-[Full output →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29304170180/job/86994029784)
+[Full output →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 
 This is what `scripts/verify.sh` calls **Method B**. The response reads
 this repo's actual `AGENTS.md`/state — not a canned reply. That confirms
@@ -158,9 +161,9 @@ claude -p "Use the git-commit-helper skill. A new file docs/hello.txt \
   commit message per that skill's exact format (gitmoji + type(domain): \
   title). Output only the commit message."
 ```
-> 📄 docs(docs): add greeting file
+> 📄 docs(docs): add hello greeting
 
-[Full output →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29304170180/job/86994029784)
+[Full output →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 
 Correct, once the skill is explicitly invoked: gitmoji, type, and
 `(domain):` are all present.
@@ -189,13 +192,21 @@ to the Explore subagent. This is what `scripts/verify.sh` calls
 claude -p "Use the Explore agent (a subagent) to list every file \
   directly inside the current directory. Report just the file list."
 ```
-> Files directly inside the current directory (`/home/runner/work/pilot-upstage-solar-open2/pilot-upstage-solar-open2/01-solar ...(truncated)
+> Here are the files directly inside the current directory:
+>
+> 1. `.env.sample`
+> 2. `README-ko.md`
+> 3. `README.md`
+> 4. `REPRODUCE-ko.md`
+> 5. `REPRODUCE.md`
 
-[Full output →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29304170180/job/86994029784)
+[Full output →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 
-The reported path is the CI runner's actual checkout of this directory.
-That confirms the subagent call really executed against the real
-filesystem, routed through `solar-open2` the whole way down.
+That file list matches this directory's real contents exactly — the
+verification script itself checks for `README.md` specifically, but the
+subagent's full listing lines up with every file actually here. That
+confirms the subagent call really executed against the real filesystem,
+routed through `solar-open2` the whole way down.
 
 ---
 
@@ -234,7 +245,7 @@ pinned release. It also doesn't install or bundle Claude Code itself: it
 just checks that `claude` is already on `PATH` and `exec`s that exact
 binary. So it always runs on the exact same local Claude Code install as
 Case 01A — same file, same version, not just a matching one. For the
-evidence run below, that was Claude Code CLI **v2.1.208**.
+evidence run below, that was Claude Code CLI **v2.1.218**.
 
 ### Finding: `claude-upstage` doesn't pass `-p` through
 
@@ -260,19 +271,20 @@ echo "hello" | claude-upstage
 
 ### Verified: piped-stdin hello check
 
-Here's real output from that same CI run of `verify.sh`, truncated to 100
-characters just like the script itself prints. Nothing here is
+Here's real output from that same CI run of `verify.sh` — up to ~700
+characters now, not a single 100-char fragment. Nothing here is
 hand-picked or edited:
 
-**Evidence run:** [`verify` job, 2026-07-14](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29304170180/job/86994029784)
+**Evidence run:** [`verify` job, 2026-07-23](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 (or browse [every run](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml) for the latest)
 
 ```bash
 echo "hello" | claude-upstage
 ```
-> Hello! 👋 How can I help you with the `pilot-upstage-solar-open2` project today? I can assist with the three inde ...(truncated)
+> Hello! 👋 I'm Solar Open2, an AI assistant trained by Upstage AI, a
+> Korean startup. How can I help you today?
 
-[Full output →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29304170180/job/86994029784)
+[Full output →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 
 This is what `scripts/verify.sh` calls **Method A**. The response reads
 this repo's actual `AGENTS.md`/state too, just like Case 01A's. The

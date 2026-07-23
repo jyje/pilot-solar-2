@@ -156,16 +156,30 @@ Solar 챗 모델 기준 분당 100 요청, 분당 5만 토큰([Upstage rate-limi
 ## 최근 검증 실행
 
 ✅ `solar-open2` 기준 5/5 Case 통과 —
-[run 29870650705](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29870650705)
-(2026-07-21):
+[run 30008688179](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179)
+(2026-07-23), `ubuntu-26.04-arm` 러너 기준. recap은 위 Cases 표와
+동일하게 카테고리별로 나뉩니다:
+
+**Review**
 
 | Case | solar-open2 |
 | --- | --- |
 | Case 01 — Solar Open 2 x Claude Code | ✅ |
 | Case 02 — Solar Open 2 x Hermes Agent | ✅ |
+
+**Extend**
+
+| Case | solar-open2 |
+| --- | --- |
 | Case 03 — Solar Open 2 x Claude Agent SDK | ✅ |
 | Case 04 — Solar Open 2 x LangChain Deepagents | ✅ |
 | Case 05 — Solar Open 2 x LangChain OpenWiki | ✅ |
+
+이제 각 Case의 README는 이 실행에서 나온 실제 출력을 그대로
+인용합니다 — 답변마다 100자 한 조각이 아니라 최대 ~700자(10줄 이상)까지
+보여줘서, 통과/실패 여부뿐 아니라 모델이 실제로 어떻게 추론했는지도
+확인할 수 있습니다. 실제 질문과 답변은 각 Case 자신의 README를
+참고하세요.
 
 최신 상태는 위 배지를 확인하거나
 [모든 실행 목록](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml)을

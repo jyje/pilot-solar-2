@@ -109,20 +109,21 @@ programmatic proof a tool call happened, not a string match on the reply.
 
 ## Verified methods
 
-Real output from one CI run of `verify.sh` (<=100 chars, same truncation
-`demo.py` itself prints) — not hand-picked or edited. Click through to
-read the untruncated response yourself:
+Real output from one CI run of `verify.sh` — `demo.py`'s own preview now
+shows up to ~700 chars (10+ wrapped lines) instead of a single <=100-char
+line, same as every other case. Not hand-picked or edited. Click through
+to read the run yourself:
 
-**Evidence run:** [`verify` job, 2026-07-14](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29306803664/job/87001673982)
+**Evidence run:** [`verify` job, 2026-07-23](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 (or browse [every run](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml) for the latest)
 
 | Method | Result |
 | --- | --- |
-| A — `query()` | message types seen: `SystemMessage`, `AssistantMessage`, `ResultMessage`; reply: "Hello! I'm Solar Open 2, an AI assistant trained by Upstage AI (a Korean startup). Nice to meet you!  ...(truncated)" |
+| A — `query()` | message types seen: `AssistantMessage`, `ResultMessage`, `SystemMessage`; reply: "Hello! How can I help you today?" (full reply, well under the new cap) |
 | B — `ClaudeSDKClient` session memory | `42` (recalled correctly in turn 2) |
 | C — tool-use visibility | `saw_tool_use=True` (a real `ToolUseBlock` appeared in the message stream) |
 
-[Full output →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/29306803664/job/87001673982)
+[Full output →](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179/job/89210972882)
 
 ## Verification
 

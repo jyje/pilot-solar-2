@@ -52,15 +52,15 @@ presented independently.
 
 ## Cases
 
-| Case | Category | Summary | Status |
+| Case | Category | Summary | CI |
 | --- | --- | --- | --- |
-| [Case 01 — Solar Open 2 x Claude Code](01-solar-open2-harness/) | Review | Build a Claude Code harness (skills, etc.) backed by Upstage's Solar Open 2 model | Verified |
-| [Case 02 — Solar Open 2 x Hermes Agent](02-hermes-agent-solar-open2/) | Review | Run Hermes Agent through its officially bundled Upstage provider and the official Docker image | Verified |
-| [Case 03 — Solar Open 2 x Claude Agent SDK](03-claude-agent-sdk-local/) | Extend | Drive a local Claude Code instance programmatically with the Claude Agent SDK | Verified |
-| [Case 04 — Solar Open 2 x LangChain Deepagents](04-langchain-upstage-deepagents/) | Extend | Initialize deepagents at the code level using the LangChain Upstage SDK | Verified |
-| [Case 05 — Solar Open 2 x LangChain OpenWiki](05-langchain-openwiki-solar-open2/) | Extend | Use `openwiki` to document this repo and answer questions about it, powered by Solar Open 2 | Verified |
-| [Case 06 — Solar Open 2 x Grok Build](06-grok-build-solar-open2/) | Extend | Run xAI's Grok Build CLI against Solar Open 2 as a custom model provider | Verified |
-| [Case 07 — Solar Open 2 x Hermes Agent Helm](07-hermes-agent-helm-solar-open2/) | Extend | Deploy Hermes Agent onto Kubernetes (via the `hermes-agent-helm` Helm chart, on a kind cluster) and verify it reaches Solar Open 2 | Verified |
+| [Case 01 — Solar Open 2 x Claude Code](01-solar-open2-harness/) | Review | Build a Claude Code harness (skills, etc.) backed by Upstage's Solar Open 2 model | [![verify-01](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-01-solar-open2-harness.yml/badge.svg)](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-01-solar-open2-harness.yml) |
+| [Case 02 — Solar Open 2 x Hermes Agent](02-hermes-agent-solar-open2/) | Review | Run Hermes Agent through its officially bundled Upstage provider and the official Docker image | [![verify-02](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-02-hermes-agent-solar-open2.yml/badge.svg)](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-02-hermes-agent-solar-open2.yml) |
+| [Case 03 — Solar Open 2 x Claude Agent SDK](03-claude-agent-sdk-local/) | Extend | Drive a local Claude Code instance programmatically with the Claude Agent SDK | [![verify-03](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-03-claude-agent-sdk-local.yml/badge.svg)](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-03-claude-agent-sdk-local.yml) |
+| [Case 04 — Solar Open 2 x LangChain Deepagents](04-langchain-upstage-deepagents/) | Extend | Initialize deepagents at the code level using the LangChain Upstage SDK | [![verify-04](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-04-langchain-upstage-deepagents.yml/badge.svg)](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-04-langchain-upstage-deepagents.yml) |
+| [Case 05 — Solar Open 2 x LangChain OpenWiki](05-langchain-openwiki-solar-open2/) | Extend | Use `openwiki` to document this repo and answer questions about it, powered by Solar Open 2 | [![verify-05](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-05-langchain-openwiki-solar-open2.yml/badge.svg)](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-05-langchain-openwiki-solar-open2.yml) |
+| [Case 06 — Solar Open 2 x Grok Build](06-grok-build-solar-open2/) | Extend | Run xAI's Grok Build CLI against Solar Open 2 as a custom model provider | [![verify-06](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-06-grok-build-solar-open2.yml/badge.svg)](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-06-grok-build-solar-open2.yml) |
+| [Case 07 — Solar Open 2 x Hermes Agent Helm](07-hermes-agent-helm-solar-open2/) | Extend | Deploy Hermes Agent onto Kubernetes (via the `hermes-agent-helm` Helm chart, on a kind cluster) and verify it reaches Solar Open 2 | [![verify-07](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-07-hermes-agent-helm-solar-open2.yml/badge.svg)](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-07-hermes-agent-helm-solar-open2.yml) |
 
 **Review** cases validate that Solar Open 2 works correctly in an
 existing, official harness path. **Extend** cases go further, wiring
@@ -177,36 +177,20 @@ response headers instead of a fixed guessed delay. Expect a full run to
 take on the order of 10-20+ minutes on a Tier-0 account. A higher tier
 would make the waits mostly disappear, but nothing here assumes one.
 
-## Latest verification run
+## Verification
 
-✅ 5/5 cases passed against `solar-open2` —
-[run 30008688179](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30008688179)
-(2026-07-23), on the `ubuntu-26.04-arm` runner. The recap splits by
-Category, matching the Cases table above:
+The **CI** column in the table above is each case's own dedicated
+`verify-0N-*.yml` workflow badge — live, not a static claim, and
+clickable straight through to that case's own run history. Each case's
+own README also quotes real, unedited excerpts (up to ~700 characters,
+10+ wrapped lines per answer) from its **Evidence run** section, so the
+model's actual reasoning is visible, not just a pass/fail line.
 
-**Review**
-
-| Case | solar-open2 |
-| --- | --- |
-| Case 01 — Solar Open 2 x Claude Code | ✅ |
-| Case 02 — Solar Open 2 x Hermes Agent | ✅ |
-
-**Extend**
-
-| Case | solar-open2 |
-| --- | --- |
-| Case 03 — Solar Open 2 x Claude Agent SDK | ✅ |
-| Case 04 — Solar Open 2 x LangChain Deepagents | ✅ |
-| Case 05 — Solar Open 2 x LangChain OpenWiki | ✅ |
-
-Every case's own README now quotes real, unedited excerpts from this
-run — up to ~700 characters (10+ wrapped lines) per answer instead of a
-single 100-char fragment, specifically so the model's actual reasoning
-is visible, not just a pass/fail line. See each case's own README for
-its real questions and answers.
-
-See the badge above for the latest status, or browse
-[every run](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml).
+All cases together, in one sequential run:
+[![verify-all-sequential](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml/badge.svg)](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml) —
+the badge at the top of this page, or browse
+[every run](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml)
+directly.
 
 ## Contributing
 

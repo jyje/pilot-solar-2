@@ -9,8 +9,8 @@
 [![verify-all-sequential](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml/badge.svg)](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml)
 
 External links:<br>
-[![Model on Hugging Face](https://img.shields.io/badge/🤗_Hugging_Face-upstage/solar--open2--250b-yellow)](https://huggingface.co/upstage/Solar-Open 2-250B)
-[![Technical Report](https://img.shields.io/badge/📄_Technical_Report-PDF-blue)](https://huggingface.co/upstage/Solar-Open 2-250B/blob/main/Solar_Open_2_Tech_Report.pdf)
+[![Model on Hugging Face](https://img.shields.io/badge/🤗_Hugging_Face-upstage/solar--open2--250b-yellow)](https://huggingface.co/upstage/Solar-Open2-250B)
+[![Technical Report](https://img.shields.io/badge/📄_Technical_Report-PDF-blue)](https://huggingface.co/upstage/Solar-Open2-250B/blob/main/Solar_Open_2_Tech_Report.pdf)
 [![Launch Event](https://img.shields.io/badge/📺_Launch_Event-YouTube-red)](https://www.youtube.com/live/6XX-yR3qomM)
 
 [English](README.md) / [한국어](README-ko.md)
@@ -19,7 +19,7 @@ External links:<br>
 
 ## Solar Open 2
 
-[Solar Open 2](https://huggingface.co/upstage/Solar-Open 2-250B) is Upstage's
+[Solar Open 2](https://huggingface.co/upstage/Solar-Open2-250B) is Upstage's
 open-weight, 250B-A15B (250B total, 15B active) Mixture-of-Experts model.
 It's purpose-built for long-horizon agentic tasks — tool use, multi-step
 reasoning, end-to-end task execution — over a 1M-token context, via a
@@ -34,12 +34,12 @@ highest average of any model compared, including fast-tier closed APIs.
 | Parameters | 250B total, 15B active (MoE) |
 | Context | 1M tokens |
 | License | Upstage Solar License |
-| Report | [Solar Open 2 Technical Report](https://huggingface.co/upstage/Solar-Open 2-250B/blob/main/Solar_Open_2_Tech_Report.pdf) (Jul 22, 2026) |
+| Report | [Solar Open 2 Technical Report](https://huggingface.co/upstage/Solar-Open2-250B/blob/main/Solar_Open_2_Tech_Report.pdf) (Jul 22, 2026) |
 | Launch event | [Solar Open Weight Day (YouTube Live)](https://www.youtube.com/live/6XX-yR3qomM) |
 
 This repo doesn't re-explain the model itself — see the
-[model card](https://huggingface.co/upstage/Solar-Open 2-250B) and
-[technical report](https://huggingface.co/upstage/Solar-Open 2-250B/blob/main/Solar_Open_2_Tech_Report.pdf)
+[model card](https://huggingface.co/upstage/Solar-Open2-250B) and
+[technical report](https://huggingface.co/upstage/Solar-Open2-250B/blob/main/Solar_Open_2_Tech_Report.pdf)
 for full details. What follows is how to build agent harnesses on top of
 it.
 

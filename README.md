@@ -7,6 +7,7 @@
 ✨ Testing multiple agent harnesses powered by the Upstage Solar Open 2 model: Claude Code, Hermes Agent, Claude Agent SDK, LangChain Deepagents, and OpenWiki
 
 [![verify-all-sequential](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml/badge.svg)](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-all-sequential.yml)
+[![Python 3.13](https://img.shields.io/badge/python-3.13-3776AB?logo=python&logoColor=white)](https://docs.python.org/3.13/)
 
 External links:<br>
 [![Model on Hugging Face](https://img.shields.io/badge/🤗_Hugging_Face-upstage/solar--open2--250b-yellow)](https://huggingface.co/upstage/Solar-Open2-250B)

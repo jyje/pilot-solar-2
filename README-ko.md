@@ -52,13 +52,18 @@ Upstage의 Solar Open2 모델을 Claude, LangChain, OpenWiki, Hermes Agent
 
 ## Case 목록
 
-| Case | 요약 | 상태 |
-| --- | --- | --- |
-| [Case 01 — Solar Open2 x Claude Code](01-solar-open2-harness/) | Upstage Solar Open2 모델을 기반으로 하는 Claude Code 하네스(스킬 등) 구성 | 검증 완료 |
-| [Case 02 — Solar Open2 x Hermes Agent](02-hermes-agent-solar-open2/) | Hermes Agent에 공식 번들된 Upstage provider와 공식 Docker 이미지로 실행 | 검증 완료 |
-| [Case 03 — Solar Open2 x Claude Agent SDK](03-claude-agent-sdk-local/) | Claude Agent SDK로 로컬 Claude Code 인스턴스를 프로그래밍 방식으로 실행 | 검증 완료 |
-| [Case 04 — Solar Open2 x LangChain Deepagents](04-langchain-upstage-deepagents/) | LangChain Upstage SDK를 이용해 코드 수준에서 deepagents 초기화 | 검증 완료 |
-| [Case 05 — Solar Open2 x LangChain OpenWiki](05-langchain-openwiki-solar-open2/) | `openwiki`로 이 리포를 문서화하고 질문에 답변 — Solar Open2로 실행 | 검증 완료 |
+| Case | 카테고리 | 요약 | 상태 |
+| --- | --- | --- | --- |
+| [Case 01 — Solar Open2 x Claude Code](01-solar-open2-harness/) | Review | Upstage Solar Open2 모델을 기반으로 하는 Claude Code 하네스(스킬 등) 구성 | 검증 완료 |
+| [Case 02 — Solar Open2 x Hermes Agent](02-hermes-agent-solar-open2/) | Review | Hermes Agent에 공식 번들된 Upstage provider와 공식 Docker 이미지로 실행 | 검증 완료 |
+| [Case 03 — Solar Open2 x Claude Agent SDK](03-claude-agent-sdk-local/) | Extend | Claude Agent SDK로 로컬 Claude Code 인스턴스를 프로그래밍 방식으로 실행 | 검증 완료 |
+| [Case 04 — Solar Open2 x LangChain Deepagents](04-langchain-upstage-deepagents/) | Extend | LangChain Upstage SDK를 이용해 코드 수준에서 deepagents 초기화 | 검증 완료 |
+| [Case 05 — Solar Open2 x LangChain OpenWiki](05-langchain-openwiki-solar-open2/) | Extend | `openwiki`로 이 리포를 문서화하고 질문에 답변 — Solar Open2로 실행 | 검증 완료 |
+
+**Review** Case는 기존 공식 하네스 경로에서 Solar Open2가 올바르게
+동작하는지 검증합니다. **Extend** Case는 한 걸음 더 나아가, 그
+하네스들이 기본으로 제공하지 않는 더 넓은 생태계(LangChain, 커스텀
+에이전트 코드)에 Solar Open2를 연결합니다.
 
 ## 구성과 의도
 

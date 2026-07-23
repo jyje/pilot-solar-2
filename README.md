@@ -51,13 +51,18 @@ independently.
 
 ## Cases
 
-| Case | Summary | Status |
-| --- | --- | --- |
-| [Case 01 — Solar Open2 x Claude Code](01-solar-open2-harness/) | Build a Claude Code harness (skills, etc.) backed by Upstage's Solar Open2 model | Verified |
-| [Case 02 — Solar Open2 x Hermes Agent](02-hermes-agent-solar-open2/) | Run Hermes Agent through its officially bundled Upstage provider and the official Docker image | Verified |
-| [Case 03 — Solar Open2 x Claude Agent SDK](03-claude-agent-sdk-local/) | Drive a local Claude Code instance programmatically with the Claude Agent SDK | Verified |
-| [Case 04 — Solar Open2 x LangChain Deepagents](04-langchain-upstage-deepagents/) | Initialize deepagents at the code level using the LangChain Upstage SDK | Verified |
-| [Case 05 — Solar Open2 x LangChain OpenWiki](05-langchain-openwiki-solar-open2/) | Use `openwiki` to document this repo and answer questions about it, powered by Solar Open2 | Verified |
+| Case | Category | Summary | Status |
+| --- | --- | --- | --- |
+| [Case 01 — Solar Open2 x Claude Code](01-solar-open2-harness/) | Review | Build a Claude Code harness (skills, etc.) backed by Upstage's Solar Open2 model | Verified |
+| [Case 02 — Solar Open2 x Hermes Agent](02-hermes-agent-solar-open2/) | Review | Run Hermes Agent through its officially bundled Upstage provider and the official Docker image | Verified |
+| [Case 03 — Solar Open2 x Claude Agent SDK](03-claude-agent-sdk-local/) | Extend | Drive a local Claude Code instance programmatically with the Claude Agent SDK | Verified |
+| [Case 04 — Solar Open2 x LangChain Deepagents](04-langchain-upstage-deepagents/) | Extend | Initialize deepagents at the code level using the LangChain Upstage SDK | Verified |
+| [Case 05 — Solar Open2 x LangChain OpenWiki](05-langchain-openwiki-solar-open2/) | Extend | Use `openwiki` to document this repo and answer questions about it, powered by Solar Open2 | Verified |
+
+**Review** cases validate that Solar Open2 works correctly in an
+existing, official harness path. **Extend** cases go further, wiring
+Solar Open2 into a broader ecosystem (LangChain, custom agent code)
+beyond what those harnesses ship out of the box.
 
 ## Composition & intent
 

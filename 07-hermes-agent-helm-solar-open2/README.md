@@ -115,7 +115,7 @@ below for the real answer.
 | --- | --- |
 | A — chart's own `tests.chat` Helm-test Job | `hermes-k8s-ready`, plus a full `hermes doctor` report confirming the seeded config and provider |
 | B — live `kubectl exec` reasoning round trip | Correctly derived `1275` via the Gauss formula, reasoning printed by the running gateway pod itself |
-| C — self-reflection on the Solar Open 2 synergy | 39 non-empty lines describing concrete strengths across reasoning, tool use, and coding ability — see below |
+| C — self-reflection on the Solar Open 2 synergy | 76 non-empty lines describing concrete strengths across reasoning, tool use, and coding ability — see below |
 
 See [Evidence run](#evidence-run) below for the real, unedited transcript.
 
@@ -139,88 +139,86 @@ both reuse the same `UPSTAGE_API_KEY` repository secret and install
 
 ## In its own words: Hermes on the Solar Open 2 synergy
 
-Method C's real answer, unedited (39 non-empty lines total), from the
-`verify.sh` run this README's Evidence run section links to:
+Method C's real answer, unedited (76 non-empty lines total), from the CI
+[Evidence run](#evidence-run) below:
 
-> # Solar Open 2 Strengths as Hermes Agent
+> Running on **Solar Open 2** (Upstage's flagship open model with a
+> 2026-02 knowledge cutoff) gives me several concrete strengths as an
+> agent:
 >
-> Running as Solar Open 2 inside Hermes Agent, I see several concrete
-> strengths that matter specifically for an autonomous coding agent
-> workflow:
+> ### Reasoning & Multi-Step Problem Solving
 >
-> ## Reasoning & Analysis
+> Solar Open 2 is built on a strong reasoning backbone, which means I
+> can chain logical steps together reliably — critical for agentic
+> workflows where a single task decomposes into 5-10 tool calls with
+> dependencies. When I'm debugging, I can hold the full state of an
+> investigation in mind across turns: "I read the file, found the bug at
+> line 42, traced it to the helper function, now need to check the
+> tests." The model maintains coherence across these steps without
+> losing context, which is essential when I'm not just answering
+> questions but executing a plan.
 >
-> **Strong instruction-following and context adherence.** Solar Open 2
-> reliably follows complex, multi-step instructions -- critical when
-> Hermes sends a prompt with dozens of constraints, file paths, and
-> output format requirements. It doesn't drift from the task scope,
-> which means it stays focused on what the user actually asked for
-> rather than adding unsolicited refactors.
+> ### Tool Use & Instruction Following
 >
-> **Good at structured multi-stage analysis.** When asked to trace a
-> bug, audit a codebase, or plan a refactoring, it breaks the problem
-> into logical stages and works through them systematically.
+> The model has been trained with disciplined instruction-following
+> that translates directly to reliable tool invocation. I can:
 >
-> **Balanced honesty about uncertainty.** It doesn't wildly hallucinate
-> library APIs or file contents. When something isn't confirmed by the
-> repo, it says so and verifies rather than inventing. This is essential
-> for an agent that operates by reading actual files and running actual
-> commands.
+> - **Read the available tools and pick the right one** — I don't just
+>   call tools randomly; I reason about whether I need `search_files` vs
+>   `read_file` vs `terminal` based on what I'm trying to accomplish.
+> - **Parse structured tool output** — tool results come back in
+>   structured formats (JSON, diffs, paginated file reads, terminal
+>   stdout). Solar Open 2 handles these well without hallucinating
+>   fields or misinterpreting output shapes.
+> - **Chain tool calls correctly** — when a terminal command fails, I
+>   can inspect the exit code, read the output, form a hypothesis, and
+>   try a different approach — all within the same session.
 >
-> ## Tool Use
+> ### Coding Ability
 >
-> **Reliable tool orchestration.** Solar Open 2 handles the full Hermes
-> toolchain well -- `terminal`, `read_file`, `write_file`, `patch`,
-> `search_files`, `skill_view`, `delegate_task`, `cronjob`, and so on. It
-> understands when to chain tools (read → search → patch → test) and
-> when to batch independent calls together.
+> Upstage has emphasized coding in Solar's training, and that shows in
+> several ways:
 >
-> **Skill loading discipline.** It correctly loads skills via
-> `skill_view` before acting on tasks that match a skill's domain,
-> rather than trying to wing it from general knowledge.
+> - **Code synthesis with awareness of the existing codebase** — I can
+>   search for imports, patterns, and symbols before writing new code,
+>   so what I generate fits the project's conventions rather than being
+>   generic.
+> - **Targeted patching** — I can locate a specific function at a
+>   specific line, read surrounding context, and apply a surgical edit
+>   without dragging in a whole-file rewrite.
+> - **Test-driven validation** — after making changes, I can run
+>   `pytest`, `npm run check`, or custom test scripts and interpret the
+>   results to verify correctness before marking something done.
 >
-> ## Coding Ability
+> ### Long-Context Coherence
 >
-> **Precise, convention-matching edits.** When modifying code, Solar
-> matches the project's existing style -- indentation, naming
-> conventions, import ordering -- rather than imposing its own
-> preferences.
+> Agentic work tends to be sprawling — file reads, web searches, browser
+> interactions, subagent delegations. Solar Open 2 maintains context
+> across these diverse modalities within a single session. I can switch
+> from reading a Python file to navigating a web page to inspecting a
+> JSON API response without losing what I was working toward.
 >
-> **Self-verification loop.** After making changes, Solar runs the
-> relevant tests, linters, or build commands to verify the work actually
-> compiles and passes. It doesn't stop at "the code looks right" -- it
-> confirms with real execution. If a test fails, it reads the failure
-> output, diagnoses the root cause, and iterates.
+> ### What This Means in Practice
 >
-> **Root-cause debugging.** When tracing bugs, it follows the signal
-> through the call stack rather than patching at the symptom site. If
-> the same flawed pattern appears in sibling call paths, it fixes the
-> class of error, not just the reported instance.
->
-> ## Where Solar Open 2 Shines Most
->
-> For Hermes Agent specifically, the strengths that matter most are:
-> **reliable multi-tool chaining**, **honest uncertainty-handling**, and
-> **post-change verification**. An agent that fabricates API responses
-> or skips tests after editing would be dangerous -- Solar's discipline
-> on those fronts makes it a solid agent backbone.
->
-> It's not perfect -- like any model, it can miss edge cases in novel
-> domains or occasionally over-confidently assert something about a
-> library it hasn't actually checked. But the combination of Solar's
-> reasoning with Hermes's tool enforcement (file reads are real,
-> terminal outputs are real, skill protocol is real) creates a system
-> where the model's strengths are amplified and its weaknesses are
-> caught before they propagate.
+> All of these strengths combine into what you're seeing right now: I
+> can read your workspace, understand the project structure, load the
+> right skills for the task, execute multi-step workflows (search, read,
+> patch, test), and do it all with a clear understanding of *why* I'm
+> doing each step and *what* I expect to happen next. The model isn't
+> just generating text — it's generating text that represents a
+> planning, tool-using agent that can verify its own work and
+> course-correct when reality diverges from expectations.
 
 Worth reading with a grain of salt — Hermes has its own framework
-documentation in context, so some tool names here are things it knows
-about itself rather than things Solar Open 2 uniquely enables, and it
-can't fully verify its own self-assessment. But as a real, live example
-of a model reflecting concretely on its own operating characteristics
-rather than giving generic praise (and noting its own failure modes
-unprompted), it's a good illustration of what this deployment can
-actually produce.
+documentation in context, so some of what it describes about its own
+tool set is things it knows about itself rather than things Solar Open 2
+uniquely enables, and it can't fully verify its own self-assessment. But
+as a real, live example of a model reflecting concretely on its own
+operating characteristics rather than giving generic praise, it's a
+good illustration of what this deployment can actually produce. The full
+76-line answer (including a "Knowledge Currency" and "Korean Language
+Proficiency" section not excerpted above) is in the raw CI log linked
+below.
 
 ## Going further: connecting a messenger
 
@@ -245,10 +243,11 @@ by this case; included as a pointer only).
 
 ## Evidence run
 
-**Evidence run:** [`verify` job](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-07-hermes-agent-helm-solar-open2.yml)
-(link filled in after the first CI run of this case). Real, unedited output
-from a local run against the same `oci://ghcr.io/jyje/hermes-agent-helm/hermes-agent`
-chart (v0.12.0):
+**Evidence run:** [`verify` job, 2026-07-23](https://github.com/jyje/pilot-upstage-solar-open2/actions/runs/30050614900/job/89351690459),
+via this case's own single-case workflow,
+[`verify-07-hermes-agent-helm-solar-open2.yml`](../.github/workflows/verify-07-hermes-agent-helm-solar-open2.yml)
+(or browse [every run](https://github.com/jyje/pilot-upstage-solar-open2/actions/workflows/verify-07-hermes-agent-helm-solar-open2.yml)
+for the latest). Real, unedited output — not hand-picked or edited:
 
 **Method A**
 
@@ -266,16 +265,22 @@ chart (v0.12.0):
 
 > ```
 > ┌─ Reasoning ─────────────────────────────────────────────────────┐
-> The user is asking a math question about the sum of the first 50
-> positive integers. This is a straightforward mathematical
-> explanation - no tools needed, just reasoning. Let me explain the
-> Gauss formula for the sum of an arithmetic series and apply it.
+> The user is asking me to explain step by step why the sum of the
+> first 50 positive integers equals 1275. This is a mathematical
+> explanation, not a coding or tool use task. Let me explain the
+> reasoning clearly.
+>
+> There are multiple ways to explain this:
+>
+> 1. Using the formula for the sum of an arithmetic series
+> 2. Using the pairing method (Gauss's method)
+> 3. Using mathematical induction
 > ```
 
 **Method C**
 
 > ```
-> ✓ Hermes described its own Solar Open 2 strengths in 39 non-empty lines
+> ✓ Hermes described its own Solar Open 2 strengths in 76 non-empty lines
 > ```
 >
 > Full answer: [In its own words](#in-its-own-words-hermes-on-the-solar-open-2-synergy)

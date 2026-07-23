@@ -35,6 +35,33 @@ workflow (manual `workflow_dispatch`), which reuses the same
 `UPSTAGE_API_KEY` secret. Case 04 pins Python 3.13 instead of 3.14 (the
 default elsewhere) — see its README for why.
 
+## Solar Open 2 naming reference
+
+Several distinct strings all point at the same model. Mixing them up has
+already broken URLs and doc prose more than once — treat each one as
+fixed, not interchangeable:
+
+| Context | Exact string | Where it's used |
+| --- | --- | --- |
+| Prose / headings | `Solar Open 2` (with space) | READMEs, PLAN.md, any human-readable text |
+| API model slug | `solar-open2` (lowercase, no space) | `--model` flags, `SOLAR_MODEL`/`ANTHROPIC_MODEL` env vars, code |
+| Hugging Face repo path | `upstage/Solar-Open2-250B` (no space, no extra hyphen) | `https://huggingface.co/upstage/Solar-Open2-250B` and its `/blob/main/...` subpaths |
+| Shields.io badge slug | `solar--open2--250b` (double-dash escapes a literal dash) | badge URL parameter only, e.g. `img.shields.io/badge/...-upstage/solar--open2--250b-yellow` |
+| Repo/case directory names | `solar-open2` (lowercase, no space) | e.g. `pilot-upstage-solar-open2`, `01-solar-open2-harness` |
+
+Two exceptions worth knowing:
+- Verbatim model output quoted in evidence sections (e.g. "Hello! I'm
+  Solar Open2...") is quoted exactly as the model said it — don't "fix"
+  the model's own self-reference to match the prose convention.
+- `solar-pro3` is a *different* Upstage model, mentioned only for
+  contrast (Tier 0 rate-limit comparisons, Upstage's own console
+  examples) — no case in this repo defaults to it.
+
+The Hugging Face URL specifically has broken twice already from careless
+find/replace passes (a stray space, then a stray hyphen). After any script
+or broad substitution touching "Solar Open" text, grep for `Solar-Open` in
+`*.md` and confirm every match reads exactly `Solar-Open2-250B`.
+
 ## Skills available
 
 - `centered-readme` — format README headers as a centered hero block
